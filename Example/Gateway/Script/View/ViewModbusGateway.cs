@@ -17,8 +17,9 @@ namespace EGFramework.Examples.Gateway{
 			ReadTest2();
 			ReadTest3();
 			ReadTest3();
-			ReadTest2();
-			ReadTest();
+			// ReadTest2();
+			// ReadTest();
+			WriteTest1();
 		}
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -71,6 +72,19 @@ namespace EGFramework.Examples.Gateway{
 					GD.Print("Register[2]"+((ModbusRTU_Response)result3).HoldingRegister[0]);
 				}else{
 					GD.Print("Error:"+((ModbusRTU_Response)result3).ErrorCode);
+				}
+			}else{
+				GD.Print("Timeout!");
+			}
+		}
+
+		public async void WriteTest1(){
+			ModbusRTU_Response? result = await this.EGModbus().WriteOnceRTUAsync(ModbusRegisterType.HoldingRegister,"COM4",0x01,0x2000,0x50);
+			if(result != null){
+				if(!((ModbusRTU_Response)result).IsError){
+					GD.Print("Write[0]"+((ModbusRTU_Response)result).FunctionType);
+				}else{
+					GD.Print("Error:"+((ModbusRTU_Response)result).ErrorCode);
 				}
 			}else{
 				GD.Print("Timeout!");

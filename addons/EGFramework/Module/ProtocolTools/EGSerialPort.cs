@@ -23,7 +23,7 @@ namespace EGFramework{
 
         public Queue<ResponseMsg> ResponseMsgs { set; get; } = new Queue<ResponseMsg>();
 
-        public byte[] ReceivedCache { set; get; } = new byte[0];
+        public Dictionary<string,byte[]> ReceivedCache { set; get; } = new Dictionary<string,byte[]>();
 
         public void Init()
         {
@@ -77,6 +77,7 @@ namespace EGFramework{
                 if(!SerialPortDevices.ContainsKey(serialPort)){
                     SerialPort newPort = new SerialPort(serialPort, DefaultBaudRate, Parity.None, 8, StopBits.One);
                     SerialPortDevices.Add(serialPort,newPort);
+                    ReceivedCache.Add(serialPort,new byte[0]);
                     if (!SerialPortDevices[serialPort].IsOpen)
                     {
                         SerialPortDevices[serialPort].Open();
@@ -176,19 +177,19 @@ namespace EGFramework{
                 int bufferSize = serialPort.BytesToRead;
                 byte[] buffer = new byte[bufferSize];
                 serialPort.Read(buffer,0,serialPort.BytesToRead);
-                ReceivedCache = ReceivedCache.Concat(buffer).ToArray();
+                ReceivedCache[serialPort.PortName] = ReceivedCache[serialPort.PortName].Concat(buffer).ToArray();
             }
-            if(ReceivedCache.Length >= MinDataPackLength){
-                string str = StringEncoding.GetString(ReceivedCache);
-                Godot.GD.Print("[Receive]"+ReceivedCache.ToStringByHex());
-                ResponseMsgs.Enqueue(new ResponseMsg(str,ReceivedCache,serialPort.PortName,ProtocolType.SerialPort));
-                ReceivedCache = new byte[0];
+            if(ReceivedCache[serialPort.PortName].Length >= MinDataPackLength){
+                string str = StringEncoding.GetString(ReceivedCache[serialPort.PortName]);
+                Godot.GD.Print("[Receive]"+ReceivedCache[serialPort.PortName].ToStringByHex());
+                ResponseMsgs.Enqueue(new ResponseMsg(str,ReceivedCache[serialPort.PortName],serialPort.PortName,ProtocolType.SerialPort));
+                ReceivedCache[serialPort.PortName] = new byte[0];
                 MinDataPackLength = 0;
                 //this.EGOnReceivedData(new ResponseMsg(str,buffer,serialPort.PortName,ProtocolType.SerialPort));
             }else{
-                Godot.GD.Print("[Data Get]" + ReceivedCache.Length);
-                string str = StringEncoding.GetString(ReceivedCache);
-                ResponseMsgs.Enqueue(new ResponseMsg(str,ReceivedCache,serialPort.PortName,ProtocolType.SerialPort));
+                Godot.GD.Print("[Data Get]" + ReceivedCache[serialPort.PortName].Length);
+                string str = StringEncoding.GetString(ReceivedCache[serialPort.PortName]);
+                ResponseMsgs.Enqueue(new ResponseMsg(str,ReceivedCache[serialPort.PortName],serialPort.PortName,ProtocolType.SerialPort));
             }
         }
 
@@ -196,15 +197,8 @@ namespace EGFramework{
             this.MinDataPackLength = leastLength;
         }
 
-        public void ClearBuffer(string serialPort){
-            if(SerialPortDevices.ContainsKey(serialPort)){
-                if (SerialPortDevices[serialPort].IsOpen)
-                {
-                    SerialPortDevices[serialPort].DiscardInBuffer();
-                }
-            }else{
-                //Not found in SerialPortDevices,need add?
-            }
+        public void ClearReceivedCache(string serialPort){
+            ReceivedCache[serialPort] = new byte[0];
         }
 
         public IArchitecture GetArchitecture()

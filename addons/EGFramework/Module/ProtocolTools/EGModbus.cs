@@ -35,15 +35,15 @@ namespace EGFramework{
             this.EGOnMessage<ModbusTCP_Response>();
         }
 
-        public bool IsReadingRTU { set; get; }
+        private bool IsRequestRTU { set; get; }
         public async Task<ModbusRTU_Response?> ReadRTUAsync(ModbusRegisterType registerType,string serialPort,byte deviceAddress,ushort start,ushort count){
-            if(IsReadingRTU){
+            if(IsRequestRTU){
                 SendPointerRTU++;
                 int messageId = SendPointerRTU;
                 WaitForSendRTU.Enqueue(messageId);
                 await Task.Run(async () =>
                 {
-                    while (IsReadingRTU || NextSendRTU != messageId)
+                    while (IsRequestRTU || NextSendRTU != messageId)
                     {
                         await Task.Delay(10);
                         //break;
@@ -53,7 +53,7 @@ namespace EGFramework{
                 //return null;
             }
             RTUCache.Clear();
-            IsReadingRTU = true;
+            IsRequestRTU = true;
             IRequest ReadRequest;
             ModbusRTU_Response? res = null;
             switch(registerType){
@@ -76,22 +76,73 @@ namespace EGFramework{
                 }else{
                     //Print Error Timeout
                     OnReadTimeOut.Invoke();
-                    this.EGSerialPort().ClearBuffer(serialPort);
                 }
             });
-            IsReadingRTU = false;
+            this.EGSerialPort().ClearReceivedCache(serialPort);
+            IsRequestRTU = false;
             if(this.WaitForSendRTU.Count>0){
                 NextSendRTU = this.WaitForSendRTU.Dequeue();
             }
             return res;
         }
 
-        public bool IsReadingTCP { set; get; }
-        public async Task<ModbusTCP_Response?> ReadTCPAsync(ModbusRegisterType registerType,string ipPort,byte deviceAddress,ushort start,ushort count){
-            if(IsReadingTCP){
+        public async Task<ModbusRTU_Response?> WriteOnceRTUAsync(ModbusRegisterType registerType,string serialPort,byte deviceAddress,ushort registerAddress,ushort value){
+            if(IsRequestRTU){
+                SendPointerRTU++;
+                int messageId = SendPointerRTU;
+                WaitForSendRTU.Enqueue(messageId);
                 await Task.Run(async () =>
                 {
-                    while (IsReadingTCP)
+                    while (IsRequestRTU || NextSendRTU != messageId)
+                    {
+                        await Task.Delay(10);
+                        //break;
+                    }
+                });
+                GD.Print("-----Write"+messageId+" ----");
+                //return null;
+            }
+            RTUCache.Clear();
+            IsRequestRTU = true;
+            IRequest ReadRequest;
+            ModbusRTU_Response? res = null;
+            switch(registerType){
+                case ModbusRegisterType.HoldingRegister:
+                    ReadRequest = new ModbusRTU_WriteSingleHoldingRegister(deviceAddress,registerAddress,value);
+                    // this.AppendMessage("【发送-"+DataModbusItem.SerialPort+"】 "+ReadRequest.ToProtocolByteData().ToStringByHex());
+                    this.EGSendMessage(ReadRequest,serialPort,ProtocolType.SerialPort);
+                    // this.EGSerialPort().SetExpectReceivedDataLength(5+count*2);
+                    this.EGSerialPort().SetExpectReceivedDataLength(ReadRequest.ToProtocolByteData().Length);
+                    break;
+            }
+            await Task.Run(async ()=>{
+                int timeout = 0;
+                while(RTUCache.Count==0 && timeout < Delay){
+                    await Task.Delay(10);
+                    timeout+=10;
+                }
+                if(RTUCache.Count>0){
+                    res = RTUCache.Dequeue();
+                }else{
+                    //Print Error Timeout
+                    OnReadTimeOut.Invoke();
+                }
+            });
+            this.EGSerialPort().ClearReceivedCache(serialPort);
+            IsRequestRTU = false;
+            if(this.WaitForSendRTU.Count>0){
+                NextSendRTU = this.WaitForSendRTU.Dequeue();
+            }
+            return res;
+        }
+
+
+        private bool IsRequestTCP { set; get; }
+        public async Task<ModbusTCP_Response?> ReadTCPAsync(ModbusRegisterType registerType,string ipPort,byte deviceAddress,ushort start,ushort count){
+            if(IsRequestTCP){
+                await Task.Run(async () =>
+                {
+                    while (IsRequestTCP)
                     {
                         await Task.Delay(10);
                         //break;
@@ -100,7 +151,7 @@ namespace EGFramework{
                 //return null;
             }
             TCPCache.Clear();
-            IsReadingTCP = true;
+            IsRequestTCP = true;
             IRequest ReadRequest;
             ModbusTCP_Response? res = null;
             switch(registerType){
@@ -123,7 +174,7 @@ namespace EGFramework{
                     OnReadTimeOut.Invoke();
                 }
             });
-            IsReadingTCP = false;
+            IsRequestTCP = false;
             return res;
         }
 
