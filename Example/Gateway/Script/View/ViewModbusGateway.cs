@@ -13,13 +13,14 @@ namespace EGFramework.Examples.Gateway{
 			this.EGEnabledProtocolTool<EGSerialPort>();
 			this.EGEnabledProtocolTool<EGTCPClient>();
 			this.EGSerialPort().SetBaudRate(9600);
-			ReadTest();
-			ReadTest2();
-			ReadTest3();
-			ReadTest3();
+			// ReadTest();
+			// ReadTest2();
+			// ReadTest3();
+			// ReadTest3();
 			// ReadTest2();
 			// ReadTest();
 			WriteTest1();
+			WriteTest2();
 		}
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -54,10 +55,10 @@ namespace EGFramework.Examples.Gateway{
 		}
 
 		public async void ReadTest2(){
-			ModbusRTU_Response? result2 = await this.EGModbus().ReadRTUAsync(ModbusRegisterType.HoldingRegister,"COM4",0x01,0x01,0x01);
+			ModbusRTU_Response? result2 = await this.EGModbus().ReadRTUAsync(ModbusRegisterType.Coil,"COM4",0x01,0x01,0x01);
 			if(result2 != null){
 				if(!((ModbusRTU_Response)result2).IsError){
-					GD.Print("Register[1]"+((ModbusRTU_Response)result2).HoldingRegister[0]);
+					GD.Print("Register[1]"+((ModbusRTU_Response)result2).Coil[0]);
 				}else{
 					GD.Print("Error:"+((ModbusRTU_Response)result2).ErrorCode);
 				}
@@ -66,10 +67,10 @@ namespace EGFramework.Examples.Gateway{
 			}
 		}
 		public async void ReadTest3(){
-			ModbusRTU_Response? result3 = await this.EGModbus().ReadRTUAsync(ModbusRegisterType.HoldingRegister,"COM4",0x01,0x10,0x01);
+			ModbusRTU_Response? result3 = await this.EGModbus().ReadRTUAsync(ModbusRegisterType.DiscreteInput,"COM4",0x01,0x01,0x01);
 			if(result3 != null){
 				if(!((ModbusRTU_Response)result3).IsError){
-					GD.Print("Register[2]"+((ModbusRTU_Response)result3).HoldingRegister[0]);
+					GD.Print("Register[2]"+((ModbusRTU_Response)result3).DiscreteInput[0]);
 				}else{
 					GD.Print("Error:"+((ModbusRTU_Response)result3).ErrorCode);
 				}
@@ -79,10 +80,23 @@ namespace EGFramework.Examples.Gateway{
 		}
 
 		public async void WriteTest1(){
-			ModbusRTU_Response? result = await this.EGModbus().WriteOnceRTUAsync(ModbusRegisterType.HoldingRegister,"COM4",0x01,0x2000,0x50);
+			ModbusRTU_Response? result = await this.EGModbus().WriteOnceRTUAsync(ModbusRegisterType.HoldingRegister,"COM4",0x01,0x02,(ushort)0x50);
 			if(result != null){
 				if(!((ModbusRTU_Response)result).IsError){
-					GD.Print("Write[0]"+((ModbusRTU_Response)result).FunctionType);
+					GD.Print("Write[1]"+((ModbusRTU_Response)result).FunctionType);
+				}else{
+					GD.Print("Error:"+((ModbusRTU_Response)result).ErrorCode);
+				}
+			}else{
+				GD.Print("Timeout!");
+			}
+		}
+
+		public async void WriteTest2(){
+			ModbusRTU_Response? result = await this.EGModbus().WriteOnceRTUAsync(ModbusRegisterType.Coil,"COM4",0x01,0x02,true);
+			if(result != null){
+				if(!((ModbusRTU_Response)result).IsError){
+					GD.Print("Write[2]"+((ModbusRTU_Response)result).FunctionType);
 				}else{
 					GD.Print("Error:"+((ModbusRTU_Response)result).ErrorCode);
 				}

@@ -35,6 +35,7 @@ namespace EGFramework{
             this.EGOnMessage<ModbusTCP_Response>();
         }
 
+        #region  Modbus RTU Operations
         private bool IsRequestRTU { set; get; }
         public async Task<ModbusRTU_Response?> ReadRTUAsync(ModbusRegisterType registerType,string serialPort,byte deviceAddress,ushort start,ushort count){
             if(IsRequestRTU){
@@ -57,11 +58,24 @@ namespace EGFramework{
             IRequest ReadRequest;
             ModbusRTU_Response? res = null;
             switch(registerType){
+                case ModbusRegisterType.Coil:
+                    ReadRequest = new ModbusRTU_ReadCoils(deviceAddress,start,count);
+                    this.EGSendMessage(ReadRequest,serialPort,ProtocolType.SerialPort);
+                    this.EGSerialPort().SetExpectReceivedDataLength(6+count/8);
+                    break;
+                case ModbusRegisterType.DiscreteInput:
+                    ReadRequest = new ModbusRTU_ReadDiscreteInput(deviceAddress,start,count);
+                    this.EGSendMessage(ReadRequest,serialPort,ProtocolType.SerialPort);
+                    this.EGSerialPort().SetExpectReceivedDataLength(6+count/8);
+                    break;
                 case ModbusRegisterType.HoldingRegister:
                     ReadRequest = new ModbusRTU_ReadHoldingRegisters(deviceAddress,start,count);
-                    // this.AppendMessage("【发送-"+DataModbusItem.SerialPort+"】 "+ReadRequest.ToProtocolByteData().ToStringByHex());
                     this.EGSendMessage(ReadRequest,serialPort,ProtocolType.SerialPort);
-                    // this.EGSerialPort().SetExpectReceivedDataLength(5+count*2);
+                    this.EGSerialPort().SetExpectReceivedDataLength(5+count*2);
+                    break;
+                case ModbusRegisterType.InputRegisters:
+                    ReadRequest = new ModbusRTU_ReadInputRegisters(deviceAddress,start,count);
+                    this.EGSendMessage(ReadRequest,serialPort,ProtocolType.SerialPort);
                     this.EGSerialPort().SetExpectReceivedDataLength(5+count*2);
                     break;
             }
@@ -86,7 +100,7 @@ namespace EGFramework{
             return res;
         }
 
-        public async Task<ModbusRTU_Response?> WriteOnceRTUAsync(ModbusRegisterType registerType,string serialPort,byte deviceAddress,ushort registerAddress,ushort value){
+        public async Task<ModbusRTU_Response?> WriteOnceRTUAsync(ModbusRegisterType registerType,string serialPort,byte deviceAddress,ushort registerAddress,object value){
             if(IsRequestRTU){
                 SendPointerRTU++;
                 int messageId = SendPointerRTU;
@@ -104,15 +118,18 @@ namespace EGFramework{
             }
             RTUCache.Clear();
             IsRequestRTU = true;
-            IRequest ReadRequest;
+            IRequest WriteRequest;
             ModbusRTU_Response? res = null;
             switch(registerType){
+                case ModbusRegisterType.Coil:
+                    WriteRequest = new ModbusRTU_WriteSingleCoil(deviceAddress,registerAddress,(bool)value);
+                    this.EGSendMessage(WriteRequest,serialPort,ProtocolType.SerialPort);
+                    this.EGSerialPort().SetExpectReceivedDataLength(WriteRequest.ToProtocolByteData().Length);
+                    break;
                 case ModbusRegisterType.HoldingRegister:
-                    ReadRequest = new ModbusRTU_WriteSingleHoldingRegister(deviceAddress,registerAddress,value);
-                    // this.AppendMessage("【发送-"+DataModbusItem.SerialPort+"】 "+ReadRequest.ToProtocolByteData().ToStringByHex());
-                    this.EGSendMessage(ReadRequest,serialPort,ProtocolType.SerialPort);
-                    // this.EGSerialPort().SetExpectReceivedDataLength(5+count*2);
-                    this.EGSerialPort().SetExpectReceivedDataLength(ReadRequest.ToProtocolByteData().Length);
+                    WriteRequest = new ModbusRTU_WriteSingleHoldingRegister(deviceAddress,registerAddress,(ushort)value);
+                    this.EGSendMessage(WriteRequest,serialPort,ProtocolType.SerialPort);
+                    this.EGSerialPort().SetExpectReceivedDataLength(WriteRequest.ToProtocolByteData().Length);
                     break;
             }
             await Task.Run(async ()=>{
@@ -135,8 +152,10 @@ namespace EGFramework{
             }
             return res;
         }
+        
+        #endregion
 
-
+        #region Modbus TCP Operations
         private bool IsRequestTCP { set; get; }
         public async Task<ModbusTCP_Response?> ReadTCPAsync(ModbusRegisterType registerType,string ipPort,byte deviceAddress,ushort start,ushort count){
             if(IsRequestTCP){
@@ -177,7 +196,8 @@ namespace EGFramework{
             IsRequestTCP = false;
             return res;
         }
-
+        
+        #endregion
         public IArchitecture GetArchitecture()
         {
             return EGArchitectureImplement.Interface;
