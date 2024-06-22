@@ -42,7 +42,11 @@ namespace EGFramework.Examples.Gateway{
 		public async void ReadTest(){
 			ModbusRTU_Response? result = await this.EGModbus().ReadRTUAsync(ModbusRegisterType.HoldingRegister,"COM4",0x01,0x00,0x01);
 			if(result != null){
-				GD.Print("Register[0]"+((ModbusRTU_Response)result).HoldingRegister[0]);
+				if(!((ModbusRTU_Response)result).IsError){
+					GD.Print("Register[0]"+((ModbusRTU_Response)result).HoldingRegister[0]);
+				}else{
+					GD.Print("Error:"+((ModbusRTU_Response)result).ErrorCode);
+				}
 			}else{
 				GD.Print("Timeout!");
 			}
@@ -51,7 +55,11 @@ namespace EGFramework.Examples.Gateway{
 		public async void ReadTest2(){
 			ModbusRTU_Response? result2 = await this.EGModbus().ReadRTUAsync(ModbusRegisterType.HoldingRegister,"COM4",0x01,0x01,0x01);
 			if(result2 != null){
-				GD.Print("Register[1]"+((ModbusRTU_Response)result2).HoldingRegister[0]);
+				if(!((ModbusRTU_Response)result2).IsError){
+					GD.Print("Register[1]"+((ModbusRTU_Response)result2).HoldingRegister[0]);
+				}else{
+					GD.Print("Error:"+((ModbusRTU_Response)result2).ErrorCode);
+				}
 			}else{
 				GD.Print("Timeout!");
 			}
@@ -59,7 +67,11 @@ namespace EGFramework.Examples.Gateway{
 		public async void ReadTest3(){
 			ModbusRTU_Response? result3 = await this.EGModbus().ReadRTUAsync(ModbusRegisterType.HoldingRegister,"COM4",0x01,0x10,0x01);
 			if(result3 != null){
-				GD.Print("Register[2]"+((ModbusRTU_Response)result3).HoldingRegister[0]);
+				if(!((ModbusRTU_Response)result3).IsError){
+					GD.Print("Register[2]"+((ModbusRTU_Response)result3).HoldingRegister[0]);
+				}else{
+					GD.Print("Error:"+((ModbusRTU_Response)result3).ErrorCode);
+				}
 			}else{
 				GD.Print("Timeout!");
 			}

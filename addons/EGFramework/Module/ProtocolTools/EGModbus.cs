@@ -62,7 +62,7 @@ namespace EGFramework{
                     // this.AppendMessage("【发送-"+DataModbusItem.SerialPort+"】 "+ReadRequest.ToProtocolByteData().ToStringByHex());
                     this.EGSendMessage(ReadRequest,serialPort,ProtocolType.SerialPort);
                     // this.EGSerialPort().SetExpectReceivedDataLength(5+count*2);
-                    this.EGSerialPort().SetExpectReceivedDataLength(5);
+                    this.EGSerialPort().SetExpectReceivedDataLength(5+count*2);
                     break;
             }
             await Task.Run(async ()=>{

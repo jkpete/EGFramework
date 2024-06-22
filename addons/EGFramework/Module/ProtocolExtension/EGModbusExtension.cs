@@ -377,7 +377,7 @@ namespace EGFramework{
         public byte[] SourceData { set; get; }
         public ModbusFunctionType FunctionType { set; get; }
         public ModbusErrorCode ErrorCode { set; get; }
-
+        public bool IsError { set; get; }
         public bool TrySetData(string protocolData, byte[] protocolBytes)
         {
             try
@@ -391,6 +391,7 @@ namespace EGFramework{
 
                 if(FunctionCode == 0x83){
                     ErrorCode = (ModbusErrorCode)protocolBytes[2];
+                    IsError = true;
                     return true;
                 }
                 byte[] dataLength = new byte[4];
@@ -763,6 +764,7 @@ namespace EGFramework{
         public byte[] SourceData { set; get; }
         public ModbusFunctionType FunctionType { set; get; }
         public ModbusErrorCode ErrorCode { set; get; }
+        public bool IsError { set; get; }
 
         public bool TrySetData(string protocolData, byte[] protocolBytes)
         {
@@ -777,6 +779,7 @@ namespace EGFramework{
                 FunctionType = (ModbusFunctionType)protocolBytes[1];
                 if(FunctionCode == 0x83){
                     ErrorCode = (ModbusErrorCode)protocolBytes[2];
+                    IsError = true;
                     return true;
                 }
                 

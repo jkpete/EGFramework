@@ -23,6 +23,8 @@ namespace EGFramework{
 
         public Queue<ResponseMsg> ResponseMsgs { set; get; } = new Queue<ResponseMsg>();
 
+        public byte[] ReceivedCache { set; get; } = new byte[0];
+
         public void Init()
         {
             this.EGRegisterSendAction(request=>{
@@ -170,17 +172,23 @@ namespace EGFramework{
         {
             //await Task.Run(() => {}).ConfigureAwait(false);
             SerialPort serialPort = (SerialPort)sender;
-            if(serialPort.BytesToRead >= MinDataPackLength){
+            if(serialPort.BytesToRead >= 0){
                 int bufferSize = serialPort.BytesToRead;
                 byte[] buffer = new byte[bufferSize];
                 serialPort.Read(buffer,0,serialPort.BytesToRead);
-                string str = StringEncoding.GetString(buffer);
-                Godot.GD.Print("[Receive]"+buffer.ToStringByHex());
-                ResponseMsgs.Enqueue(new ResponseMsg(str,buffer,serialPort.PortName,ProtocolType.SerialPort));
+                ReceivedCache = ReceivedCache.Concat(buffer).ToArray();
+            }
+            if(ReceivedCache.Length >= MinDataPackLength){
+                string str = StringEncoding.GetString(ReceivedCache);
+                Godot.GD.Print("[Receive]"+ReceivedCache.ToStringByHex());
+                ResponseMsgs.Enqueue(new ResponseMsg(str,ReceivedCache,serialPort.PortName,ProtocolType.SerialPort));
+                ReceivedCache = new byte[0];
                 MinDataPackLength = 0;
                 //this.EGOnReceivedData(new ResponseMsg(str,buffer,serialPort.PortName,ProtocolType.SerialPort));
             }else{
-                Godot.GD.Print("[Data Get]" + serialPort.BytesToRead);
+                Godot.GD.Print("[Data Get]" + ReceivedCache.Length);
+                string str = StringEncoding.GetString(ReceivedCache);
+                ResponseMsgs.Enqueue(new ResponseMsg(str,ReceivedCache,serialPort.PortName,ProtocolType.SerialPort));
             }
         }
 
