@@ -1,0 +1,154 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8kk7iegicmdr"]
+
+[ext_resource type="Script" path="res://Example/ModbusDebugTool/Script/ViewModbusItem.cs" id="1_ih8g3"]
+[ext_resource type="FontFile" uid="uid://b1atsgy4xkk7d" path="res://Font/SourceHanSansCN-Regular.otf" id="1_upshn"]
+
+[node name="ModbusItem" type="Control"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_ih8g3")
+
+[node name="BackGround" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.196078)
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(200, 37)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_right = 100.0
+offset_bottom = 37.0
+grow_horizontal = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 37.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("1_upshn")
+theme_override_font_sizes/font_size = 25
+text = "保持寄存器65535"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 93.0
+offset_top = -50.0
+offset_right = 149.0
+offset_bottom = -20.0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_upshn")
+theme_override_font_sizes/font_size = 20
+text = "65535"
+horizontal_alignment = 1
+
+[node name="ID" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 9.0
+offset_top = -50.0
+offset_right = 88.0
+offset_bottom = -20.0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_upshn")
+theme_override_font_sizes/font_size = 20
+text = "1-1"
+horizontal_alignment = 1
+
+[node name="WriteEdit" type="LineEdit" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 8.0
+offset_right = 120.0
+offset_bottom = 38.0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_upshn")
+theme_override_font_sizes/font_size = 20
+placeholder_text = "输入写入值"
+
+[node name="Get" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -46.0
+offset_top = -50.0
+offset_right = -6.0
+offset_bottom = -19.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+text = "获取"
+
+[node name="WriteBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -74.0
+offset_right = -6.0
+offset_bottom = 38.0
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+theme_override_fonts/font = ExtResource("1_upshn")
+theme_override_font_sizes/font_size = 20
+text = "写入"
+
+[node name="ModifyBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 13.0
+offset_top = -51.0
+offset_right = 81.0
+offset_bottom = -13.0
+grow_vertical = 0
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "修改"
+
+[node name="DeleteBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -81.0
+offset_top = -51.0
+offset_right = -13.0
+offset_bottom = -13.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "删除"
+
+[connection signal="pressed" from="Get" to="." method="GetValue"]
+[connection signal="pressed" from="WriteBtn" to="." method="WriteValue"]
+[connection signal="pressed" from="ModifyBtn" to="." method="OnModifyItem"]
+[connection signal="pressed" from="DeleteBtn" to="." method="OnDeleteItem"]

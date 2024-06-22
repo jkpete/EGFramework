@@ -1,0 +1,417 @@
+[gd_scene load_steps=7 format=3 uid="uid://qo2w16ececmu"]
+
+[ext_resource type="Script" path="res://Example/ModbusDebugTool/Script/ViewMenu.cs" id="1_7ubyu"]
+[ext_resource type="FontFile" uid="uid://b1atsgy4xkk7d" path="res://Font/SourceHanSansCN-Regular.otf" id="1_tw1qu"]
+[ext_resource type="PackedScene" uid="uid://c8kk7iegicmdr" path="res://Example/ModbusDebugTool/Component/modbus_item.tscn" id="3_c8jeq"]
+[ext_resource type="Script" path="res://Example/ModbusDebugTool/Script/ViewEdit.cs" id="4_smsvf"]
+[ext_resource type="Script" path="res://Example/ModbusDebugTool/Script/ViewMessage.cs" id="5_8s6lk"]
+[ext_resource type="Script" path="res://Example/ModbusDebugTool/Script/ViewSettings.cs" id="6_38tri"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7ubyu")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -253.0
+offset_top = 52.0
+offset_right = 251.0
+offset_bottom = 128.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("1_tw1qu")
+theme_override_font_sizes/font_size = 52
+text = "Modbus调试工具V1.0"
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 140.0
+offset_right = -9.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ModbusList" type="GridContainer" parent="Scroll"]
+layout_mode = 2
+theme_override_constants/h_separation = 30
+theme_override_constants/v_separation = 30
+columns = 5
+
+[node name="ModbusItem" parent="Scroll/ModbusList" instance=ExtResource("3_c8jeq")]
+layout_mode = 2
+
+[node name="MenuBar" type="MenuBar" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 45.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("1_tw1qu")
+theme_override_font_sizes/font_size = 25
+
+[node name="添加" type="PopupMenu" parent="MenuBar"]
+size = Vector2i(108, 116)
+item_count = 4
+item_0/text = "线圈"
+item_0/id = 0
+item_1/text = "离散输入"
+item_1/id = 1
+item_2/text = "保持寄存器"
+item_2/id = 2
+item_3/text = "输入寄存器"
+item_3/id = 3
+
+[node name="读取" type="PopupMenu" parent="MenuBar"]
+size = Vector2i(108, 116)
+item_count = 4
+item_0/text = "线圈"
+item_0/id = 0
+item_1/text = "离散输入"
+item_1/id = 1
+item_2/text = "保持寄存器"
+item_2/id = 2
+item_3/text = "输入寄存器"
+item_3/id = 3
+
+[node name="帮助" type="PopupMenu" parent="MenuBar"]
+item_count = 3
+item_0/text = "关于jkpete"
+item_0/id = 0
+item_1/text = "关于EGFramework"
+item_1/id = 1
+item_2/text = "使用手册"
+item_2/id = 2
+
+[node name="设置" type="PopupMenu" parent="MenuBar"]
+item_count = 2
+item_0/text = "查看报文"
+item_0/id = 0
+item_1/text = "设置"
+item_1/id = 1
+
+[node name="Message" type="Control" parent="."]
+layout_mode = 1
+anchor_top = 0.558642
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_8s6lk")
+metadata/_edit_use_anchors_ = true
+
+[node name="MessageContainer" type="TextEdit" parent="Message"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+editable = false
+
+[node name="Close" type="Button" parent="Message"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "关闭"
+
+[node name="Clear" type="Button" parent="Message"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -82.0
+offset_right = -42.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "清空"
+
+[node name="Edit" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_smsvf")
+
+[node name="Back" type="ColorRect" parent="Edit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.392157)
+
+[node name="Back2" type="ColorRect" parent="Edit"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0588235, 0.231373, 0.270588, 1)
+
+[node name="Close" type="Button" parent="Edit/Back2"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -50.0
+offset_bottom = 50.0
+grow_horizontal = 0
+text = "X"
+
+[node name="Title" type="Label" parent="Edit"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -168.0
+offset_top = 54.0
+offset_right = 168.0
+offset_bottom = 124.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("1_tw1qu")
+theme_override_font_sizes/font_size = 48
+text = "保持寄存器"
+horizontal_alignment = 1
+
+[node name="List" type="VBoxContainer" parent="Edit"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -264.0
+offset_top = -174.0
+offset_right = 265.0
+offset_bottom = 117.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Device" type="LineEdit" parent="Edit/List"]
+custom_minimum_size = Vector2(529, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+placeholder_text = "请输入设备地址"
+virtual_keyboard_type = 2
+
+[node name="Register" type="LineEdit" parent="Edit/List"]
+custom_minimum_size = Vector2(529, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+placeholder_text = "请输入寄存器地址"
+virtual_keyboard_type = 2
+
+[node name="SerialPortSelect" type="OptionButton" parent="Edit/List"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+item_count = 1
+popup/item_0/text = "COM1"
+popup/item_0/id = 0
+
+[node name="Save" type="Button" parent="Edit"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -109.0
+offset_right = 80.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 36
+text = "保存"
+
+[node name="RefreshPort" type="Button" parent="Edit"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 211.0
+offset_top = 109.0
+offset_right = 264.0
+offset_bottom = 141.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "刷新"
+
+[node name="Settings" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_38tri")
+
+[node name="Back" type="ColorRect" parent="Settings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.392157)
+
+[node name="Back2" type="ColorRect" parent="Settings"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0588235, 0.231373, 0.270588, 1)
+
+[node name="Close" type="Button" parent="Settings/Back2"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -50.0
+offset_bottom = 50.0
+grow_horizontal = 0
+text = "X"
+
+[node name="Title" type="Label" parent="Settings"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -168.0
+offset_top = 54.0
+offset_right = 168.0
+offset_bottom = 124.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("1_tw1qu")
+theme_override_font_sizes/font_size = 48
+text = "设置"
+horizontal_alignment = 1
+
+[node name="List" type="VBoxContainer" parent="Settings"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.0
+offset_top = -174.0
+offset_right = 266.0
+offset_bottom = 117.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Device" type="LineEdit" parent="Settings/List"]
+custom_minimum_size = Vector2(250, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "115200"
+placeholder_text = "请输入波特率"
+virtual_keyboard_type = 2
+
+[node name="OptionText" type="VBoxContainer" parent="Settings"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -214.0
+offset_top = -174.0
+offset_right = -114.0
+offset_bottom = 117.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Label" type="Label" parent="Settings/OptionText"]
+custom_minimum_size = Vector2(100, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "波特率"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Save" type="Button" parent="Settings"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -109.0
+offset_right = 80.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 36
+text = "保存"
+
+[connection signal="index_pressed" from="MenuBar/添加" to="." method="OpenEdit"]
+[connection signal="index_pressed" from="MenuBar/设置" to="." method="OpenSettings"]
+[connection signal="pressed" from="Message/Close" to="Message" method="OnClose"]
+[connection signal="pressed" from="Message/Clear" to="Message" method="Clear"]
+[connection signal="pressed" from="Edit/Back2/Close" to="Edit" method="OnClose"]
+[connection signal="pressed" from="Edit/Save" to="Edit" method="Save"]
+[connection signal="pressed" from="Edit/RefreshPort" to="Edit" method="RefreshSerialPort"]
+[connection signal="pressed" from="Settings/Back2/Close" to="Settings" method="OnClose"]
+[connection signal="pressed" from="Settings/Save" to="Settings" method="Save"]

@@ -1,0 +1,79 @@
+[gd_scene load_steps=6 format=3 uid="uid://hp4ae14r3hpm"]
+
+[ext_resource type="Script" path="res://Example/Gateway/Script/View/ViewGateway.cs" id="1_tas7d"]
+[ext_resource type="Script" path="res://Example/Gateway/Script/View/ViewTcpGateway.cs" id="2_ct4oh"]
+[ext_resource type="Script" path="res://Example/Gateway/Script/View/ViewBacNetGateway.cs" id="3_ip8nj"]
+[ext_resource type="Script" path="res://Example/Gateway/Script/View/ViewBacnetHttpServer.cs" id="4_plubp"]
+[ext_resource type="FontFile" uid="uid://b1atsgy4xkk7d" path="res://Font/SourceHanSansCN-Regular.otf" id="5_q4lsg"]
+
+[node name="Gateway" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tas7d")
+
+[node name="TcpGateway" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_ct4oh")
+
+[node name="BacNetGateway" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_ip8nj")
+
+[node name="BacnetHttpServer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_plubp")
+
+[node name="Setting" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GatewaySetting" type="Label" parent="Setting"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -181.5
+offset_right = 181.5
+offset_bottom = 70.0
+grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("5_q4lsg")
+theme_override_font_sizes/font_size = 48
+text = "Gateway Setting"
+
+[node name="MessageContainer" type="TextEdit" parent="Setting"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.56
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+editable = false
