@@ -14,13 +14,8 @@ script = ExtResource("1_jpym0")
 Target = NodePath("Card1")
 
 [node name="Card1" type="Panel" parent="."]
-custom_minimum_size = Vector2(90, 160)
-layout_mode = 2
-offset_left = 390.0
-offset_top = 488.0
-offset_right = 480.0
-offset_bottom = 648.0
-grow_horizontal = 2
-grow_vertical = 0
+layout_mode = 1
+offset_right = 90.0
+offset_bottom = 160.0
 pivot_offset = Vector2(45, 160)
 theme_override_styles/panel = ExtResource("2_cbb73")

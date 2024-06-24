@@ -22,6 +22,9 @@ namespace EGFramework.Examples.TweenAnime{
 			// tween2.SetLoops();
 
 			Tween tween3 = GetTree().CreateTween();
+			tween3.SetEase(Tween.EaseType.InOut);
+			tween3.SetTrans(Tween.TransitionType.Cubic);
+			tween3.TweenInterval(0.5f);
 			tween3.TweenProperty(Target,"size",new Vector2(100,40),0.5f);
 			tween3.TweenProperty(Target,"size",new Vector2(40,100),0.5f);
 			tween3.TweenProperty(Target,"size",new Vector2(40,40),0.5f);
