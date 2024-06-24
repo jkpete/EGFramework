@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace EGFramework.Examples.Gateway{
     public class DataModbusGatewaySetting{
         public float Delay { set; get; }
-        public List<DataModbus485Device> Devices485 = new List<DataModbus485Device>();
-        public List<DataModbusTCPDevice> DevicesTCP = new List<DataModbusTCPDevice>();
+        public Dictionary<string,DataModbus485Device> Devices485 = new Dictionary<string,DataModbus485Device>();
+        public Dictionary<string,DataModbusTCPDevice> DevicesTCP = new Dictionary<string,DataModbusTCPDevice>();
     }
     public class DataModbus485Device{
         public string SerialPort { set; get; }
@@ -21,10 +21,10 @@ namespace EGFramework.Examples.Gateway{
         public Dictionary<string,DataModbusRegister> Registers = new Dictionary<string, DataModbusRegister>();
     }
     public class DataModbusRegister{
-        public short Address { set; get; }
+        public ushort Address { set; get; }
         public ModbusRegisterType RegisterType { set; get; } = ModbusRegisterType.HoldingRegister;
-        public string Info { set; get; }
-        public string Unit { set; get; }
+        public string Name { set; get; }
+        // public string Unit { set; get; }
     }
     
 

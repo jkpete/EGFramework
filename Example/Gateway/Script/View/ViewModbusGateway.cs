@@ -1,7 +1,12 @@
 using EGFramework;
 using EGFramework.Examples.Gateway;
 using Godot;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Text.Json.Nodes;
+
 namespace EGFramework.Examples.Gateway{
 	public partial class ViewModbusGateway : Control,IEGFramework,IGateway
 	{
@@ -10,17 +15,7 @@ namespace EGFramework.Examples.Gateway{
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
-			this.EGEnabledProtocolTool<EGSerialPort>();
-			this.EGEnabledProtocolTool<EGTCPClient>();
-			this.EGSerialPort().SetBaudRate(9600);
-			// ReadTest();
-			// ReadTest2();
-			// ReadTest3();
-			// ReadTest3();
-			// ReadTest2();
-			// ReadTest();
-			WriteTest1();
-			WriteTest2();
+			InitGateway();
 		}
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -31,14 +26,54 @@ namespace EGFramework.Examples.Gateway{
 		public void InitGateway()
 		{
 			if(this.EGSave().GetDataByFile<DataModbusGatewaySetting>() == null){
-				Setting = new DataModbusGatewaySetting();
+				InitSettings();
 				this.EGSave().SetDataToFile(Setting);
 			}else{
 				Setting = this.EGSave().GetDataByFile<DataModbusGatewaySetting>();
 			}
 			this.EGEnabledProtocolTool<EGTCPClient>();
 			this.EGEnabledProtocolTool<EGSerialPort>();
+			this.EGSerialPort().SetBaudRate(9600);
 			//this.EGOnMessage<GateWayMessage>();
+		}
+
+		public void InitSettings(){
+			Setting = new DataModbusGatewaySetting();
+			Setting.Delay = 1.0f;
+			Setting.Devices485.Add("COM4",new DataModbus485Device(){
+				SerialPort = "COM4",
+				Address = 0x01,
+				BaudRate = 9600
+			});
+			Setting.Devices485["COM4"].Registers.Add("表头读数",new DataModbusRegister(){
+				Address = 0x00,
+				RegisterType = ModbusRegisterType.HoldingRegister,
+				Name = "表头读数"
+			});
+		}
+
+		public async void PushDataToGateway(){
+			JObject pushData = new JObject();
+			foreach(KeyValuePair<string,DataModbus485Device> device485 in Setting.Devices485){
+				foreach(KeyValuePair<string,DataModbusRegister> register in Setting.Devices485[device485.Key].Registers){
+					ModbusRTU_Response? result = await this.EGModbus().ReadRTUAsync(register.Value.RegisterType,device485.Key,device485.Value.Address,register.Value.Address,0x01);
+					if(result != null){
+						if(!((ModbusRTU_Response)result).IsError){
+							if(register.Value.RegisterType == ModbusRegisterType.HoldingRegister){
+								pushData.Add(register.Key,((ModbusRTU_Response)result).HoldingRegister[0]);
+							}
+						}else{
+							GD.Print("Error:"+((ModbusRTU_Response)result).ErrorCode);
+						}
+					}else{
+						GD.Print("Timeout!");
+					}
+				}
+			}
+			string resultJson = JsonConvert.SerializeObject(pushData,Formatting.Indented);
+			GD.Print(resultJson);
+			
+			this.EGTCPClient().SendStringData("192.168.1.170",5501,resultJson);
 		}
 		
 		public async void ReadTest(){
