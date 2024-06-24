@@ -104,9 +104,25 @@ namespace EGFramework {
             return BitConverter.ToUInt16(self, 0);
         }
 
+        public static ushort ToUShortLittleEndian(this byte[] self){
+            if (!BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(self);
+            }
+            return BitConverter.ToUInt16(self, 0);
+        }
+
         public static byte[] ToBytes(this uint self){
             byte[] byteArray = BitConverter.GetBytes(self);
             if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(byteArray);
+            }
+            return byteArray;
+        }
+        public static byte[] ToBytesLittleEndian(this uint self){
+            byte[] byteArray = BitConverter.GetBytes(self);
+            if (!BitConverter.IsLittleEndian)
             {
                 Array.Reverse(byteArray);
             }
@@ -119,6 +135,27 @@ namespace EGFramework {
                 Array.Reverse(self);
             }
             return BitConverter.ToUInt32(self, 0);
+        }
+        public static uint ToUINTLittleEndian(this byte[] self){
+            if (!BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(self);
+            }
+            return BitConverter.ToUInt32(self, 0);
+        }
+
+
+        public static byte[] ToBytes(this uint[] uintArray)
+        {
+            int byteCount = uintArray.Length * sizeof(uint);
+            byte[] byteArray = new byte[byteCount];
+            
+            for (int i = 0; i < uintArray.Length; i++)
+            {
+                byte[] tempBytes = BitConverter.GetBytes(uintArray[i]);
+                Array.Copy(tempBytes, 0, byteArray, i * sizeof(uint), sizeof(uint));
+            }
+            return byteArray;
         }
 
         /// <summary>
@@ -178,6 +215,17 @@ namespace EGFramework {
 
             return boolArray;
         }
+
+        public static bool[] ToBoolArray(this byte byteData)
+        {
+            bool[] boolArray = new bool[8];
+            byte currentByte = byteData;
+            for (int j = 0; j < 8; j++)
+            {
+                boolArray[j] = (currentByte & (1 << j)) != 0;
+            }
+            return boolArray;
+        }
         public static bool[] ToBoolArray(this int value)
         {
             string binaryString = Convert.ToString(value, 2); 
@@ -212,6 +260,92 @@ namespace EGFramework {
                 ushortArray[j] = (ushort)((byteArray[i] << 8) | byteArray[i + 1]);
             }
             return ushortArray;
+        }
+
+        public static byte[] ToByteArray(this float[] floatArray)
+        {
+            byte[] byteArray = new byte[floatArray.Length * 4];
+            for (int i = 0; i < floatArray.Length; i++)
+            {
+                byte[] tempArray = BitConverter.GetBytes(floatArray[i]);
+                if(!BitConverter.IsLittleEndian){
+                    Array.Reverse(tempArray); 
+                }
+                //Array.Reverse(tempArray); // 大端序需要反转字节数组以满足高字节在后
+                Array.Copy(tempArray, 0, byteArray, i * 4, 4);
+            }
+            return byteArray;
+        }
+
+        public static float[] ToFloatArray(this byte[] byteArray)
+        {
+            float[] floatArray = new float[byteArray.Length / 4];
+            for (int i = 0; i < floatArray.Length; i++)
+            {
+                byte[] tempArray = new byte[4];
+                Array.Copy(byteArray, i * 4, tempArray, 0, 4);
+                if(!BitConverter.IsLittleEndian){
+                    Array.Reverse(tempArray); 
+                }
+                //Array.Reverse(tempArray);
+                floatArray[i] = BitConverter.ToSingle(tempArray, 0);
+            }
+            return floatArray;
+        }
+        public static double[] ToDoubleArray(this byte[] byteArray)
+        {
+            double[] doubleArray = new double[byteArray.Length / 8];
+            for (int i = 0; i < doubleArray.Length; i++)
+            {
+                byte[] tempArray = new byte[8];
+                Array.Copy(byteArray, i * 8, tempArray, 0, 8);
+                if(!BitConverter.IsLittleEndian){
+                    Array.Reverse(tempArray); 
+                }
+                //Array.Reverse(tempArray);
+                doubleArray[i] = BitConverter.ToDouble(tempArray, 0);
+            }
+            return doubleArray;
+        }
+
+        public static byte[] ToByteArray(this int[] intArray)
+        {
+            byte[] byteArray = new byte[intArray.Length * 4];
+            for (int i = 0; i < intArray.Length; i++)
+            {
+                byte[] tempArray = BitConverter.GetBytes(intArray[i]);
+                //Array.Reverse(tempArray); // 大端序需要反转字节数组以满足高字节在后
+                Array.Copy(tempArray, 0, byteArray, i * 4, 4);
+            }
+            return byteArray;
+        }
+
+        public static byte[] Reverse(this byte[] bytes){
+            Array.Reverse(bytes);
+            return bytes;
+        }
+
+        public static byte[] ToSubByte(this byte[] bytes,int index,int length){
+            byte[] resultByte = new byte[length];
+            Array.Copy(bytes,index,resultByte,0,length);
+            return resultByte;
+        }
+
+        public static float[] ToSubFloat(this float[] floats,int index,int length){
+            float[] resultFloats = new float[length];
+            Array.Copy(floats,index,resultFloats,0,length);
+            return resultFloats;
+        }
+        public static float[] ToSubArrayByCount(this float[] originalArray, int targetLength)
+        {
+            float[] reducedArray = new float[targetLength];
+            float ratio = (float)(originalArray.Length - 1) / (targetLength - 1);
+            for (int i = 0; i < targetLength; i++)
+            {
+                int originalIndex = (int)Math.Round(ratio * i);
+                reducedArray[i] = originalArray[originalIndex];
+            }
+            return reducedArray;
         }
 
     }

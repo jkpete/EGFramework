@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://1garq2laye1n"]
+[gd_scene load_steps=3 format=3 uid="uid://1garq2laye1n"]
 
 [ext_resource type="Script" path="res://Example/Tween/Script/TweenTest.cs" id="1_jpym0"]
+[ext_resource type="StyleBox" uid="uid://t4prctf3uxtb" path="res://Example/Theme/StyleBox/CardFrame.tres" id="2_cbb73"]
 
 [node name="EgTween" type="Control" node_paths=PackedStringArray("Target")]
 layout_mode = 3
@@ -10,20 +11,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jpym0")
-Target = NodePath("ColorRect")
+Target = NodePath("Card1")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+[node name="Card1" type="Panel" parent="."]
+custom_minimum_size = Vector2(90, 160)
+layout_mode = 2
+offset_left = 390.0
+offset_top = 488.0
+offset_right = 480.0
+offset_bottom = 648.0
 grow_horizontal = 2
-grow_vertical = 2
-rotation = 1.14319
-pivot_offset = Vector2(20, 20)
+grow_vertical = 0
+pivot_offset = Vector2(45, 160)
+theme_override_styles/panel = ExtResource("2_cbb73")

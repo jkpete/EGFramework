@@ -3,15 +3,15 @@ using System;
 namespace EGFramework.Examples.TweenAnime{
 	public partial class TweenTest : Node
 	{
-		[Export] ColorRect Target {set;get;}
+		[Export] Control Target {set;get;}
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
-			Tween tween = GetTree().CreateTween();
-			tween.TweenProperty(Target,"color",Colors.Red,1.0f);
-			tween.TweenProperty(Target,"color",Colors.Green,1.0f);
-			tween.TweenProperty(Target,"color",Colors.Blue,1.0f);
-			tween.SetLoops();
+			// Tween tween = GetTree().CreateTween();
+			// tween.TweenProperty(Target,"color",Colors.Red,1.0f);
+			// tween.TweenProperty(Target,"color",Colors.Green,1.0f);
+			// tween.TweenProperty(Target,"color",Colors.Blue,1.0f);
+			// tween.SetLoops();
 
 			// Tween tween2 = GetTree().CreateTween();
 			// tween2.TweenProperty(Target,"position",new Vector2(100,0),1.0f);

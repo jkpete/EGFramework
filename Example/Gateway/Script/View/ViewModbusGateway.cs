@@ -15,7 +15,14 @@ namespace EGFramework.Examples.Gateway{
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
-			InitGateway();
+			if(this.Visible){
+				InitGateway();
+			}
+			// byte[] fData ={0x40,0xB9,0x9B,0x00,0x00,0x00,0x00,0x00};
+			// fData.Reverse();
+			// GD.Print(fData.ToDoubleArray()[0]);
+			// double t = 54.32f;
+			// GD.Print(BitConverter.GetBytes(fData.ToDoubleArray()[0]).ToStringByHex()); 
 		}
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -53,6 +60,9 @@ namespace EGFramework.Examples.Gateway{
 		}
 
 		public async void PushDataToGateway(){
+			if(!this.Visible){
+				return;
+			}
 			JObject pushData = new JObject();
 			foreach(KeyValuePair<string,DataModbus485Device> device485 in Setting.Devices485){
 				foreach(KeyValuePair<string,DataModbusRegister> register in Setting.Devices485[device485.Key].Registers){
