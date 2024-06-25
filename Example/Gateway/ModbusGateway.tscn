@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://Example/Gateway/Script/View/ViewModbusGateway.cs" id="1_34uaa"]
 
 [node name="ModbusGateway" type="Control"]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,5 +13,6 @@ script = ExtResource("1_34uaa")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 2.0
+autostart = true
 
 [connection signal="timeout" from="Timer" to="." method="PushDataToGateway"]

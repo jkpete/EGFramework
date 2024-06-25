@@ -11,17 +11,18 @@ namespace EGFramework.Examples.Gateway{
         public string SerialPort { set; get; }
         public byte Address { set; get; }
         public int BaudRate { set; get; }
-        public Dictionary<string,DataModbusRegister> Registers = new Dictionary<string, DataModbusRegister>();
+        public Dictionary<string,DataModbusValue> ValueRegisters = new Dictionary<string, DataModbusValue>();
     }
 
     public class DataModbusTCPDevice{
         public string Host { set; get; }
         public int Port { set; get; }
         public byte Address { set; get; }
-        public Dictionary<string,DataModbusRegister> Registers = new Dictionary<string, DataModbusRegister>();
+        public Dictionary<string,DataModbusValue> ValueRegisters = new Dictionary<string, DataModbusValue>();
     }
-    public class DataModbusRegister{
+    public class DataModbusValue{
         public ushort Address { set; get; }
+        public ushort Length { set; get; }
         public ModbusRegisterType RegisterType { set; get; } = ModbusRegisterType.HoldingRegister;
         public string Name { set; get; }
         // public string Unit { set; get; }

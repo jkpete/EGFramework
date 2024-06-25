@@ -24,8 +24,7 @@ namespace EGFramework.Examples.Gateway{
 			// double t = 54.32f;
 			// GD.Print(BitConverter.GetBytes(fData.ToDoubleArray()[0]).ToStringByHex()); 
 			// byte[] fData = {0x42,0x0D,0x33,0x33};
-			// GD.Print(fData.Reverse().ToFloatArray()[0]);
-
+			// GD.Print(fData.ToFloatArrayBigEndian()[0]);
 		}
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -55,10 +54,23 @@ namespace EGFramework.Examples.Gateway{
 				Address = 0x01,
 				BaudRate = 9600
 			});
-			Setting.Devices485["COM4"].Registers.Add("表头读数",new DataModbusRegister(){
+			Setting.Devices485["COM4"].ValueRegisters.Add("表头读数",new DataModbusValue(){
 				Address = 0x00,
+				Length = 0x01,
 				RegisterType = ModbusRegisterType.HoldingRegister,
 				Name = "表头读数"
+			});
+			string IpPort = "192.168.1.170:8234";
+			Setting.DevicesTCP.Add(IpPort,new DataModbusTCPDevice(){
+				Host = IpPort.GetHostByIp(),
+				Port = IpPort.GetPortByIp(),
+				Address = 0x01
+			});
+			Setting.DevicesTCP[IpPort].ValueRegisters.Add("温度",new DataModbusValue(){
+				Address = 0x04B0,
+				Length = 0x01,
+				RegisterType = ModbusRegisterType.HoldingRegister,
+				Name = "温度"
 			});
 		}
 
@@ -68,8 +80,8 @@ namespace EGFramework.Examples.Gateway{
 			}
 			JObject pushData = new JObject();
 			foreach(KeyValuePair<string,DataModbus485Device> device485 in Setting.Devices485){
-				foreach(KeyValuePair<string,DataModbusRegister> register in Setting.Devices485[device485.Key].Registers){
-					ModbusRTU_Response? result = await this.EGModbus().ReadRTUAsync(register.Value.RegisterType,device485.Key,device485.Value.Address,register.Value.Address,0x01);
+				foreach(KeyValuePair<string,DataModbusValue> register in Setting.Devices485[device485.Key].ValueRegisters){
+					ModbusRTU_Response? result = await this.EGModbus().ReadRTUAsync(register.Value.RegisterType,device485.Key,device485.Value.Address,register.Value.Address,register.Value.Length);
 					if(result != null){
 						if(!((ModbusRTU_Response)result).IsError){
 							if(register.Value.RegisterType == ModbusRegisterType.HoldingRegister){

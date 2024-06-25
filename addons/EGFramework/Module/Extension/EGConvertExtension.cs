@@ -292,6 +292,22 @@ namespace EGFramework {
             }
             return floatArray;
         }
+
+        public static float[] ToFloatArrayBigEndian(this byte[] byteArray)
+        {
+            float[] floatArray = new float[byteArray.Length / 4];
+            for (int i = 0; i < floatArray.Length; i++)
+            {
+                byte[] tempArray = new byte[4];
+                Array.Copy(byteArray, i * 4, tempArray, 0, 4);
+                if(BitConverter.IsLittleEndian){
+                    Array.Reverse(tempArray); 
+                }
+                //Array.Reverse(tempArray);
+                floatArray[i] = BitConverter.ToSingle(tempArray, 0);
+            }
+            return floatArray;
+        }
         public static double[] ToDoubleArray(this byte[] byteArray)
         {
             double[] doubleArray = new double[byteArray.Length / 8];
