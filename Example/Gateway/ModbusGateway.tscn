@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://Example/Gateway/Script/View/ViewModbusGateway.cs" id="1_34uaa"]
 
 [node name="ModbusGateway" type="Control"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

@@ -23,6 +23,9 @@ namespace EGFramework.Examples.Gateway{
 			// GD.Print(fData.ToDoubleArray()[0]);
 			// double t = 54.32f;
 			// GD.Print(BitConverter.GetBytes(fData.ToDoubleArray()[0]).ToStringByHex()); 
+			// byte[] fData = {0x42,0x0D,0x33,0x33};
+			// GD.Print(fData.Reverse().ToFloatArray()[0]);
+
 		}
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
