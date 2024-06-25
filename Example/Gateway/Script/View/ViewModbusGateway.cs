@@ -124,6 +124,19 @@ namespace EGFramework.Examples.Gateway{
 			}
 		}
 
+		public async void ReadTestTCP(ushort address){
+			ModbusTCP_Response? result3 = await this.EGModbus().ReadTCPAsync(ModbusRegisterType.HoldingRegister,"192.168.1.170:8234",0x01,address,0x01);
+			if(result3 != null){
+				if(!((ModbusTCP_Response)result3).IsError){
+					GD.Print("Register"+((ModbusTCP_Response)result3).HoldingRegister[0]);
+				}else{
+					GD.Print("Error:"+((ModbusTCP_Response)result3).ErrorCode);
+				}
+			}else{
+				GD.Print("Timeout!");
+			}
+		}
+
 		public async void WriteTest1(){
 			ModbusRTU_Response? result = await this.EGModbus().WriteOnceRTUAsync(ModbusRegisterType.HoldingRegister,"COM4",0x01,0x02,(ushort)0x50);
 			if(result != null){
@@ -144,6 +157,19 @@ namespace EGFramework.Examples.Gateway{
 					GD.Print("Write[2]"+((ModbusRTU_Response)result).FunctionType);
 				}else{
 					GD.Print("Error:"+((ModbusRTU_Response)result).ErrorCode);
+				}
+			}else{
+				GD.Print("Timeout!");
+			}
+		}
+
+		public async void WriteTestTCP(){
+			ModbusTCP_Response? result = await this.EGModbus().WriteOnceTCPAsync(ModbusRegisterType.HoldingRegister,"192.168.1.170:8234",0x01,2005,(ushort)20);
+			if(result != null){
+				if(!((ModbusTCP_Response)result).IsError){
+					GD.Print("Write"+((ModbusTCP_Response)result).FunctionType);
+				}else{
+					GD.Print("Error:"+((ModbusTCP_Response)result).ErrorCode);
 				}
 			}else{
 				GD.Print("Timeout!");

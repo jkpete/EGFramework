@@ -17,6 +17,10 @@ namespace EGFramework{
         public int NextSendRTU = 0;
         public int SendPointerRTU = 1;
 
+        public Queue<int> WaitForSendTCP = new Queue<int>();
+        public int NextSendTCP = 0;
+        public int SendPointerTCP = 1;
+
         public EasyEvent OnReadTimeOut = new EasyEvent();
 
         public void Init()
@@ -159,14 +163,18 @@ namespace EGFramework{
         private bool IsRequestTCP { set; get; }
         public async Task<ModbusTCP_Response?> ReadTCPAsync(ModbusRegisterType registerType,string ipPort,byte deviceAddress,ushort start,ushort count){
             if(IsRequestTCP){
+                SendPointerTCP++;
+                int messageId = SendPointerTCP;
+                WaitForSendTCP.Enqueue(messageId);
                 await Task.Run(async () =>
                 {
-                    while (IsRequestTCP)
+                    while (IsRequestTCP || NextSendTCP != messageId)
                     {
                         await Task.Delay(10);
                         //break;
                     }
                 });
+                GD.Print("-----Read"+messageId+" ----");
                 //return null;
             }
             TCPCache.Clear();
@@ -194,9 +202,64 @@ namespace EGFramework{
                 }
             });
             IsRequestTCP = false;
+            if(this.WaitForSendTCP.Count>0){
+                NextSendTCP = this.WaitForSendTCP.Dequeue();
+            }
             return res;
         }
         
+        public async Task<ModbusTCP_Response?> WriteOnceTCPAsync(ModbusRegisterType registerType,string serialPort,byte deviceAddress,ushort registerAddress,object value){
+            if(IsRequestTCP){
+                SendPointerTCP++;
+                int messageId = SendPointerTCP;
+                WaitForSendTCP.Enqueue(messageId);
+                await Task.Run(async () =>
+                {
+                    while (IsRequestTCP || NextSendTCP != messageId)
+                    {
+                        await Task.Delay(10);
+                        //break;
+                    }
+                });
+                GD.Print("-----Write"+messageId+" ----");
+                //return null;
+            }
+            TCPCache.Clear();
+            IsRequestTCP = true;
+            IRequest WriteRequest;
+            ModbusTCP_Response? res = null;
+            switch(registerType){
+                case ModbusRegisterType.Coil:
+                    WriteRequest = new ModbusTCP_WriteSingleCoil(deviceAddress,registerAddress,(bool)value);
+                    this.EGSendMessage(WriteRequest,serialPort,ProtocolType.TCPClient);
+                    break;
+                case ModbusRegisterType.HoldingRegister:
+                    WriteRequest = new ModbusTCP_WriteSingleHoldingRegister(deviceAddress,registerAddress,(ushort)value);
+                    this.EGSendMessage(WriteRequest,serialPort,ProtocolType.TCPClient);
+                    break;
+            }
+            await Task.Run(async ()=>{
+                int timeout = 0;
+                while(TCPCache.Count==0 && timeout < Delay){
+                    await Task.Delay(10);
+                    timeout+=10;
+                }
+                if(TCPCache.Count>0){
+                    res = TCPCache.Dequeue();
+                }else{
+                    //Print Error Timeout
+                    OnReadTimeOut.Invoke();
+                }
+            });
+            IsRequestTCP = false;
+            if(this.WaitForSendTCP.Count>0){
+                NextSendTCP = this.WaitForSendTCP.Dequeue();
+            }
+            if(this.WaitForSendTCP.Count>0){
+                NextSendTCP = this.WaitForSendTCP.Dequeue();
+            }
+            return res;
+        }
         #endregion
         public IArchitecture GetArchitecture()
         {
