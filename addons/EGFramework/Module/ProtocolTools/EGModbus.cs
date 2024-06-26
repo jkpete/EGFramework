@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Godot;
@@ -234,7 +235,12 @@ namespace EGFramework{
                     this.EGSendMessage(WriteRequest,serialPort,ProtocolType.TCPClient);
                     break;
                 case ModbusRegisterType.HoldingRegister:
-                    WriteRequest = new ModbusTCP_WriteSingleHoldingRegister(deviceAddress,registerAddress,(ushort)value);
+                    if(value.GetType() == typeof(float)){
+                        ushort[] writeData = ((float)value).ToByteArrayBigEndian().ToUShortArray();
+                        WriteRequest = new ModbusTCP_WriteMultiHoldingRegister(deviceAddress,registerAddress,writeData);
+                    }else{
+                        WriteRequest = new ModbusTCP_WriteSingleHoldingRegister(deviceAddress,registerAddress,(ushort)value);
+                    }
                     this.EGSendMessage(WriteRequest,serialPort,ProtocolType.TCPClient);
                     break;
             }

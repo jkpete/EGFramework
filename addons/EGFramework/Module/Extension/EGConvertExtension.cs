@@ -277,6 +277,30 @@ namespace EGFramework {
             return byteArray;
         }
 
+        public static byte[] ToByteArray(this float value)
+        {
+            byte[] byteArray = new byte[4];
+            byte[] tempArray = BitConverter.GetBytes(value);
+            if(!BitConverter.IsLittleEndian){
+                Array.Reverse(tempArray); 
+            }
+            //Array.Reverse(tempArray); // 大端序需要反转字节数组以满足高字节在后
+            Array.Copy(tempArray, 0, byteArray, 0, 4);
+            return byteArray;
+        }
+        public static byte[] ToByteArrayBigEndian(this float value)
+        {
+            byte[] byteArray = new byte[4];
+            byte[] tempArray = BitConverter.GetBytes(value);
+            if(BitConverter.IsLittleEndian){
+                Array.Reverse(tempArray); 
+            }
+            //Array.Reverse(tempArray); // 大端序需要反转字节数组以满足高字节在后
+            Array.Copy(tempArray, 0, byteArray, 0, 4);
+            return byteArray;
+        }
+
+
         public static float[] ToFloatArray(this byte[] byteArray)
         {
             float[] floatArray = new float[byteArray.Length / 4];

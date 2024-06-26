@@ -141,7 +141,6 @@ namespace EGFramework{
                     byte[] receivedByte = new byte[bytesRead];
                     Array.Copy(buffer, 0, receivedByte, 0, bytesRead);
                     ResponseMsg receivedMsgs = new ResponseMsg(data,receivedByte,ClientName, ProtocolType.TCPClient);
-                    Godot.GD.Print("[TCP-R]+("+ClientName+")" + data);
                     ResponseMsgs.Enqueue(receivedMsgs);
                     //this.EGOnReceivedData(receivedMsgs);
                 }

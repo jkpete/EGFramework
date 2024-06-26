@@ -26,6 +26,13 @@ namespace EGFramework.Examples.Gateway{
 			// GD.Print(BitConverter.GetBytes(fData.ToDoubleArray()[0]).ToStringByHex()); 
 			// byte[] fData = {0x42,0x0D,0x33,0x33};
 			// GD.Print(fData.ToFloatArrayBigEndian()[0]);
+			this.EGRegisterMessageEvent<TypeTCPSetRotateData>(e=>{
+				if(e.ValueSet.ContainsKey("rotational_speed")){
+					WriteHoldingRegisterTCP("192.168.1.170:8234","rotational_speed",e.ValueSet["rotational_speed"]);
+					GD.Print("Write success!");
+				}
+			});
+			this.EGOnMessage<TypeTCPSetRotateData>();
 		}
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -139,10 +146,33 @@ namespace EGFramework.Examples.Gateway{
             {
                 { "type", "SpeedControlDeviceLogin" }
             };
-			this.EGTCPClient().SendStringData("192.168.1.11",9966,loginData.ToString());
+			// this.EGTCPClient().SendStringData("192.168.1.11",9966,loginData.ToString());
+			this.EGTCPClient().SendStringData("192.168.1.170",5501,loginData.ToString());
 			await Task.Delay(50);
-			this.EGTCPClient().SendStringData("192.168.1.11",9966,resultJson);
-			
+			// this.EGTCPClient().SendStringData("192.168.1.11",9966,resultJson);
+			this.EGTCPClient().SendStringData("192.168.1.170",5501,resultJson);
+		}
+
+		public async void WriteHoldingRegisterTCP(string ipPort,string registerKey,object value){
+			DataModbusValue modbusValue = null;
+			foreach(KeyValuePair<string,DataModbusTCPDevice> deviceTCP in Setting.DevicesTCP){
+				if(Setting.DevicesTCP[deviceTCP.Key].ValueRegisters.ContainsKey(registerKey)){
+					modbusValue = Setting.DevicesTCP[deviceTCP.Key].ValueRegisters[registerKey];
+				}
+			}
+			if(modbusValue == null){
+				return;
+			}
+			ModbusTCP_Response? result = await this.EGModbus().WriteOnceTCPAsync(modbusValue.RegisterType,ipPort,0x01,modbusValue.Address,value);
+			if(result != null){
+				if(!((ModbusTCP_Response)result).IsError){
+					GD.Print("Write"+((ModbusTCP_Response)result).FunctionType);
+				}else{
+					GD.Print("Error:"+((ModbusTCP_Response)result).ErrorCode);
+				}
+			}else{
+				GD.Print("Timeout!");
+			}
 		}
 		
 		public async void ReadTest(){
@@ -244,4 +274,35 @@ namespace EGFramework.Examples.Gateway{
 			this.data = data;
 		}
 	}
+	public struct TypeTCPSetRotateData:IResponse{
+		public int code { set; get; }
+		public string data { set; get; }
+		public Dictionary<string,float> ValueSet { set; get; }
+
+        public bool TrySetData(string protocolData, byte[] protocolBytes)
+        {
+            try
+			{
+				if(protocolBytes[0]=='{'){
+					
+					TypeTCPSetRotateData receivedData = JsonConvert.DeserializeObject<TypeTCPSetRotateData>(protocolData);
+					this.code = receivedData.code;
+					this.data = receivedData.data;
+					if(data != null && data != ""){
+						ValueSet = JsonConvert.DeserializeObject<Dictionary<string,float>>(data);
+					}else{
+						return false;
+					}
+					return true;
+				}else{
+					return false;
+				}
+			}
+			catch (System.Exception)
+			{
+				return false;
+				throw;
+			}
+        }
+    }
 }
