@@ -49,17 +49,17 @@ namespace EGFramework.Examples.Gateway{
 		public void InitSettings(){
 			Setting = new DataModbusGatewaySetting();
 			Setting.Delay = 1.0f;
-			Setting.Devices485.Add("COM4",new DataModbus485Device(){
-				SerialPort = "COM4",
-				Address = 0x01,
-				BaudRate = 9600
-			});
-			Setting.Devices485["COM4"].ValueRegisters.Add("表头读数",new DataModbusValue(){
-				Address = 0x00,
-				Length = 0x01,
-				RegisterType = ModbusRegisterType.HoldingRegister,
-				Name = "表头读数"
-			});
+			// Setting.Devices485.Add("COM4",new DataModbus485Device(){
+			// 	SerialPort = "COM4",
+			// 	Address = 0x01,
+			// 	BaudRate = 9600
+			// });
+			// Setting.Devices485["COM4"].ValueRegisters.Add("表头读数",new DataModbusValue(){
+			// 	Address = 0x00,
+			// 	Length = 0x01,
+			// 	RegisterType = ModbusRegisterType.HoldingRegister,
+			// 	Name = "表头读数"
+			// });
 			string IpPort = "192.168.1.170:8234";
 			Setting.DevicesTCP.Add(IpPort,new DataModbusTCPDevice(){
 				Host = IpPort.GetHostByIp(),
@@ -97,7 +97,42 @@ namespace EGFramework.Examples.Gateway{
 			}
 			string resultJson = JsonConvert.SerializeObject(pushData,Formatting.Indented);
 			GD.Print(resultJson);
-			
+			this.EGTCPClient().SendStringData("192.168.1.170",5501,resultJson);
+		}
+
+		public async void PushTCPDataToGateway(){
+			if(!this.Visible){
+				return;
+			}
+			JObject pushData = new JObject();
+			foreach(KeyValuePair<string,DataModbusTCPDevice> deviceTCP in Setting.DevicesTCP){
+				foreach(KeyValuePair<string,DataModbusValue> register in Setting.DevicesTCP[deviceTCP.Key].ValueRegisters){
+					ModbusTCP_Response? result = await this.EGModbus().ReadTCPAsync(register.Value.RegisterType,deviceTCP.Key,deviceTCP.Value.Address,register.Value.Address,register.Value.Length);
+					if(result != null){
+						if(!((ModbusTCP_Response)result).IsError){
+							if(register.Value.RegisterType == ModbusRegisterType.HoldingRegister){
+								object onceValue = 0;
+								switch(register.Value.ValueType){
+									case DataModbusValueType.Float_:
+										onceValue = ((ModbusTCP_Response)result).SourceValueData?.ToFloatArrayBigEndian()[0];
+										break;
+									case DataModbusValueType.UShort_:
+										onceValue = ((ModbusTCP_Response)result).HoldingRegister[0];
+										break;
+								}
+								pushData.Add(register.Key, (float)onceValue);
+								
+							}
+						}else{
+							GD.Print("Error:"+((ModbusTCP_Response)result).ErrorCode);
+						}
+					}else{
+						GD.Print("Timeout!");
+					}
+				}
+			}
+			string resultJson = JsonConvert.SerializeObject(pushData,Formatting.Indented);
+			GD.Print(resultJson);
 			this.EGTCPClient().SendStringData("192.168.1.170",5501,resultJson);
 		}
 		

@@ -375,6 +375,7 @@ namespace EGFramework{
         public uint DataLength { set; get; }
         
         public byte[] SourceData { set; get; }
+        public byte[] SourceValueData { set; get; }
         public ModbusFunctionType FunctionType { set; get; }
         public ModbusErrorCode ErrorCode { set; get; }
         public bool IsError { set; get; }
@@ -407,24 +408,28 @@ namespace EGFramework{
                             byte readCoilLength = protocolBytes[8];
                             byte[] CoilBytes = new byte[readCoilLength];
                             Array.Copy(protocolBytes,9,CoilBytes,0,readCoilLength);
+                            SourceValueData = CoilBytes;
                             Coil = CoilBytes.ToBoolArray();
                             return true;
                         case ModbusFunctionType.ReadDiscreteInput:
                             byte readDiscreteInputLength = protocolBytes[8];
                             byte[] DiscreteInputBytes = new byte[readDiscreteInputLength];
                             Array.Copy(protocolBytes,9,DiscreteInputBytes,0,readDiscreteInputLength);
+                            SourceValueData = DiscreteInputBytes;
                             DiscreteInput = DiscreteInputBytes.ToBoolArray();
                             return true;
                         case ModbusFunctionType.ReadHoldingRegisters:
                             byte readHoldingRegistersLength = protocolBytes[8];
                             byte[] HoldingRegistersBytes = new byte[readHoldingRegistersLength];
                             Array.Copy(protocolBytes,9,HoldingRegistersBytes,0,readHoldingRegistersLength);
+                            SourceValueData = HoldingRegistersBytes;
                             HoldingRegister = HoldingRegistersBytes.ToUShortArray();
                             return true;
                         case ModbusFunctionType.ReadInputRegisters:
                             byte readInputRegistersLength = protocolBytes[8];
                             byte[] InputRegistersBytes = new byte[readInputRegistersLength];
                             Array.Copy(protocolBytes,9,InputRegistersBytes,0,readInputRegistersLength);
+                            SourceValueData = InputRegistersBytes;
                             InputRegister = InputRegistersBytes.ToUShortArray();
                             return true;
                         case ModbusFunctionType.WriteSingleCoil:
@@ -762,6 +767,7 @@ namespace EGFramework{
         public ushort RegisterStartAddress { set; get; }
         
         public byte[] SourceData { set; get; }
+        public byte[] SourceValueData { set; get; }
         public ModbusFunctionType FunctionType { set; get; }
         public ModbusErrorCode ErrorCode { set; get; }
         public bool IsError { set; get; }
@@ -798,24 +804,28 @@ namespace EGFramework{
                         byte readCoilLength = protocolBytes[2];
                         byte[] CoilBytes = new byte[readCoilLength];
                         Array.Copy(protocolBytes,3,CoilBytes,0,readCoilLength);
+                        SourceValueData = CoilBytes;
                         Coil = CoilBytes.ToBoolArray();
                         return true;
                     case ModbusFunctionType.ReadDiscreteInput:
                         byte readDiscreteInputLength = protocolBytes[2];
                         byte[] DiscreteInputBytes = new byte[readDiscreteInputLength];
                         Array.Copy(protocolBytes,3,DiscreteInputBytes,0,readDiscreteInputLength);
+                        SourceValueData = DiscreteInputBytes;
                         DiscreteInput = DiscreteInputBytes.ToBoolArray();
                         return true;
                     case ModbusFunctionType.ReadHoldingRegisters:
                         byte readHoldingRegistersLength = protocolBytes[2];
                         byte[] HoldingRegistersBytes = new byte[readHoldingRegistersLength];
                         Array.Copy(protocolBytes,3,HoldingRegistersBytes,0,readHoldingRegistersLength);
+                        SourceValueData = HoldingRegistersBytes;
                         HoldingRegister = HoldingRegistersBytes.ToUShortArray();
                         return true;
                     case ModbusFunctionType.ReadInputRegisters:
                         byte readInputRegistersLength = protocolBytes[2];
                         byte[] InputRegistersBytes = new byte[readInputRegistersLength];
                         Array.Copy(protocolBytes,3,InputRegistersBytes,0,readInputRegistersLength);
+                        SourceValueData = InputRegistersBytes;
                         InputRegister = InputRegistersBytes.ToUShortArray();
                         return true;
                     case ModbusFunctionType.WriteSingleCoil:

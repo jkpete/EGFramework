@@ -23,9 +23,15 @@ namespace EGFramework.Examples.Gateway{
     public class DataModbusValue{
         public ushort Address { set; get; }
         public ushort Length { set; get; }
+        public DataModbusValueType ValueType = DataModbusValueType.Float_;
         public ModbusRegisterType RegisterType { set; get; } = ModbusRegisterType.HoldingRegister;
         public string Name { set; get; }
         // public string Unit { set; get; }
+    }
+
+    public enum DataModbusValueType{
+        UShort_ = 0,
+        Float_ = 1
     }
     
 
