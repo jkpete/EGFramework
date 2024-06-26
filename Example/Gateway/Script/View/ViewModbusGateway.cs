@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 
 namespace EGFramework.Examples.Gateway{
 	public partial class ViewModbusGateway : Control,IEGFramework,IGateway
@@ -131,9 +132,17 @@ namespace EGFramework.Examples.Gateway{
 					}
 				}
 			}
-			string resultJson = JsonConvert.SerializeObject(pushData,Formatting.Indented);
-			GD.Print(resultJson);
-			this.EGTCPClient().SendStringData("192.168.1.170",5501,resultJson);
+			string resultJson = JsonConvert.SerializeObject(pushData);
+			resultJson = JsonConvert.SerializeObject(new TypeTCPRotateData(resultJson),Formatting.Indented);
+			// GD.Print(resultJson);
+			JObject loginData = new JObject
+            {
+                { "type", "SpeedControlDeviceLogin" }
+            };
+			this.EGTCPClient().SendStringData("192.168.1.11",9966,loginData.ToString());
+			await Task.Delay(50);
+			this.EGTCPClient().SendStringData("192.168.1.11",9966,resultJson);
+			
 		}
 		
 		public async void ReadTest(){
@@ -226,5 +235,13 @@ namespace EGFramework.Examples.Gateway{
 			}
 		}
 		
+	}
+	public struct TypeTCPRotateData{
+		public string type;
+		public string data;
+		public TypeTCPRotateData(string data){
+			this.type = "SendRotationalSpeed";
+			this.data = data;
+		}
 	}
 }
