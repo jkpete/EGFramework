@@ -209,7 +209,7 @@ namespace EGFramework{
             return res;
         }
         
-        public async Task<ModbusTCP_Response?> WriteOnceTCPAsync(ModbusRegisterType registerType,string serialPort,byte deviceAddress,ushort registerAddress,object value){
+        public async Task<ModbusTCP_Response?> WriteOnceTCPAsync(ModbusRegisterType registerType,string ipPort,byte deviceAddress,ushort registerAddress,object value){
             if(IsRequestTCP){
                 SendPointerTCP++;
                 int messageId = SendPointerTCP;
@@ -232,7 +232,7 @@ namespace EGFramework{
             switch(registerType){
                 case ModbusRegisterType.Coil:
                     WriteRequest = new ModbusTCP_WriteSingleCoil(deviceAddress,registerAddress,(bool)value);
-                    this.EGSendMessage(WriteRequest,serialPort,ProtocolType.TCPClient);
+                    this.EGSendMessage(WriteRequest,ipPort,ProtocolType.TCPClient);
                     break;
                 case ModbusRegisterType.HoldingRegister:
                     if(value.GetType() == typeof(float)){
@@ -241,7 +241,7 @@ namespace EGFramework{
                     }else{
                         WriteRequest = new ModbusTCP_WriteSingleHoldingRegister(deviceAddress,registerAddress,(ushort)value);
                     }
-                    this.EGSendMessage(WriteRequest,serialPort,ProtocolType.TCPClient);
+                    this.EGSendMessage(WriteRequest,ipPort,ProtocolType.TCPClient);
                     break;
             }
             await Task.Run(async ()=>{

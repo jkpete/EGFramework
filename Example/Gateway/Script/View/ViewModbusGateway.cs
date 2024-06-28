@@ -33,6 +33,7 @@ namespace EGFramework.Examples.Gateway{
 				}
 			});
 			this.EGOnMessage<TypeTCPSetRotateData>();
+			this.GetModule<EGMessage>().SetDelay(0);
 		}
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
