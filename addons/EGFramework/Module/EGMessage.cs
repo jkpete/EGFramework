@@ -85,7 +85,9 @@ namespace EGFramework
 
         public void SetDelay(int millisecond){
             this.SendDelay = millisecond;
-            RequestTimer.Interval = millisecond;
+            if(millisecond != 0){
+                RequestTimer.Interval = millisecond;
+            }
         }
     }
     
