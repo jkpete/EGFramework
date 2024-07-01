@@ -12,6 +12,9 @@
     <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
     <PackageReference Include="WebDav.Client" Version="2.8.0" />
     <PackageReference Include="MQTTnet" Version="4.3.3.952" />
-    <PackageReference Include="BACnet" Version="2.0.4" />
+    <PackageReference Include="Makaretu.Dns.Multicast" Version="0.27.0" />
+    <PackageReference Include="PacketDotNet" Version="0.19.3" />
+    <PackageReference Include="SharpPcap" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="8.0.0" />
   </ItemGroup>
 </Project>

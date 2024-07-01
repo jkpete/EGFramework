@@ -20,12 +20,12 @@ namespace EGFramework
         /// <value></value>
         public int SendDelay { set; get; } = 100;
         public Queue<RequestMsgEvent> RequestCache { set; get; } = new Queue<RequestMsgEvent>();
-        private Timer RequestTimer { set; get; }
+        private System.Timers.Timer RequestTimer { set; get; }
 
         public override void Init()
         {
             if(SendDelay>0){
-                RequestTimer = new Timer(SendDelay);
+                RequestTimer = new System.Timers.Timer(SendDelay);
                 RequestTimer.Elapsed += ExecuteRequest;
                 RequestTimer.AutoReset = true;
                 RequestTimer.Enabled = true;
