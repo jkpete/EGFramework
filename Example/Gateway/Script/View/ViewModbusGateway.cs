@@ -129,8 +129,8 @@ namespace EGFramework.Examples.Gateway{
 										onceValue = ((ModbusTCP_Response)result).HoldingRegister[0];
 										break;
 								}
+								GD.Print(register.Key+"[Read]:"+(float)onceValue);
 								pushData.Add(register.Key, (float)onceValue);
-								
 							}
 						}else{
 							GD.Print("Error:"+((ModbusTCP_Response)result).ErrorCode);
