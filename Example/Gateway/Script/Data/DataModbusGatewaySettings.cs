@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace EGFramework.Examples.Gateway{
     public class DataModbusGatewaySetting{
         public float Delay { set; get; }
+        public AddressTCPClient TCPClientAddress { set; get; }
         public Dictionary<string,DataModbus485Device> Devices485 = new Dictionary<string,DataModbus485Device>();
         public Dictionary<string,DataModbusTCPDevice> DevicesTCP = new Dictionary<string,DataModbusTCPDevice>();
     }

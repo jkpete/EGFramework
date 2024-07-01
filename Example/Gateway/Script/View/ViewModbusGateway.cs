@@ -28,7 +28,7 @@ namespace EGFramework.Examples.Gateway{
 			// GD.Print(fData.ToFloatArrayBigEndian()[0]);
 			this.EGRegisterMessageEvent<TypeTCPSetRotateData>(e=>{
 				if(e.ValueSet.ContainsKey("rotational_speed")){
-					WriteHoldingRegisterTCP("192.168.1.170:8234","rotational_speed",e.ValueSet["rotational_speed"]);
+					WriteHoldingRegisterTCP("rotational_speed",e.ValueSet["rotational_speed"]);
 					GD.Print("Write success!");
 				}
 			});
@@ -148,17 +148,18 @@ namespace EGFramework.Examples.Gateway{
                 { "type", "SpeedControlDeviceLogin" }
             };
 			// this.EGTCPClient().SendStringData("192.168.1.11",9966,loginData.ToString());
-			this.EGTCPClient().SendStringData("192.168.1.170",5501,loginData.ToString());
+			this.EGTCPClient().SendStringData(Setting.TCPClientAddress.Host,Setting.TCPClientAddress.Port,loginData.ToString());
 			await Task.Delay(50);
 			// this.EGTCPClient().SendStringData("192.168.1.11",9966,resultJson);
-			this.EGTCPClient().SendStringData("192.168.1.170",5501,resultJson);
+			this.EGTCPClient().SendStringData(Setting.TCPClientAddress.Host,Setting.TCPClientAddress.Port,resultJson);
 		}
-
-		public async void WriteHoldingRegisterTCP(string ipPort,string registerKey,object value){
+		public async void WriteHoldingRegisterTCP(string registerKey,object value){
 			DataModbusValue modbusValue = null;
+			string ipPort = "";
 			foreach(KeyValuePair<string,DataModbusTCPDevice> deviceTCP in Setting.DevicesTCP){
 				if(Setting.DevicesTCP[deviceTCP.Key].ValueRegisters.ContainsKey(registerKey)){
 					modbusValue = Setting.DevicesTCP[deviceTCP.Key].ValueRegisters[registerKey];
+					ipPort = Setting.DevicesTCP[registerKey].Host+":"+Setting.DevicesTCP[registerKey].Port;
 				}
 			}
 			if(modbusValue == null){
