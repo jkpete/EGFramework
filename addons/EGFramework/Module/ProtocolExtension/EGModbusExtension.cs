@@ -783,7 +783,7 @@ namespace EGFramework{
                 DeviceAddress = protocolBytes[0];
                 FunctionCode = protocolBytes[1];
                 FunctionType = (ModbusFunctionType)protocolBytes[1];
-                if(FunctionCode == 0x83){
+                if(FunctionCode >= 0x80){
                     ErrorCode = (ModbusErrorCode)protocolBytes[2];
                     IsError = true;
                     return true;
