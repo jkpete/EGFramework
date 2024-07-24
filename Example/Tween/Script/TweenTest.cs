@@ -1,9 +1,13 @@
 using Godot;
 using System;
+using EGFramework.EGTween;
+
 namespace EGFramework.Examples.TweenAnime{
-	public partial class TweenTest : Node
+	public partial class TweenTest : Control
 	{
 		[Export] Control Target {set;get;}
+
+		[Export] Node2D Target2D {set;get;}
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
@@ -21,14 +25,15 @@ namespace EGFramework.Examples.TweenAnime{
 			// tween2.TweenCallback(Callable.From(TweenOver));
 			// tween2.SetLoops();
 
-			Tween tween3 = GetTree().CreateTween();
-			tween3.SetEase(Tween.EaseType.InOut);
-			tween3.SetTrans(Tween.TransitionType.Cubic);
-			tween3.TweenInterval(0.5f);
-			tween3.TweenProperty(Target,"size",new Vector2(100,40),0.5f);
-			tween3.TweenProperty(Target,"size",new Vector2(40,100),0.5f);
-			tween3.TweenProperty(Target,"size",new Vector2(40,40),0.5f);
-			tween3.SetLoops();
+			// Tween tween3 = this.CreateTween();
+			// tween3.SetEase(Tween.EaseType.InOut);
+			// tween3.SetTrans(Tween.TransitionType.Cubic);
+			// tween3.TweenInterval(0.5f);
+			// tween3.TweenProperty(Target,"size",new Vector2(100,40),0.5f);
+			// tween3.TweenProperty(Target,"size",new Vector2(40,100),0.5f);
+			// tween3.TweenProperty(Target,"size",new Vector2(40,40),0.5f);
+			// tween3.SetLoops();
+			Target2D.TweenRotationByAngle(360f,1.0f);
 		}
 
 		public void TweenOver(){

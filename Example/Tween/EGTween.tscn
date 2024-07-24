@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Example/Tween/Script/TweenTest.cs" id="1_jpym0"]
 [ext_resource type="StyleBox" uid="uid://t4prctf3uxtb" path="res://Example/Theme/StyleBox/CardFrame.tres" id="2_cbb73"]
 
-[node name="EgTween" type="Control" node_paths=PackedStringArray("Target")]
+[node name="EgTween" type="Control" node_paths=PackedStringArray("Target", "Target2D")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,11 +11,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jpym0")
-Target = NodePath("Card1")
+Target = NodePath("CanvasLayer/Card1")
+Target2D = NodePath("Polygon2D")
 
-[node name="Card1" type="Panel" parent="."]
-layout_mode = 1
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Card1" type="Panel" parent="CanvasLayer"]
 offset_right = 90.0
 offset_bottom = 160.0
-pivot_offset = Vector2(45, 160)
+pivot_offset = Vector2(45, 80)
 theme_override_styles/panel = ExtResource("2_cbb73")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(146, 80)
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+position = Vector2(146, 97)
+polygon = PackedVector2Array(0, 0, 100, 0, 213.683, 76.1096, 454, 237, 0, 100, 0, 0)
