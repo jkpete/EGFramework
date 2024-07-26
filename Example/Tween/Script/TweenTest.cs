@@ -33,7 +33,7 @@ namespace EGFramework.Examples.TweenAnime{
 			// tween3.TweenProperty(Target,"size",new Vector2(40,100),0.5f);
 			// tween3.TweenProperty(Target,"size",new Vector2(40,40),0.5f);
 			// tween3.SetLoops();
-			Target2D.TweenRotationByAngle(360f,1.0f);
+			Target2D.TweenRotationByAngle(360f,1.0f).KillOnEnd();
 		}
 
 		public void TweenOver(){

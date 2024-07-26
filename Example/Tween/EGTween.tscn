@@ -27,4 +27,4 @@ position = Vector2(146, 80)
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 position = Vector2(146, 97)
-polygon = PackedVector2Array(0, 0, 100, 0, 213.683, 76.1096, 454, 237, 0, 100, 0, 0)
+polygon = PackedVector2Array(0, 0, 100, 0, 327, 56, 454, 237, 0, 100, 0, 0)
