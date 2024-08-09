@@ -1,0 +1,110 @@
+[gd_scene load_steps=19 format=3 uid="uid://05atvgqt8tku"]
+
+[ext_resource type="Texture2D" uid="uid://ss8dh8aaqc4w" path="res://Example/Action3D/SkyBox/lakeside.jpg" id="1_akq3m"]
+[ext_resource type="Texture2D" uid="uid://31r216hix0wk" path="res://icon.svg" id="2_b66wh"]
+[ext_resource type="Script" path="res://Example/Action3D/Script/ActionPlayer.cs" id="2_c0s4j"]
+[ext_resource type="Script" path="res://Example/Action3D/Script/ActionCamera.cs" id="3_ue0e3"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hbme1"]
+panorama = ExtResource("1_akq3m")
+
+[sub_resource type="Sky" id="Sky_qmmlv"]
+sky_material = SubResource("PanoramaSkyMaterial_hbme1")
+
+[sub_resource type="Environment" id="Environment_dusyb"]
+background_mode = 2
+sky = SubResource("Sky_qmmlv")
+glow_enabled = true
+fog_light_color = Color(0.152941, 0.168627, 0.196078, 1)
+fog_density = 0.05
+fog_aerial_perspective = 1.0
+fog_height = 0.5
+fog_height_density = 0.4
+adjustment_brightness = 1.91
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hm8uo"]
+size = Vector3(60, 1, 60)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c0bvn"]
+albedo_texture = ExtResource("2_b66wh")
+
+[sub_resource type="BoxMesh" id="BoxMesh_2gv65"]
+material = SubResource("StandardMaterial3D_c0bvn")
+size = Vector3(60, 1, 60)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4jggu"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7005m"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_byd0k"]
+albedo_color = Color(0, 0.219608, 0.176471, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h3y2r"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r4ehu"]
+albedo_color = Color(0.517647, 0.886275, 0.807843, 1)
+rim_enabled = true
+rim_tint = 0.48
+
+[sub_resource type="BoxMesh" id="BoxMesh_3o4en"]
+material = SubResource("StandardMaterial3D_r4ehu")
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dv57j"]
+albedo_color = Color(0.294118, 0.294118, 0.294118, 1)
+metallic = 1.0
+metallic_specular = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_iv7ly"]
+material = SubResource("StandardMaterial3D_dv57j")
+size = Vector3(0.6, 0.6, 0.6)
+
+[node name="MainGame" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dusyb")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.642788, -0.383022, 0.663414, 0, 0.866025, 0.5, -0.766044, -0.321394, 0.55667, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.01419, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00709915, 0.117098, -0.180923)
+shape = SubResource("BoxShape3D_hm8uo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_2gv65")
+
+[node name="Area3D" type="Area3D" parent="."]
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_4jggu")
+
+[node name="Pivot" type="Node3D" parent="."]
+script = ExtResource("3_ue0e3")
+
+[node name="Camera3D" type="Camera3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 0.976296, 0.21644, 0, -0.21644, 0.976296, 0, 1, 2)
+
+[node name="Player" type="CharacterBody3D" parent="."]
+script = ExtResource("2_c0s4j")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0296049, -9.53674e-07, 0.00402832)
+shape = SubResource("BoxShape3D_7005m")
+
+[node name="Body" type="MeshInstance3D" parent="Player"]
+material_override = SubResource("StandardMaterial3D_byd0k")
+mesh = SubResource("BoxMesh_h3y2r")
+
+[node name="Head" type="MeshInstance3D" parent="Player/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("BoxMesh_3o4en")
+
+[node name="Hair" type="MeshInstance3D" parent="Player/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.15)
+mesh = SubResource("BoxMesh_iv7ly")
