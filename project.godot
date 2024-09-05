@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 
 project/assembly_name="EGFramework"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/Tools/ItemImporter/plugin.cfg")
+
 [input]
 
 move_forward={

@@ -5,9 +5,13 @@ namespace EGFramework.Examples.Action3D{
 	public partial class ActionPlayer : CharacterBody3D
 	{
 		[Export]
-    	public int Speed { get; set; } = 14;
+    	public float Speed { get; set; } = 14;
 		[Export]
-    	public int FallAcceleration { get; set; } = 75;
+		public float JumpSpeed { set; get; } = 15;
+		[Export]
+    	public float FallAcceleration { get; set; } = 75;
+
+		public float FallSpeed { get; set; } = 0;
 
     	private Vector3 _targetVelocity = Vector3.Zero;
 
@@ -34,7 +38,8 @@ namespace EGFramework.Examples.Action3D{
 
 			if (direction.Length() > 0)
 			{
-				this.Rotation = new Vector3(0,CameraPivot.Rotation.Y,0);
+				// this.Rotation = new Vector3(0,CameraPivot.Rotation.Y,0);
+				this.GetNode<Node3D>("Body").Rotation = new Vector3(0,CameraPivot.Rotation.Y,0);
 				direction = direction.Normalized();
 				direction = direction.Rotated(Vector3.Up, CameraPivot.Rotation.Y);
 			}
@@ -45,12 +50,14 @@ namespace EGFramework.Examples.Action3D{
 
 			if (!IsOnFloor()) // If in the air, fall towards the floor. Literally gravity
 			{
-				// GD.Print("Fallen!");
-				_targetVelocity.Y -= FallAcceleration * (float)delta;
+				// GD.Print(FallSpeed);
+				FallSpeed -= FallAcceleration * (float)delta;
+				_targetVelocity.Y += FallSpeed;
 			}else{
 				if (Input.IsActionPressed("jump"))
 				{
-					_targetVelocity.Y += 10.0f;
+					_targetVelocity.Y = 0.1f;
+					FallSpeed = JumpSpeed;
 				}
 			}
 

@@ -28,11 +28,11 @@ public partial class ActionCamera : Node3D
 		}
 		if (Input.IsActionPressed("camera_left"))
 		{
-			_targetRotation.Y -= Speed*(float)delta;
+			_targetRotation.Y += Speed*(float)delta;
 		}
 		if (Input.IsActionPressed("camera_right"))
 		{
-			_targetRotation.Y += Speed*(float)delta;
+			_targetRotation.Y -= Speed*(float)delta;
 		}
 		if (_targetRotation.X>30*Mathf.Pi/180)
 		{

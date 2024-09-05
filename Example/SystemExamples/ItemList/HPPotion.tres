@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bhsavl0d80s6j"]
+
+[ext_resource type="Script" path="res://Example/SystemExamples/PlayerStorage/Script/DataStorageItem.cs" id="1_j773b"]
+
+[resource]
+script = ExtResource("1_j773b")
+Id = 0
+Name = ""
+Info = ""

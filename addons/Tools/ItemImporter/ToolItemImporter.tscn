@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://bglw1yht7w1kt"]
+
+[node name="ToolItemImporter" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+offset_right = 69.0
+offset_bottom = 31.0
+text = "导入CSV"
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -72.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "重新载入"
+
+[node name="Button3" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -71.0
+offset_top = 36.0
+offset_right = 1.0
+offset_bottom = 67.0
+grow_horizontal = 0
+text = "重新载入"

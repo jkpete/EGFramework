@@ -42,7 +42,7 @@ namespace EGFramework{
         }
         
         public static void Alert(this Node self,string alertMsg){
-
+            
         }
     }
 }
