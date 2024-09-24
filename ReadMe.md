@@ -16,25 +16,17 @@
 > 
 > Godot 在 [宽松的 MIT 许可证](https://docs.godotengine.org/zh-cn/4.x/about/complying_with_licenses.html#doc-complying-with-licenses) 下完全自由且开源，没有附加条件、没有抽成、什么都没有。用户的游戏乃至引擎的每一行代码，都归用户自己所有。Godot 的开发完全独立且由社区驱动，允许用户为满足需求重塑引擎。它受到不以盈利为目标的 [Godot 基金会](https://godot.foundation/)支持。
 
-
-
 # 一、准备工作
-
-
 
 ## 1.下载开发环境
 
 本章节所有环境均在开源IDE `VSCode`，`Godot4.2 - .NET` 的环境下进行，请确保已经下载好`VSCode`，`Godot4.2 - .NET`，如果您有购买Rider或者其他编码工具可以根据自己的喜好来替代VSCode。
-
-
 
 ## 2.VSCode 插件安装
 
 打开VSCode， 按下`Ctrl+Shift+X`，在搜索栏里面搜索`C# Tools for Godot`，安装该插件，因为该插件可能依赖于`C#`插件，同时需要安装`C#`插件。
 
 同上，搜索并安装`NuGet Package Manager GUI`插件，用于Nuget包的安装与管理。
-
-
 
 ## 3.Nuget包的安装
 
@@ -50,15 +42,54 @@
 
 注意：这些Nuget包仅为目前框架版本所用，后续可能会有新的Nuget包导入，会在此处列出。
 
-
-
 ## 4.删除不需要的Module（可选）
 
 如果您只想使用部分功能，或者不想安装对应的Nuget包依赖，可以直接删除对应的Module脚本文件。
 
 无需担心，除了部分Module存在相关依赖，大部分Module是支持直接删除的。
 
+## 5.EG插件库简介
 
+### 5.1 EGSave篇
+
+---
+
+#### Sqlite数据持久化扩展：
+
+注意：本功能需要依赖安装 `Microsoft.Data.Sqlite` Nuget扩展，将以下代码放入*.csproj 工程文件中，或者通过Nuget安装上述包。
+
+```xml
+<PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.1" />
+```
+
+使用案例（保存数据=>保存单一数据，目前来看该功能仍需改进）：
+
+```csharp
+    public partial class EGSaveTest : Node,IEGFramework
+    {
+        public override void _Ready()
+        {
+            TestSqlite();
+        }
+
+        public void TestSqlite(){
+            // string result = this.EGSqlite().CreateTable<SqliteBackpackItem>();
+            this.EGSqlite().SaveData(new SqliteBackpackItem{
+                ItemID = 10,
+                ItemCount = 1,
+                BackpackID = 1,
+            });
+            GD.Print(this.EGSqlite().ExceptionMsg);
+        }
+    }
+    public struct SqliteBackpackItem{
+        public int ItemID;
+        public int ItemCount;
+        public int BackpackID;
+    }
+```
+
+结构类要求：保存字段不能使用 {get；set;}，所有数据会自动生成自增序列的ID，字段名称不能为ID。
 
 # 二、框架简介
 
@@ -67,8 +98,6 @@
 本框架所使用的一切Nuget包均满足MIT开源协议，如果使用的Nuget包牵扯有其他协议请联系作者QQ：1031139173，会删除对应的Module功能保证该框架满足MIT协议。
 
 协议文件均存放在目录addons\EGFramework\License_Third_Part下面
-
- 
 
 ## 1.使用框架
 
@@ -96,11 +125,7 @@ public class DataTest{
     public string PlayerName;
     public int Hp;
 }
-
-
 ```
-
-
 
 ## 2.直接使用Module
 
@@ -128,8 +153,6 @@ public class DataTest{
 }
 ```
 
-
-
 ## 3.扩展框架（编写Module）
 
 编写框架时，要用到IModule这个接口，任何继承了该接口的类均视为Module，可以被上面的方法Get到。
@@ -150,14 +173,14 @@ namespace EGFramework
     {
         void RegisterObject<T>(T object_);
         T GetObject<T>() where T : class,new();
-		
+
     }
     public class EGObject : EGModule,IEGObject
     {
         private IOCContainer ObjectContainer = new IOCContainer();
         public override void Init()
         {
-            
+
         }
 
         public TObject GetObject<TObject>() where TObject : class,new()
@@ -178,7 +201,7 @@ namespace EGFramework
             return ObjectContainer.self.ContainsKey(typeof(TObject));
         }
     }
-    
+
     public static class CanGetObjectExtension
     {
         public static T EGGetObject<T>(this IEGFramework self) where T : class,new()
@@ -206,5 +229,4 @@ namespace EGFramework
     }
 
 }
-
 ```

@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dhb625wmjnlwy"
+
+[deps]
+
+files=["res://Example/SystemExamples/ItemList/ItemList.en.translation", "res://Example/SystemExamples/ItemList/ItemList.es.translation", "res://Example/SystemExamples/ItemList/ItemList.ja.translation"]
+
+source_file="res://Example/SystemExamples/ItemList/ItemList.CSV"
+dest_files=["res://Example/SystemExamples/ItemList/ItemList.en.translation", "res://Example/SystemExamples/ItemList/ItemList.es.translation", "res://Example/SystemExamples/ItemList/ItemList.ja.translation"]
+
+[params]
+
+compress=true
+delimiter=0

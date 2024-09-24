@@ -81,6 +81,7 @@ namespace EGFramework{
                 string sqlCommand = "CREATE TABLE " + typeof(TData).Name;
                 sqlCommand += "(\"ID\" INTEGER NOT NULL UNIQUE,";
                 var properties = typeof(TData).GetFields();
+                Godot.GD.Print(properties.Count() + " Readed ");
                 foreach(var property in properties){
                     if(property.FieldType == typeof(int) || property.FieldType == typeof(bool) || property.FieldType.IsEnum){
                         sqlCommand += "\"" + property.Name + "\"   INTEGER" + "     NOT NULL,";
@@ -92,6 +93,7 @@ namespace EGFramework{
                     }
                 }
                 sqlCommand += "PRIMARY KEY(\"ID\" AUTOINCREMENT))";
+                Godot.GD.Print(sqlCommand);
                 SqliteCommand createCommand = new SqliteCommand(sqlCommand,SqliteConn);
                 result = result + createCommand.ExecuteNonQuery().ToString();
             }

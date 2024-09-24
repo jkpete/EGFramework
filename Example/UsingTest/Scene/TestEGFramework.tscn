@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dfa86yq8m28rk"]
 
-[ext_resource type="Script" path="res://Example/UsingTest/Script/EGTest.cs" id="1_s8hm3"]
+[ext_resource type="Script" path="res://Example/UsingTest/Script/EGSaveTest.cs" id="1_eij2h"]
 
 [node name="TestEgFramework" type="Control"]
 layout_mode = 3
@@ -9,7 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_s8hm3")
+script = ExtResource("1_eij2h")
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
@@ -23,5 +23,3 @@ offset_bottom = 164.0
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0
-
-[connection signal="pressed" from="Button1" to="." method="OnButton1Click"]
