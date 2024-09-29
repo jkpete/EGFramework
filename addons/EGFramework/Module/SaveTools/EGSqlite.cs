@@ -10,7 +10,7 @@ namespace EGFramework{
         List<TData> GetDataSet<TData>() where TData : new();
         void InitDatabase(string dataBaseName);
     }
-    public class EGSqlite : EGModule,IEGSqlite
+    public class EGSqlite : EGModule
     {
         public string DBName = "Default";
         private string DefaultDBFolder = "SaveData";

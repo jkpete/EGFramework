@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 using Newtonsoft.Json.Linq;
 
 namespace EGFramework
@@ -9,12 +10,20 @@ namespace EGFramework
     public interface IEGSave{
         void SetDataToFile<TData>(TData data);
         TData GetDataByFile<TData>() where TData : class,new();
-        void InitSaveData(string fileName);
+        void InitSaveData(string path);
     }
+    public enum TypeEGSave{
+        Json = 0,
+        Bson = 1,
+        Byte = 2,
+        Sqlite = 3,
+        LiteDB = 4,
+        XML = 5
+    }
+
     public class EGSave : EGModule,IEGSave
     {
-        private string DefaultSaveFile = "Default";
-        private string DefaultSaveFolder = "SaveData";
+        private string DefaultPath = "Default/SaveData.json";
         private JObject _SaveObject;
         private JObject SaveObject{ 
             get {
@@ -24,30 +33,20 @@ namespace EGFramework
                 return _SaveObject;
             }
         }
-
-        public EGSave(){
-
-        }
-        /// <summary>
-        /// if you want to define default save data file name, please use "this.RegisterModule(new EGSave("FileName"))"in your architecture code(Init function);
-        /// </summary>
-        /// <param name="fileName"></param>
-        public EGSave(string fileName){
-            this.DefaultSaveFile = fileName;
-        }
+        public EGSave() {}
         public override void Init()
         {
-            if (!Directory.Exists(DefaultSaveFolder))
+            if (!Directory.Exists(DefaultPath))
             {
-                Directory.CreateDirectory(DefaultSaveFolder);
-                File.WriteAllText(DefaultSaveFolder + "/" + DefaultSaveFile + ".json","{}");
-            }else if(!File.Exists(DefaultSaveFolder + "/" + DefaultSaveFile + ".json")){
-                File.WriteAllText(DefaultSaveFolder + "/"  + DefaultSaveFile + ".json","{}");
+                Directory.CreateDirectory(Path.GetDirectoryName(DefaultPath));
+                File.WriteAllText(DefaultPath,"{}");
+            }else if(!File.Exists(DefaultPath)){
+                File.WriteAllText(DefaultPath,"{}");
             }
         }
 
         private void InitSaveObject(){
-            using (StreamReader reader = File.OpenText(DefaultSaveFolder + "/" + DefaultSaveFile + ".json"))
+            using (StreamReader reader = File.OpenText(DefaultPath))
             {
                 _SaveObject = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
             }
@@ -57,10 +56,10 @@ namespace EGFramework
         /// Push SaveObject data set to file
         /// </summary>
         public void SaveToFile(){
-            SaveToFile(DefaultSaveFile);
+            SaveToFile(DefaultPath);
         }
         private void SaveToFile(string fileName){
-            File.WriteAllText(DefaultSaveFolder + "/" + fileName + ".json",JsonConvert.SerializeObject(SaveObject,Formatting.Indented));
+            File.WriteAllText(DefaultPath,JsonConvert.SerializeObject(SaveObject,Formatting.Indented));
         }
 
         /// <summary>
@@ -100,15 +99,21 @@ namespace EGFramework
             SaveToFile();
         }
 
+        #region About Godot File's PATH
+        // Godot's Path has res:// and user://
+        // UserPath is used for every platform such as android. 
+        // You can use ProjectSettings.GlobalizePath("") to convert a "local" path like res://path/to/file.txt to an absolute OS path.
+        #endregion
+
         /// <summary>
         /// Init a new save data file or load an other file with json suffix, if you want to load other save data, please use this function to reload;
         /// </summary>
         /// <param name="fileName"></param>
-        public void InitSaveData(string fileName)
+        public void InitSaveData(string path)
         {
-            DefaultSaveFile = fileName;
-            if(!File.Exists(DefaultSaveFolder + "/" + DefaultSaveFile + ".json")){
-                File.WriteAllText(DefaultSaveFolder + "/" + DefaultSaveFile + ".json","{}");
+            DefaultPath = path;
+            if(!File.Exists(path)){
+                File.WriteAllText(path,"{}");
             }
             InitSaveObject();
         }
@@ -116,7 +121,11 @@ namespace EGFramework
 
     public static class CanGetEGSaveExtension{
         public static EGSave EGSave(this IEGFramework self){
-            return EGArchitectureImplement.Interface.GetModule<EGSave>();
+            return self.GetModule<EGSave>();
+        }
+        public static EGSave EGSave(this IEGFramework self,string path){
+            self.GetModule<EGSave>().InitSaveData(path);
+            return self.GetModule<EGSave>();
         }
     }
 }
