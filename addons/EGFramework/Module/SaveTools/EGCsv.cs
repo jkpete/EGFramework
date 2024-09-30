@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EGFramework
 {
-    public class EGTable : EGModule
+    public class EGCsv : EGModule
     {
         public override void Init()
         {

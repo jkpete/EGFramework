@@ -20,7 +20,7 @@ namespace EGFramework.Examples.ModbusDebugTool{
             Edit = this.GetNode<ViewEdit>("Edit");
             Edit.Visible = false;
             this.EGEnabledProtocolTools();
-            DataModbus dataModbus = this.EGSave().GetDataByFile<DataModbus>();
+            DataModbus dataModbus = this.EGSave().GetObjectFromJson<DataModbus>();
             if (dataModbus == null)
             {
                 dataModbus = new DataModbus();

@@ -20,16 +20,16 @@ namespace EGFramework.Examples.Gateway{
 
 		public void InitGateway()
 		{
-			if(this.EGSave().GetDataByFile<DataBacnetGatewaySetting>() == null){
+			if(this.EGSave().GetObjectFromJson<DataBacnetGatewaySetting>() == null){
 				DataBacnetGatewaySetting = new DataBacnetGatewaySetting(){
 					MqttHost = "192.168.1.220",
 					HttpServerPrefix = "http://127.0.0.1:5000/",
 					ResponseTheme = "/LocalBacnetResponse",
 					RequestTheme = "/LocalBacnetRequest"
 				};
-				this.EGSave().SetDataToFile(DataBacnetGatewaySetting);
+				this.EGSave().SetObjectToJson(DataBacnetGatewaySetting);
 			}else{
-				DataBacnetGatewaySetting = this.EGSave().GetDataByFile<DataBacnetGatewaySetting>();
+				DataBacnetGatewaySetting = this.EGSave().GetObjectFromJson<DataBacnetGatewaySetting>();
 			}
 			this.EGEnabledProtocolTool<EGBacnet>();
 			this.EGEnabledProtocolTool<EGMqtt>();

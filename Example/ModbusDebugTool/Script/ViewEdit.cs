@@ -75,7 +75,7 @@ namespace EGFramework.Examples.ModbusDebugTool{
                     this.EGGetObject<DataModbus>().Items.Remove(DataModbusItem.GetKey());
                 }
                 this.EGGetObject<DataModbus>().Items.Add(modbusItem.GetKey(),modbusItem);
-                this.EGSave().SetDataToFile(this.EGGetObject<DataModbus>());
+                this.EGSave().SetObjectToJson(this.EGGetObject<DataModbus>());
                 this.Visible = false;
                 this.ViewMenu.RefreshSaveData();
                 

@@ -9,9 +9,10 @@ namespace EGFramework.Examples.Test{
         public override void _Ready()
         {
             base._Ready();
-            GD.Print(ProjectSettings.GlobalizePath("res://SaveData/Default.json"));
-            GD.Print(ProjectSettings.GlobalizePath("user://SaveData/Default.json"));
-            GD.Print(Path.GetDirectoryName(ProjectSettings.GlobalizePath("res://SaveData/Default.json")));
+            this.EGSave().OpenUserPath();
+            // GD.Print(ProjectSettings.GlobalizePath("res://SaveData/Default.json"));
+            // GD.Print(ProjectSettings.GlobalizePath("user://SaveData/Default.json"));
+            // GD.Print(Path.GetDirectoryName(ProjectSettings.GlobalizePath("res://SaveData/Default.json")));
             // TestLiteDB();
         }
 
@@ -32,7 +33,8 @@ namespace EGFramework.Examples.Test{
             using(var db = new LiteDatabase("SaveData/MyData.db"))
             {
                 // 获取一个集合 (如果不存在创建)
-                var col = db.GetCollection<Customer>("customers");
+                LiteCollection<Customer> col = (LiteCollection<Customer>)db.GetCollection<Customer>("customers");
+                GD.Print(col);
 
                 // // 创建新顾客实例
                 // var customer = new Customer

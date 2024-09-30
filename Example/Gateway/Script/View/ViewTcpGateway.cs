@@ -14,7 +14,7 @@ namespace EGFramework.Examples.Gateway{
 		}
 
 		public void InitGateway(){
-			if(this.EGSave().GetDataByFile<DataTcpGatewaySetting>() == null){
+			if(this.EGSave().GetObjectFromJson<DataTcpGatewaySetting>() == null){
 				DataTcpGatewaySetting = new DataTcpGatewaySetting();
 				DataTcpGatewaySetting.DataTcpGatewayDevices.Add(new DataTcpGatewayDevice(){
 					Host = "127.0.0.1",
@@ -23,9 +23,9 @@ namespace EGFramework.Examples.Gateway{
 					ResponseTheme = "/LocalTCPResponse",
 					RequestTheme = "/LocalTCPRequest"
 				});
-				this.EGSave().SetDataToFile(DataTcpGatewaySetting);
+				this.EGSave().SetObjectToJson(DataTcpGatewaySetting);
 			}else{
-				DataTcpGatewaySetting = this.EGSave().GetDataByFile<DataTcpGatewaySetting>();
+				DataTcpGatewaySetting = this.EGSave().GetObjectFromJson<DataTcpGatewaySetting>();
 			}
 			this.EGEnabledProtocolTool<EGTCPClient>();
 			this.EGEnabledProtocolTool<EGMqtt>();

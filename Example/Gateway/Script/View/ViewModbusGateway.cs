@@ -43,11 +43,11 @@ namespace EGFramework.Examples.Gateway{
 
 		public void InitGateway()
 		{
-			if(this.EGSave().GetDataByFile<DataModbusGatewaySetting>() == null){
+			if(this.EGSave().GetObjectFromJson<DataModbusGatewaySetting>() == null){
 				InitSettings();
-				this.EGSave().SetDataToFile(Setting);
+				this.EGSave().SetObjectToJson(Setting);
 			}else{
-				Setting = this.EGSave().GetDataByFile<DataModbusGatewaySetting>();
+				Setting = this.EGSave().GetObjectFromJson<DataModbusGatewaySetting>();
 			}
 			this.EGEnabledProtocolTool<EGTCPClient>();
 			this.EGEnabledProtocolTool<EGSerialPort>();

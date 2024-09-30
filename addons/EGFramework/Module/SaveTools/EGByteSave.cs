@@ -7,7 +7,7 @@ using Godot;
 
 namespace EGFramework
 {
-    public class EGByteSave : EGModule//, IEGSave
+    public class EGByteSave : EGModule, IEGSave,IEGSaveObject
     {
         
         public void SaveToFile(string content)
@@ -31,17 +31,19 @@ namespace EGFramework
 
         }
 
-        // public TData GetDataByFile<TData>() where TData : class, new()
-        // {
-        //     throw new NotImplementedException();
-        // }
-        // public void InitSaveData(string fileName)
-        // {
-        //     throw new NotImplementedException();
-        // }
-        public void SetDataToFile<TData>(TData data)
+        public void InitSaveFile(string path)
         {
+            //throw new NotImplementedException();
+        }
 
+        public void SetObject<TObject>(string objectKey , TObject obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TObject GetObject<TObject>(string objectKey) where TObject : new()
+        {
+            throw new NotImplementedException();
         }
     }
 }

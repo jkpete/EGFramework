@@ -14,7 +14,7 @@ namespace EGFramework.Examples.ModbusDebugTool{
         }
 
         public void LoadSettings(){
-            DataModbusSettings settings = this.EGSave().GetDataByFile<DataModbusSettings>();
+            DataModbusSettings settings = this.EGSave().GetObjectFromJson<DataModbusSettings>();
             this.EGRegisterObject(settings);
             UpdateSettings(settings);
             EditBaudRate.Text = settings.BaudRate.ToString();
@@ -36,7 +36,7 @@ namespace EGFramework.Examples.ModbusDebugTool{
                 };
                 UpdateSettings(settings);
                 this.EGRegisterObject(settings);
-                this.EGSave().SetDataToFile(this.EGGetObject<DataModbusSettings>());
+                this.EGSave().SetObjectToJson(this.EGGetObject<DataModbusSettings>());
                 this.Visible = false;
             }
             catch (System.Exception ex)
