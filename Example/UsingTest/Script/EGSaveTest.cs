@@ -9,11 +9,17 @@ namespace EGFramework.Examples.Test{
         public override void _Ready()
         {
             base._Ready();
-            this.EGSave().OpenUserPath();
+            // this.EGSave().OpenUserPath();
             // GD.Print(ProjectSettings.GlobalizePath("res://SaveData/Default.json"));
             // GD.Print(ProjectSettings.GlobalizePath("user://SaveData/Default.json"));
             // GD.Print(Path.GetDirectoryName(ProjectSettings.GlobalizePath("res://SaveData/Default.json")));
             // TestLiteDB();
+            string CardPath1 = "SaveData/CardData1.json".GetGodotResPath();
+            this.EGSave().LoadObjectFile<EGJsonSave>(CardPath1);
+            // this.EGSave().SetObject(CardPath1,"Customer1",new Customer() { Name = "Andy" });
+            // this.EGSave().SetObject(CardPath1,"Customer3",new Customer() { Name = "Terry" });
+            Customer customer = this.EGSave().GetObject<Customer>(CardPath1,"Customer3");
+            GD.Print("ReadName is "+customer.Name);
         }
 
         public void TestSqlite(){

@@ -44,10 +44,10 @@ namespace EGFramework
 
         public void SetObject<TObject>(string objectKey,TObject obj)
         {
-            if(SaveObject.ContainsKey(typeof(TObject).ToString())){
-                SaveObject[typeof(TObject).ToString()] = JToken.FromObject(obj);
+            if(SaveObject.ContainsKey(objectKey)){
+                SaveObject[objectKey] = JToken.FromObject(obj);
             }else{
-                SaveObject.Add(typeof(TObject).ToString(),JToken.FromObject(obj));
+                SaveObject.Add(objectKey,JToken.FromObject(obj));
             }
             File.WriteAllText(DefaultPath,JsonConvert.SerializeObject(SaveObject,Formatting.Indented));
         }
@@ -57,10 +57,10 @@ namespace EGFramework
         /// </summary>
         public TObject GetObject<TObject>(string objectKey) where TObject : new()
         {
-            if(!SaveObject.ContainsKey(typeof(TObject).ToString())){
+            if(!SaveObject.ContainsKey(objectKey)){
                 throw new Exception("Key not found!");
             }
-            TObject data = SaveObject[typeof(TObject).ToString()].ToObject<TObject>();
+            TObject data = SaveObject[objectKey].ToObject<TObject>();
             return data;
         }
     }

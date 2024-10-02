@@ -30,28 +30,19 @@ namespace EGFramework
         public EGSave() {}
         public override void Init()
         {
-            LoadObjectFile("SaveData/DefaultJsonSave.json".GetGodotResPath(),TypeEGSave.Json);
+            LoadObjectFile<EGJsonSave>("SaveData/DefaultJsonSave.json".GetGodotResPath());
         }
 
-        public void LoadDataFile(string path,TypeDBSave type){
-            switch(type){
-                case TypeDBSave.Csv:
-                    break;
-                default:
-                    break;
-            }
+        public void LoadDataFile<TSaveData>(string path) where TSaveData:IEGSaveData,IEGSave,new(){
+            TSaveData saveData = new TSaveData();
+            saveData.InitSaveFile(path);
+            DataBaseFiles.Add(path,saveData);
         }
 
-        public void LoadObjectFile(string path,TypeEGSave type){
-            switch(type){
-                case TypeEGSave.Json:
-                    EGJsonSave newJsonFile = new EGJsonSave();
-                    newJsonFile.InitSaveFile(path);
-                    ObjectFiles.Add(path, newJsonFile);
-                    break;
-                default:
-                    break;
-            }
+        public void LoadObjectFile<TSaveObject>(string path) where TSaveObject:IEGSaveObject,IEGSave,new(){
+            TSaveObject saveObject = new TSaveObject();
+            saveObject.InitSaveFile(path);
+            ObjectFiles.Add(path, saveObject);
         }
 
         public void SetObject<TObject>(string path,string objectKey,TObject obj){
