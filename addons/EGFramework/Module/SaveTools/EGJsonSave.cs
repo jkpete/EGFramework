@@ -28,7 +28,7 @@ namespace EGFramework
         {
             DefaultPath = path;
             if(!File.Exists(path)){
-                if (!Directory.Exists(DefaultPath))
+                if (!Directory.Exists(Path.GetDirectoryName(DefaultPath)))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(DefaultPath));
                     File.WriteAllText(DefaultPath,"{}");

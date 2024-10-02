@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace EGFramework
@@ -16,8 +17,10 @@ namespace EGFramework
     
     // 
     public interface IEGSaveData{
-        void SetData<TData>(TData data,string dataKey,int id);
-        TData GetData<TData>(string dataKey,int id) where TData : new();
-        IList<TData> QueryData<TData>(string dataKey,string sql) where TData : new();
+        void SetData<TData>(string dataKey,TData data,object id);
+        TData GetData<TData>(string dataKey,object id) where TData : new();
+        IEnumerable<TData> GetAll<TData>(string dataKey) where TData : new();
+        IEnumerable<TData> FindData<TData>(string dataKey,Expression<Func<TData, bool>> expression) where TData : new();
+        IEnumerable<TData> QueryData<TData>(string dataKey,string sql) where TData : new();
     }
 }

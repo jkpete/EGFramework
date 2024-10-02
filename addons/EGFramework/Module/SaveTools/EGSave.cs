@@ -30,7 +30,7 @@ namespace EGFramework
         public EGSave() {}
         public override void Init()
         {
-            LoadObjectFile("Default/SaveData.json".GetGodotUserPath(),TypeEGSave.Json);
+            LoadObjectFile("SaveData/DefaultJsonSave.json".GetGodotResPath(),TypeEGSave.Json);
         }
 
         public void LoadDataFile(string path,TypeDBSave type){
@@ -61,14 +61,21 @@ namespace EGFramework
             return ObjectFiles[path].GetObject<TObject>(key);
         }
 
+        public void SetData<TData>(string path,string dataKey,TData data,int id){
+            DataBaseFiles[path].SetData(dataKey,data,id);
+        }
+        public void GetData<TData>(string path,string key,int id) where TData : new(){
+            DataBaseFiles[path].GetData<TData>(key,id);
+        }
+
         //------------------------------------------------------------------------------//
 
         #region Default Json Operation
         public void SetObjectToJson<TObject>(TObject obj){
-            ObjectFiles["Default/SaveData.json"].SetObject(typeof(TObject).ToString(),obj);
+            ObjectFiles["SaveData/DefaultJsonSave.json"].SetObject(typeof(TObject).ToString(),obj);
         }
         public TObject GetObjectFromJson<TObject>() where TObject : new(){
-            return ObjectFiles["Default/SaveData.json"].GetObject<TObject>(typeof(TObject).ToString());
+            return ObjectFiles["SaveData/DefaultJsonSave.json"].GetObject<TObject>(typeof(TObject).ToString());
         }
         #endregion
 

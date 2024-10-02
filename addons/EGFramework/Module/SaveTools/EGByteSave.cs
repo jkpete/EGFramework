@@ -7,7 +7,7 @@ using Godot;
 
 namespace EGFramework
 {
-    public class EGByteSave : EGModule, IEGSave,IEGSaveObject
+    public class EGByteSave : IEGSave,IEGSaveObject
     {
         
         public void SaveToFile(string content)
@@ -25,10 +25,6 @@ namespace EGFramework
             Variant content = file.GetVar();
             Variant pos = file.GetVar();
             return pos;
-        }
-        public override void Init()
-        {
-
         }
 
         public void InitSaveFile(string path)
