@@ -30,7 +30,7 @@ namespace EGFramework.Examples.Test{
 
         public void TestLiteDB(){
             // 打开数据库 (如果不存在自动创建)
-            using(var db = new LiteDatabase("SaveData/MyData.db"))
+            using(var db = new LiteDatabase("SaveData/DefaultLiteDBData.db"))
             {
                 // 获取一个集合 (如果不存在创建)
                 LiteCollection<Customer> col = (LiteCollection<Customer>)db.GetCollection<Customer>("customers");

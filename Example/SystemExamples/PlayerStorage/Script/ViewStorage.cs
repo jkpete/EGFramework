@@ -8,8 +8,6 @@ public partial class ViewStorage : Node,IEGFramework
 	public override void _Ready()
 	{
 		// this.GetModule<EGByteSave>().SaveToFile("nihao");
-		Variant result = this.GetModule<EGByteSave>().LoadFromFile();
-		GD.Print(result);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
