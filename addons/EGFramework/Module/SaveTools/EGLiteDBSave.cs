@@ -60,12 +60,6 @@ namespace EGFramework
             return collection.Find(expression);
         }
 
-        public IEnumerable<TData> QueryData<TData>(string dataKey, string sql="") where TData : new()
-        {
-            LiteCollection<TData> collection = (LiteCollection<TData>)Database.GetCollection<TData>(dataKey);
-            return collection.FindAll();
-        }
-
         
     }
 }

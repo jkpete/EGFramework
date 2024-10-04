@@ -21,6 +21,5 @@ namespace EGFramework
         TData GetData<TData>(string dataKey,object id) where TData : new();
         IEnumerable<TData> GetAll<TData>(string dataKey) where TData : new();
         IEnumerable<TData> FindData<TData>(string dataKey,Expression<Func<TData, bool>> expression) where TData : new();
-        IEnumerable<TData> QueryData<TData>(string dataKey,string sql) where TData : new();
     }
 }
