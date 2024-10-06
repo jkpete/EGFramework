@@ -20,10 +20,24 @@ namespace EGFramework.Examples.Test{
             // // this.EGSave().SetObject(CardPath1,"Customer3",new Customer() { Name = "Terry" });
             // Customer customer = this.EGSave().GetObject<Customer>(CardPath1,"Customer3");
             // GD.Print("ReadName is "+customer.Name);
+
             EGCsvSave csvSave = new EGCsvSave();
             csvSave.InitSaveFile("SaveData/TestCsv.csv");
-            string[] group = {"7","MyTestData"};
-            csvSave.WriteLine(group);
+            Customer testData = csvSave.GetData<Customer>("",1);
+            GD.Print("Name = "+testData.Name +" || ID = "+testData.Id);
+
+            // GD.Print(typeof(Customer));
+            // Type type = typeof(Customer);
+            // foreach(PropertyInfo property in type.GetProperties()){
+            //     GD.Print(property.Name);
+            //     CsvParamAttribute csvParam = property.GetCustomAttribute<CsvParamAttribute>();
+            //     if(csvParam != null){
+            //         GD.Print("["+csvParam._name+"]");
+            //     }
+            // }
+            // foreach(FieldInfo property in type.GetFields()){
+            //     GD.Print(property.Name);
+            // }
         }
 
         public void TestSqlite(){
@@ -37,62 +51,6 @@ namespace EGFramework.Examples.Test{
             // var properties = typeof(SqliteBackpackItem).GetFields();
             // Godot.GD.Print(properties.Count() + " Readed ");
         }
-
-        public void TestLiteDB(){
-            // 打开数据库 (如果不存在自动创建)
-            using(var db = new LiteDatabase("SaveData/DefaultLiteDBData.db"))
-            {
-                // 获取一个集合 (如果不存在创建)
-                LiteCollection<Customer> col = (LiteCollection<Customer>)db.GetCollection<Customer>("customers");
-                GD.Print(col);
-
-                // // 创建新顾客实例
-                // var customer = new Customer
-                // { 
-                //     Id = 200,
-                //     Name = "Alexander King", 
-                //     Phones = new string[] { "8000-0000", "9000-0000" }, 
-                //     IsActive = true
-                // };
-                // // 插入新顾客文档 (Id 自增)
-                // for (int i = 0; i < 10000; i++)
-                // {
-                //     customer.Id ++;
-                //     col.Insert(customer);
-                // }
-                // // 更新集合中的一个文档
-                // customer.Name = "Joana Doe";
-                // col.Update(customer);
-                // // 使用文档的 Name 属性为文档建立索引
-                // col.EnsureIndex(x => x.Name);
-                // 使用 LINQ 查询文档
-                // var results = col.Find(x => x.Name.StartsWith("Al"));
-                // GD.Print("Find:"+results.Count());
-                // string ids = "";
-                // foreach(var item in results){
-                //     ids += "["+item.Id.ToString()+"]";
-                    
-                // }
-                // GD.Print(ids);
-                // // 让我们创建在电话号码字段上创建一个索引 (使用表达式). 它是一个多键值索引
-                // //col.EnsureIndex(x => x.Phones, "$.Phones[*]"); 
-                // col.EnsureIndex(x => x.Phones);
-                // // 现在我们可以查询电话号码
-                // var r = col.FindOne(x => x.Phones.Contains("8888-5555"));\
-
-                // Test Other
-                // ILiteCollection<SqliteBackpackItem> col = db.GetCollection<SqliteBackpackItem>("SqliteBackpackItem");
-                // var item = new SqliteBackpackItem{
-                //     ItemID = 10,
-                //     ItemCount = 1,
-                //     BackpackID = 1,
-                // };
-                // for (int i = 0; i < 100; i++)
-                // {
-                //     col.Insert(item);
-                // }
-            }
-        }
         
     }
     public struct SqliteBackpackItem{
@@ -104,7 +62,9 @@ namespace EGFramework.Examples.Test{
 
     public class Customer
     {
+        [CsvParam("ID")]
         public int Id { get; set; }
+        [CsvParam("Name")]
         public string Name { get; set; }
         public string[] Phones { get; set; }
         public bool IsActive { get; set; }

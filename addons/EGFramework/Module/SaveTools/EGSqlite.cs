@@ -80,12 +80,12 @@ namespace EGFramework{
             {
                 string sqlCommand = "CREATE TABLE " + typeof(TData).Name;
                 sqlCommand += "(\"ID\" INTEGER NOT NULL UNIQUE,";
-                var properties = typeof(TData).GetFields();
+                var properties = typeof(TData).GetProperties();
                 Godot.GD.Print(properties.Count() + " Readed ");
                 foreach(var property in properties){
-                    if(property.FieldType == typeof(int) || property.FieldType == typeof(bool) || property.FieldType.IsEnum){
+                    if(property.PropertyType == typeof(int) || property.PropertyType == typeof(bool) || property.PropertyType.IsEnum){
                         sqlCommand += "\"" + property.Name + "\"   INTEGER" + "     NOT NULL,";
-                    }else if(property.FieldType == typeof(double) || property.FieldType == typeof(float)){
+                    }else if(property.PropertyType == typeof(double) || property.PropertyType == typeof(float)){
                         sqlCommand += "\"" + property.Name + "\"   REAL" + "     NOT NULL,";
                     }
                     else{
@@ -135,15 +135,15 @@ namespace EGFramework{
             try
             {
                 string sqlCommand = "INSERT INTO " + typeof(TData).Name;
-                var properties = typeof(TData).GetFields();
+                var properties = typeof(TData).GetProperties();
                 Dictionary<string,object> dataParams = new Dictionary<string, object>();
                 foreach(var property in properties){
                     dataParams.Add(property.Name,property.GetValue(data));
-                    if(property.FieldType==typeof(bool) || property.FieldType.IsEnum){
+                    if(property.PropertyType==typeof(bool) || property.PropertyType.IsEnum){
                         // If property is bool type , save data to data base should be 0 or 1 instead of false or true;
                         // If property is Enum type , then transform data to int;
                         dataParams[property.Name] = System.Convert.ToInt32(dataParams[property.Name]);
-                    }else if(property.FieldType.IsClass || property.FieldType.IsValueType && !property.FieldType.IsPrimitive && property.FieldType != typeof(string)){
+                    }else if(property.PropertyType.IsClass || property.PropertyType.IsValueType && !property.PropertyType.IsPrimitive && property.PropertyType != typeof(string)){
                         dataParams[property.Name] = JsonConvert.SerializeObject(dataParams[property.Name]);
                     }
                 }
@@ -188,23 +188,23 @@ namespace EGFramework{
                 string sqlCommand = "SELECT * FROM " + typeof(TData).Name;
                 SqliteCommand selectCommand = new SqliteCommand(sqlCommand,SqliteConn);
                 SqliteDataReader reader = selectCommand.ExecuteReader();
-                var properties = typeof(TData).GetFields();
+                var properties = typeof(TData).GetProperties();
                 
                 while (reader.Read())
                 {
                     TData dataRow = new TData();
                     foreach(var property in properties){
-                        if(property.FieldType == reader[property.Name].GetType()){
+                        if(property.PropertyType == reader[property.Name].GetType()){
                             property.SetValue(dataRow,reader[property.Name]);
-                        }else if(property.FieldType.IsEnum){
-                            object propertyEnum = Enum.Parse(property.FieldType,reader[property.Name].ToString());
+                        }else if(property.PropertyType.IsEnum){
+                            object propertyEnum = Enum.Parse(property.PropertyType,reader[property.Name].ToString());
                             property.SetValue(dataRow,propertyEnum);
                         }
-                        else if(property.FieldType.IsPrimitive) {
-                            object propertyObject = System.Convert.ChangeType(reader[property.Name],property.FieldType);
+                        else if(property.PropertyType.IsPrimitive) {
+                            object propertyObject = System.Convert.ChangeType(reader[property.Name],property.PropertyType);
                             property.SetValue(dataRow,propertyObject);
                         }else{
-                            object classObject = JsonConvert.DeserializeObject(reader[property.Name].ToString(),property.FieldType);
+                            object classObject = JsonConvert.DeserializeObject(reader[property.Name].ToString(),property.PropertyType);
                             property.SetValue(dataRow,classObject);
                         }
                     }

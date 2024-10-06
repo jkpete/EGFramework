@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Godot;
 
 namespace EGFramework
 {
@@ -13,7 +14,7 @@ namespace EGFramework
         public Encoding StringEncoding { set; get; } = Encoding.UTF8;
         private string DefaultPath { set; get; }
         private List<string[]> CsvDataBlock { get; set; }
-        private string[] CsvDataHeader;
+        private Dictionary<string,int> CsvDataHeader = new Dictionary<string,int>();
         private string ReadText { set; get; }
         public void InitSaveFile(string path)
         {
@@ -47,8 +48,8 @@ namespace EGFramework
                 FileStream fileStream = File.Create(path);
                 string writeText = "";
                 string headerText = "";
-                foreach(string headers in CsvDataHeader){
-                    headerText+=headers + ",";
+                foreach(string headStr in CsvDataHeader.Keys){
+                    headerText+=headStr + ",";
                 }
                 headerText = headerText.Remove(headerText.Length-1,1);
                 writeText = headerText + "\n";
@@ -74,10 +75,15 @@ namespace EGFramework
             }
         }
 
-        public List<string[]> GetCSVDataBlockFromText(string text,out string[] header){
+        public List<string[]> GetCSVDataBlockFromText(string text,out Dictionary<string,int> header){
             List<string[]> csvBlock = new List<string[]>();
             string[] lineData = text.Split('\n');
-            header = lineData[0].Split(',');
+            string[] headerStr = lineData[0].Split(',');
+            header = new Dictionary<string,int>();
+            for (int i = 0; i < headerStr.Length; i++)
+            {
+                header.Add(headerStr[i],i);
+            }
             for (int lineID = 0; lineID < lineData.Length; lineID++)
             {
                 if (lineID!=0){
@@ -106,7 +112,28 @@ namespace EGFramework
         }
         public TData GetData<TData>(string dataKey, object id) where TData : new()
         {
-            throw new NotImplementedException();
+            TData data = new TData();
+            int dataID = 0;
+            if(id.GetType()==typeof(int)){
+                dataID = (int)id;
+            }else if(int.TryParse(id.ToString() ,out dataID)){
+                throw new Exception("Id cannot be convert to int!");
+            }
+            if(dataID>=CsvDataBlock.Count()){
+                throw new IndexOutOfRangeException("Parameter index is out of range.");
+            }
+            foreach(PropertyInfo property in data.GetType().GetProperties()){
+                CsvParamAttribute csvParam = property.GetCustomAttribute<CsvParamAttribute>();
+                if(csvParam != null && CsvDataHeader.ContainsKey(csvParam._name)){
+                    string valueStr = CsvDataBlock[dataID][CsvDataHeader[csvParam._name]];
+                    if(property.PropertyType==typeof(string)){
+                        property.SetValue(data,valueStr);
+                    }else{
+                        property.SetValue(data,Convert.ChangeType(valueStr,property.PropertyType));
+                    }
+                }
+            }
+            return data;
         }
         public IEnumerable<TData> GetAll<TData>(string dataKey) where TData : new()
         {
@@ -119,9 +146,11 @@ namespace EGFramework
         }
     }
 
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class CsvParamAttribute: Attribute{
+        public string _name { set; get; }
         public CsvParamAttribute(string name){
-
+            this._name = name;
         }
     }
 }
