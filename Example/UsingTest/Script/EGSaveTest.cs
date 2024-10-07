@@ -23,8 +23,14 @@ namespace EGFramework.Examples.Test{
 
             EGCsvSave csvSave = new EGCsvSave();
             csvSave.InitSaveFile("SaveData/TestCsv.csv");
-            Customer testData = csvSave.GetData<Customer>("",1);
-            GD.Print("Name = "+testData.Name +" || ID = "+testData.Id);
+            // Customer testData = csvSave.GetData<Customer>("",1);
+            // GD.Print("Name = "+testData.Name +" || ID = "+testData.Id);
+            Customer testData = new Customer(){
+                Id = 1008,
+                Name = "AddDataDefault",
+                IsActive = true
+            };
+            csvSave.SetData("",testData,2);
 
             // GD.Print(typeof(Customer));
             // Type type = typeof(Customer);
@@ -67,6 +73,7 @@ namespace EGFramework.Examples.Test{
         [CsvParam("Name")]
         public string Name { get; set; }
         public string[] Phones { get; set; }
+        [CsvParam("是否启用")]
         public bool IsActive { get; set; }
     }
 }

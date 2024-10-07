@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Godot;
 
 namespace EGFramework
 {
@@ -15,7 +15,10 @@ namespace EGFramework
         private string DefaultPath { set; get; }
         private List<string[]> CsvDataBlock { get; set; }
         private Dictionary<string,int> CsvDataHeader = new Dictionary<string,int>();
+        public IOCContainer TypeDataContainer = new IOCContainer();
         private string ReadText { set; get; }
+
+
         public void InitSaveFile(string path)
         {
             ReadDataBlock(path);
@@ -62,7 +65,6 @@ namespace EGFramework
                     writeText += lineText + "\n";
                 }
                 writeText = writeText.Remove(writeText.Length-1,1);
-
                 byte[] data = StringEncoding.GetBytes(writeText);
                 fileStream.Write(data,0,data.Length);
                 fileStream.Close();
@@ -108,8 +110,31 @@ namespace EGFramework
 
         public void SetData<TData>(string dataKey, TData data, object id)
         {
-            throw new NotImplementedException();
+            bool IsAdd = false;
+            int dataID = 0;
+            if(id.GetType()==typeof(int)){
+                dataID = (int)id;
+            }else if(int.TryParse(id.ToString() ,out dataID)){
+                throw new Exception("Id cannot be convert to int!");
+            }
+            if(dataID>=CsvDataBlock.Count() || dataID < 0){
+                IsAdd = true;
+            }
+            string[] csvSet = new string[CsvDataHeader.Keys.Count()];
+            foreach(PropertyInfo property in data.GetType().GetProperties()){
+                CsvParamAttribute csvParam = property.GetCustomAttribute<CsvParamAttribute>();
+                if(csvParam != null && CsvDataHeader.ContainsKey(csvParam._name)){
+                    csvSet[CsvDataHeader[csvParam._name]] = property.GetValue(data).ToString();
+                }
+            }
+            if(IsAdd){
+                CsvDataBlock.Add(csvSet);
+            }else{
+                CsvDataBlock[dataID] = csvSet;
+            }
+            this.WriteDataBlock(DefaultPath);
         }
+
         public TData GetData<TData>(string dataKey, object id) where TData : new()
         {
             TData data = new TData();
@@ -137,12 +162,36 @@ namespace EGFramework
         }
         public IEnumerable<TData> GetAll<TData>(string dataKey) where TData : new()
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
+            List<TData> DataList = new List<TData>();
+            for (int dataID = 0; dataID < CsvDataBlock.Count(); dataID++){
+                foreach(PropertyInfo property in typeof(TData).GetProperties()){
+                    CsvParamAttribute csvParam = property.GetCustomAttribute<CsvParamAttribute>();
+                    if(csvParam != null && CsvDataHeader.ContainsKey(csvParam._name)){
+                        string valueStr = CsvDataBlock[dataID][CsvDataHeader[csvParam._name]];
+                        TData data = new TData();
+                        if(property.PropertyType==typeof(string)){
+                            property.SetValue(data,valueStr);
+                        }else{
+                            property.SetValue(data,Convert.ChangeType(valueStr,property.PropertyType));
+                        }
+                        DataList.Add(data);
+                    }
+                }
+            }
+            TypeDataContainer.Register(DataList);
+            return DataList;
         }
         
         public IEnumerable<TData> FindData<TData>(string dataKey, Expression<Func<TData, bool>> expression) where TData : new()
         {
-            throw new NotImplementedException();
+            List<TData> sourceList;
+            if(TypeDataContainer.self.ContainsKey(typeof(List<TData>))){
+                sourceList = TypeDataContainer.Get<List<TData>>();
+            }else{
+                sourceList = (List<TData>)GetAll<TData>(dataKey);
+            }
+            return sourceList.Where(expression.Compile());
         }
     }
 
