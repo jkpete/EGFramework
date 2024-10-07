@@ -165,19 +165,19 @@ namespace EGFramework
             // throw new NotImplementedException();
             List<TData> DataList = new List<TData>();
             for (int dataID = 0; dataID < CsvDataBlock.Count(); dataID++){
+                TData data = new TData();
                 foreach(PropertyInfo property in typeof(TData).GetProperties()){
                     CsvParamAttribute csvParam = property.GetCustomAttribute<CsvParamAttribute>();
                     if(csvParam != null && CsvDataHeader.ContainsKey(csvParam._name)){
                         string valueStr = CsvDataBlock[dataID][CsvDataHeader[csvParam._name]];
-                        TData data = new TData();
                         if(property.PropertyType==typeof(string)){
                             property.SetValue(data,valueStr);
                         }else{
                             property.SetValue(data,Convert.ChangeType(valueStr,property.PropertyType));
                         }
-                        DataList.Add(data);
                     }
                 }
+                DataList.Add(data);
             }
             TypeDataContainer.Register(DataList);
             return DataList;
