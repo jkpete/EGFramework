@@ -32,17 +32,17 @@ namespace EGFramework.Examples.Test{
             // };
             // csvSave.SetData("",testData,2)
 
-            IEnumerable<Customer> allResult = csvSave.GetAll<Customer>("");
-            GD.Print("Get result " + allResult.Count());
-            foreach(Customer customer in allResult){
-                GD.Print(customer.Id +"|" + customer.Name);
-            }
+            // IEnumerable<Customer> allResult = csvSave.GetAll<Customer>("");
+            // GD.Print("Get result " + allResult.Count());
+            // foreach(Customer customer in allResult){
+            //     GD.Print(customer.Id +"|" + customer.Name);
+            // }
 
-            // System.Linq.Expressions.Expression<Func<Customer, bool>> expr = i => i.Id < 5;
+            // System.Linq.Expressions.Expression<Func<Customer, bool>> expr = i => i.Name == "Creature";
             // IEnumerable<Customer> linqResult = csvSave.FindData<Customer>("",expr);
             // GD.Print("Find result " + linqResult.Count());
             // foreach(Customer customer in linqResult){
-            //     GD.Print(customer.Name);
+            //     GD.Print(customer.Id);
             // }
 
             // GD.Print(typeof(Customer));
