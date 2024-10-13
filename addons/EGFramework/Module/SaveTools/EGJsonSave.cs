@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace EGFramework
 {
-    public class EGJsonSave : IEGSave,IEGSaveObject
+    public class EGJsonSave : IEGSave,IEGSaveReadOnly,IEGSaveObject
     {
         private string DefaultPath { set; get; }
         private JObject _SaveObject;
@@ -42,6 +42,11 @@ namespace EGFramework
             }
         }
 
+        public void InitReadOnly(string data)
+        {
+            _SaveObject = JObject.Parse(data);
+        }
+
         public void SetObject<TObject>(string objectKey,TObject obj)
         {
             if(SaveObject.ContainsKey(objectKey)){
@@ -63,5 +68,6 @@ namespace EGFramework
             TObject data = SaveObject[objectKey].ToObject<TObject>();
             return data;
         }
+
     }
 }

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Example/UsingTest/Script/EGSaveTest.cs" id="1_eij2h"]
 
-[node name="TestEgFramework" type="Control"]
+[node name="Test" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,6 +20,7 @@ offset_right = 361.0
 offset_bottom = 164.0
 
 [node name="Button1" type="Button" parent="."]
+visible = false
 layout_mode = 0
 offset_right = 50.0
 offset_bottom = 50.0

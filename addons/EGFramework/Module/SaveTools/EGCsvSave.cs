@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EGFramework
 {
-    public class EGCsvSave : IEGSaveData, IEGSave
+    public class EGCsvSave : IEGSaveData, IEGSave, IEGSaveReadOnly
     {
         public Encoding StringEncoding { set; get; } = Encoding.UTF8;
         private string DefaultPath { set; get; }
@@ -22,6 +22,14 @@ namespace EGFramework
         public void InitSaveFile(string path)
         {
             ReadDataBlock(path);
+        }
+
+        public void InitReadOnly(string data)
+        {
+            ReadText = data;
+            if(ReadText != null || ReadText != ""){
+                CsvDataBlock = GetCSVDataBlockFromText(ReadText,out CsvDataHeader);
+            }
         }
 
         public void ReadDataBlock(string path){

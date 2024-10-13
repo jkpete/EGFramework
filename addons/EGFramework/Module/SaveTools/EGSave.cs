@@ -27,6 +27,9 @@ namespace EGFramework
 
         private Dictionary<string,IEGSaveData> DataBaseFiles = new Dictionary<string,IEGSaveData>();
         private Dictionary<string,IEGSaveObject> ObjectFiles = new Dictionary<string,IEGSaveObject>(); 
+
+        private Dictionary<string,IEGSaveDataReadOnly> DataBaseReadOnly = new Dictionary<string, IEGSaveDataReadOnly>();
+        private Dictionary<string,IEGSaveObjectReadOnly> ObjectReadOnly = new Dictionary<string,IEGSaveObjectReadOnly>();
         public EGSave() {}
         public override void Init()
         {
@@ -39,25 +42,69 @@ namespace EGFramework
             DataBaseFiles.Add(path,saveData);
         }
 
+        public void ReadData<TReadOnlyData>(string key,string data)where TReadOnlyData:IEGSaveDataReadOnly,IEGSaveReadOnly,new(){
+            TReadOnlyData readOnlyData = new TReadOnlyData();
+            readOnlyData.InitReadOnly(data);
+            DataBaseReadOnly.Add(key,readOnlyData);
+        }
+
         public void LoadObjectFile<TSaveObject>(string path) where TSaveObject:IEGSaveObject,IEGSave,new(){
             TSaveObject saveObject = new TSaveObject();
             saveObject.InitSaveFile(path);
             ObjectFiles.Add(path, saveObject);
         }
 
-        public void SetObject<TObject>(string path,string objectKey,TObject obj){
-            ObjectFiles[path].SetObject(objectKey,obj);
+        public void ReadObject<TReadOnlyObject>(string key,string data)where TReadOnlyObject:IEGSaveObjectReadOnly,IEGSaveReadOnly,new(){
+            TReadOnlyObject readOnlyObject = new TReadOnlyObject();
+            readOnlyObject.InitReadOnly(data);
+            ObjectReadOnly.Add(key,readOnlyObject);
         }
+
+        public void SetObject<TObject>(string path,string objectKey,TObject obj){
+            if(ObjectFiles.ContainsKey(path)){
+                ObjectFiles[path].SetObject(objectKey,obj);
+            }else{
+                throw new Exception("File not loaded, you should use LoadObjectFile(key) first.");
+            }
+        }
+        
         public TObject GetObject<TObject>(string path,string key) where TObject : new(){
-            return ObjectFiles[path].GetObject<TObject>(key);
+            if(ObjectFiles.ContainsKey(path)){
+                return ObjectFiles[path].GetObject<TObject>(key);
+            }else if(ObjectReadOnly.ContainsKey(path)){
+                return ObjectReadOnly[path].GetObject<TObject>(key);
+            }else{
+                throw new Exception("File not loaded, you should use LoadObjectFile(key) or ReadObject(key) first.");
+            }
         }
 
         public void SetData<TData>(string path,string dataKey,TData data,int id){
-            DataBaseFiles[path].SetData(dataKey,data,id);
+            if(DataBaseFiles.ContainsKey(path)){
+                DataBaseFiles[path].SetData(dataKey,data,id);
+            }else{
+                throw new Exception("File not loaded, you should use LoadDataFile(path) first.");
+            }
         }
-        public void GetData<TData>(string path,string key,int id) where TData : new(){
-            DataBaseFiles[path].GetData<TData>(key,id);
+        public TData GetData<TData>(string path,string key,int id) where TData : new(){
+            if(DataBaseFiles.ContainsKey(path)){
+                return DataBaseFiles[path].GetData<TData>(key,id);
+            }else if(DataBaseReadOnly.ContainsKey(path)){
+                return DataBaseReadOnly[path].GetData<TData>(key,id);
+            }else{
+                throw new Exception("File not loaded, you should use LoadDataFile(key) or ReadData(key,data) first.");
+            }
         }
+
+        public IEnumerable<TData> GetAllData<TData>(string path,string key) where TData : new(){
+            if(DataBaseFiles.ContainsKey(path)){
+                return DataBaseFiles[path].GetAll<TData>(key);
+            }else if(DataBaseReadOnly.ContainsKey(path)){
+                return DataBaseReadOnly[path].GetAll<TData>(key);
+            }else{
+                throw new Exception("File not loaded, you should use LoadDataFile(key) or ReadData(key,data) first.");
+            }
+        }
+
 
         //------------------------------------------------------------------------------//
 
