@@ -27,7 +27,7 @@ project/assembly_name="EGFramework"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/Tools/ItemImporter/plugin.cfg")
+enabled=PackedStringArray()
 
 [input]
 

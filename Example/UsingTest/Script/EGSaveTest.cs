@@ -33,7 +33,7 @@ namespace EGFramework.Examples.Test{
             // // this.EGSave().SetObject(CardPath1,"Customer1",new Customer() { Name = "Andy" });
             // // this.EGSave().SetObject(CardPath1,"Customer3",new Customer() { Name = "Terry" });
 
-            string CardPath1 = "Card1";
+            // string CardPath1 = "Card1";
             // FileAccess fileAccess = FileAccess.Open("res://SaveData/TestCsv.csv", FileAccess.ModeFlags.Read);
             // GD.Print(fileAccess.GetAsText());
             // FileAccess testFile = FileAccess.Open("res://SaveData/CardData1.json", FileAccess.ModeFlags.Read);
@@ -48,19 +48,25 @@ namespace EGFramework.Examples.Test{
             // csvSave.InitSaveFile("SaveData/TestCsv.csv");
             // Customer testData = csvSave.GetData<Customer>("",1);
             // GD.Print("Name = "+testData.Name +" || ID = "+testData.Id);
-            // Customer testData = new Customer(){
+            // CustomerByte testData = new CustomerByte(){
             //     Id = 1008,
             //     Name = "AddDataDefault",
             //     IsActive = true
             // };
             // csvSave.SetData("",testData,2)
-            FileAccess testCsv = FileAccess.Open("res://SaveData/TestCsv.csv", FileAccess.ModeFlags.Read);
-            this.EGSave().ReadData<EGCsvSave>(CardPath1,testCsv.GetAsText());
-            IEnumerable<Customer> allResult = this.EGSave().GetAllData<Customer>(CardPath1,"");
-            GD.Print("Get result " + allResult.Count());
-            foreach(Customer customer in allResult){
-                GD.Print(customer.Id +"|" + customer.Name);
-            }
+
+            // FileAccess testCsv = FileAccess.Open("res://SaveData/TestCsv.csv", FileAccess.ModeFlags.Read);
+            // this.EGSave().ReadData<EGCsvSave>(CardPath1,testCsv.GetAsText());
+            // IEnumerable<Customer> allResult = this.EGSave().GetAllData<Customer>(CardPath1,"");
+            // GD.Print("Get result " + allResult.Count());
+            // foreach(Customer customer in allResult){
+            //     GD.Print(customer.Id +"|" + customer.Name);
+            // }
+
+            this.EGSave().LoadObjectFile<EGByteSave>("SaveData/testDat.dat");
+            // this.EGSave().SetObject("SaveData/testDat.dat","",testData);
+            CustomerByte testDat = this.EGSave().GetObject<CustomerByte>("SaveData/testDat.dat","");
+            GD.Print(testDat.Id);
 
             // System.Linq.Expressions.Expression<Func<Customer, bool>> expr = i => i.Name == "Creature";
             // IEnumerable<Customer> linqResult = csvSave.FindData<Customer>("",expr);
@@ -99,5 +105,32 @@ namespace EGFramework.Examples.Test{
         public string[] Phones { get; set; }
         [CsvParam("是否启用")]
         public bool IsActive { get; set; }
+    }
+
+    public class CustomerByte : Customer, IResponse, IRequest
+    {
+        public byte[] ToProtocolByteData()
+        {
+            byte[] data = new byte[0];
+            data = data.Concat(((uint)Id).ToBytesLittleEndian()).ToArray();
+            return data;
+        }
+
+        public string ToProtocolData()
+        {
+            return "";
+        }
+
+
+        public bool TrySetData(string protocolData, byte[] protocolBytes)
+        {
+            if(protocolBytes != null && protocolBytes.Length >= 4){
+                Id = (int)protocolBytes.ToUINTLittleEndian();
+                return true;
+            }else{
+                return false;
+            }
+        }
+
     }
 }

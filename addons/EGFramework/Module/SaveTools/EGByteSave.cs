@@ -7,6 +7,7 @@ using System.IO;
 
 namespace EGFramework
 {
+    [Obsolete("this idea can be replaced by EGFileStream")]
     public class EGByteSave : IEGSave,IEGSaveObject
     {
         public Encoding StringEncoding { set; get; } = Encoding.ASCII;
@@ -17,7 +18,7 @@ namespace EGFramework
             DefaultPath = path;
             try
             {
-                FileStream fileStream = new FileStream(path,FileMode.Open);
+                FileStream fileStream = new FileStream(path,FileMode.OpenOrCreate);
                 byte[] buffer = new byte[fileStream.Length];
                 fileStream.Read(buffer, 0, (int)fileStream.Length);
                 fileStream.Close();
@@ -52,38 +53,23 @@ namespace EGFramework
 
         public void SetObject<TObject>(string objectKey , TObject obj)
         {
-            // throw new NotImplementedException();
+            if(typeof(TObject).GetInterfaces().Contains(typeof(IRequest))){
+                Data = ((IRequest)obj).ToProtocolByteData();
+            }else{
+                throw new Exception("This byte class cannot be serialized! you should implement IRequest first!");
+            }
+            WriteDataBlock(DefaultPath);
         }
 
         public TObject GetObject<TObject>(string objectKey) where TObject : new()
         {
-            throw new NotImplementedException();
-        }
-
-        public int GetDataLength(Type type){
-            
-            switch(type){
-
-                default: return 0 ;
+            if(typeof(TObject).GetInterfaces().Contains(typeof(IResponse))){
+                TObject result = new TObject();
+                ((IResponse)result).TrySetData(StringEncoding.GetString(Data),Data);
+                return result;
+            }else{
+                throw new Exception("This byte class cannot be serialized! you should implement IRequest first!");
             }
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-    public class ByteParamAttribute: Attribute{
-        public int _pointer { set; get; }
-        public int _length { set; get; }
-        public ByteParamAttribute(int pointer,int length = 0){
-            this._pointer = pointer;
-            this._length = length;
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
-    public class ByteClassAttribute:Attribute{
-        public int _length { set; get; }
-        public ByteClassAttribute(int length){
-            this._length = length;
         }
     }
 
