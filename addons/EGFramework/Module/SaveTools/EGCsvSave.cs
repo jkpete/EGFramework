@@ -11,6 +11,7 @@ namespace EGFramework
 {
     public class EGCsvSave : IEGSaveData, IEGSave, IEGSaveReadOnly
     {
+        public bool IsReadOnly { get; set; }
         public Encoding StringEncoding { set; get; } = Encoding.UTF8;
         private string DefaultPath { set; get; }
         private List<string[]> CsvDataBlock { get; set; }
@@ -118,6 +119,9 @@ namespace EGFramework
 
         public void SetData<TData>(string dataKey, TData data, object id)
         {
+            if(IsReadOnly){
+                throw new Exception("This file is readonly! can't set any data to file.");
+            }
             bool IsAdd = false;
             int dataID = 0;
             if(id.GetType()==typeof(int)){

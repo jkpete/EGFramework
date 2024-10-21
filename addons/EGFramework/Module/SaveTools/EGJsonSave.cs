@@ -10,6 +10,7 @@ namespace EGFramework
 {
     public class EGJsonSave : IEGSave,IEGSaveReadOnly,IEGSaveObject
     {
+        public bool IsReadOnly { get; set; }
         private string DefaultPath { set; get; }
         private JObject _SaveObject;
         private JObject SaveObject{ 
@@ -45,10 +46,14 @@ namespace EGFramework
         public void InitReadOnly(string data)
         {
             _SaveObject = JObject.Parse(data);
+            IsReadOnly = true;
         }
 
         public void SetObject<TObject>(string objectKey,TObject obj)
         {
+            if(IsReadOnly){
+                throw new Exception("This file is readonly! can't set any object to file.");
+            }
             if(SaveObject.ContainsKey(objectKey)){
                 SaveObject[objectKey] = JToken.FromObject(obj);
             }else{

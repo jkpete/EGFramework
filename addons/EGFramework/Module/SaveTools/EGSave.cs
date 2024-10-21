@@ -136,12 +136,12 @@ namespace EGFramework
             return self.GetModule<EGSave>();
         }
 
-        public static string GetGodotResPath(this string absPath){
-            return ProjectSettings.GlobalizePath("res://"+absPath);
+        public static string GetGodotResPath(this string path){
+            return ProjectSettings.GlobalizePath("res://"+path);
         }
 
-        public static string GetGodotUserPath(this string absPath){
-            return ProjectSettings.GlobalizePath("user://"+absPath);
+        public static string GetGodotUserPath(this string path){
+            return ProjectSettings.GlobalizePath("user://"+path);
         }
 
     }
