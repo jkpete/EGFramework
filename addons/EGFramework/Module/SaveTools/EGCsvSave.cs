@@ -33,6 +33,14 @@ namespace EGFramework
             }
         }
 
+        public void InitReadOnly(byte[] data)
+        {
+            ReadText = StringEncoding.GetString(data);
+            if(ReadText != null || ReadText != ""){
+                CsvDataBlock = GetCSVDataBlockFromText(ReadText,out CsvDataHeader);
+            }
+        }
+
         public void ReadDataBlock(string path){
             DefaultPath = path;
             try

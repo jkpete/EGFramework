@@ -12,6 +12,7 @@ namespace EGFramework
 
     public interface IEGSaveReadOnly{
         void InitReadOnly(string data);
+        void InitReadOnly(byte[] data);
     }
 
     public interface IEGSaveObjectReadOnly{

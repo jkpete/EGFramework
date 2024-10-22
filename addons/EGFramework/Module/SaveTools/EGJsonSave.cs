@@ -11,6 +11,7 @@ namespace EGFramework
     public class EGJsonSave : IEGSave,IEGSaveReadOnly,IEGSaveObject
     {
         public bool IsReadOnly { get; set; }
+        public Encoding StringEncoding { set; get; } = Encoding.UTF8;
         private string DefaultPath { set; get; }
         private JObject _SaveObject;
         private JObject SaveObject{ 
@@ -46,6 +47,12 @@ namespace EGFramework
         public void InitReadOnly(string data)
         {
             _SaveObject = JObject.Parse(data);
+            IsReadOnly = true;
+        }
+
+        public void InitReadOnly(byte[] data)
+        {
+            _SaveObject = JObject.Parse(StringEncoding.GetString(data));
             IsReadOnly = true;
         }
 

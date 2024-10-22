@@ -26,9 +26,9 @@ namespace EGFramework.Examples.Test{
             // GD.Print(ProjectSettings.GlobalizePath("res://SaveData/Default.json"));
             // GD.Print(ProjectSettings.GlobalizePath("user://SaveData/Default.json"));
             // GD.Print(Path.GetDirectoryName(ProjectSettings.GlobalizePath("res://SaveData/Default.json")));
-            // TestLiteDB();
-            // string CardPath1 = "SaveData/CardData1.json".GetGodotResPath();
-            // this.EGSave().LoadObjectFile<EGJsonSave>(CardPath1);
+            
+            // string Path2 = "Data1.json".GetGodotResPath();
+            // this.EGSave().LoadObjectFile<EGJsonSave>(Path2);
             
             // // this.EGSave().SetObject(CardPath1,"Customer1",new Customer() { Name = "Andy" });
             // // this.EGSave().SetObject(CardPath1,"Customer3",new Customer() { Name = "Terry" });
@@ -36,10 +36,10 @@ namespace EGFramework.Examples.Test{
             // string CardPath1 = "Card1";
             // FileAccess fileAccess = FileAccess.Open("res://SaveData/TestCsv.csv", FileAccess.ModeFlags.Read);
             // GD.Print(fileAccess.GetAsText());
-            // FileAccess testFile = FileAccess.Open("res://SaveData/CardData1.json", FileAccess.ModeFlags.Read);
-            // this.EGSave().ReadObject<EGJsonSave>(CardPath1,testFile.GetAsText());
-            // Customer customer = this.EGSave().GetObject<Customer>(CardPath1,"Customer3");
-            // GD.Print("ReadName is "+customer.Name);
+            FileAccess testJson = FileAccess.Open("res://TestJson.json", FileAccess.ModeFlags.Read);
+            this.EGSave().ReadObject<EGJsonSave>("TestJson",testJson.GetAsText());
+            Customer customer = this.EGSave().GetObject<Customer>("TestJson","Customer3");
+            GD.Print("ReadName is "+customer.Name);
 
             // FileAccess testCSV = FileAccess.Open("res://SaveData/TestCSV.json", FileAccess.ModeFlags.Read);
 
@@ -54,9 +54,11 @@ namespace EGFramework.Examples.Test{
             //     IsActive = true
             // };
             // csvSave.SetData("",testData,2)
-
+            // string Path1 = "Test.csv".GetGodotResPath();
+            // this.EGSave().LoadDataFile<EGCsvSave>(Path1);
+            
             // FileAccess testCsv = FileAccess.Open("res://SaveData/TestCsv.csv", FileAccess.ModeFlags.Read);
-            // this.EGSave().ReadData<EGCsvSave>(CardPath1,testCsv.GetAsText());
+            // this.EGSave().ReadData<EGCsvSave>("TestCsv",testCsv.GetAsText());
             // IEnumerable<Customer> allResult = this.EGSave().GetAllData<Customer>(CardPath1,"");
             // GD.Print("Get result " + allResult.Count());
             // foreach(Customer customer in allResult){

@@ -39,25 +39,94 @@ namespace EGFramework
         public void LoadDataFile<TSaveData>(string path) where TSaveData:IEGSaveData,IEGSave,new(){
             TSaveData saveData = new TSaveData();
             saveData.InitSaveFile(path);
-            DataBaseFiles.Add(path,saveData);
+            if(!DataBaseFiles.ContainsKey(path)){
+                DataBaseFiles.Add(path,saveData);
+            }else{
+                DataBaseFiles[path] = saveData;
+            }
         }
 
-        public void ReadData<TReadOnlyData>(string key,string data)where TReadOnlyData:IEGSaveDataReadOnly,IEGSaveReadOnly,new(){
+        public void ReadData<TReadOnlyData>(string key,string data) where TReadOnlyData:IEGSaveDataReadOnly,IEGSaveReadOnly,new(){
             TReadOnlyData readOnlyData = new TReadOnlyData();
             readOnlyData.InitReadOnly(data);
-            DataBaseReadOnly.Add(key,readOnlyData);
+            if(!DataBaseReadOnly.ContainsKey(key)){
+                DataBaseReadOnly.Add(key,readOnlyData);
+            }else{
+                DataBaseReadOnly[key] = readOnlyData;
+            }
+        }
+
+        public void ReadData<TReadOnlyData>(string key,byte[] data) where TReadOnlyData:IEGSaveDataReadOnly,IEGSaveReadOnly,new(){
+            TReadOnlyData readOnlyData = new TReadOnlyData();
+            readOnlyData.InitReadOnly(data);
+            if(!DataBaseReadOnly.ContainsKey(key)){
+                DataBaseReadOnly.Add(key,readOnlyData);
+            }else{
+                DataBaseReadOnly[key] = readOnlyData;
+            }
         }
 
         public void LoadObjectFile<TSaveObject>(string path) where TSaveObject:IEGSaveObject,IEGSave,new(){
             TSaveObject saveObject = new TSaveObject();
             saveObject.InitSaveFile(path);
-            ObjectFiles.Add(path, saveObject);
+            if(!ObjectFiles.ContainsKey(path)){
+                ObjectFiles.Add(path, saveObject);
+            }else{
+                ObjectFiles[path] = saveObject;
+            }
+            
         }
 
-        public void ReadObject<TReadOnlyObject>(string key,string data)where TReadOnlyObject:IEGSaveObjectReadOnly,IEGSaveReadOnly,new(){
+        public void ReadObject<TReadOnlyObject>(string key,string data) where TReadOnlyObject:IEGSaveObjectReadOnly,IEGSaveReadOnly,new(){
             TReadOnlyObject readOnlyObject = new TReadOnlyObject();
             readOnlyObject.InitReadOnly(data);
-            ObjectReadOnly.Add(key,readOnlyObject);
+            if(!ObjectReadOnly.ContainsKey(key)){
+                ObjectReadOnly.Add(key,readOnlyObject);
+            }else{
+                ObjectReadOnly[key] = readOnlyObject;
+            }
+        }
+
+        public void ReadObject<TReadOnlyObject>(string key,byte[] data) where TReadOnlyObject:IEGSaveObjectReadOnly,IEGSaveReadOnly,new(){
+            TReadOnlyObject readOnlyObject = new TReadOnlyObject();
+            readOnlyObject.InitReadOnly(data);
+            if(!ObjectReadOnly.ContainsKey(key)){
+                ObjectReadOnly.Add(key,readOnlyObject);
+            }else{
+                ObjectReadOnly[key] = readOnlyObject;
+            }
+            
+        }
+
+        public void Unload(string keyOrPath){
+            if(DataBaseReadOnly.ContainsKey(keyOrPath)){
+                DataBaseReadOnly.Remove(keyOrPath);
+            }else if(ObjectReadOnly.ContainsKey(keyOrPath)){
+                ObjectReadOnly.Remove(keyOrPath);
+            }else if(DataBaseFiles.ContainsKey(keyOrPath)){
+                DataBaseFiles.Remove(keyOrPath);
+            }else if(ObjectFiles.ContainsKey(keyOrPath)){
+                ObjectFiles.Remove(keyOrPath);
+            }else{
+                throw new Exception("Key is not found!");
+            }
+        }
+        
+        public List<string> GetKeys(){
+            List<string> keys = new List<string>();
+            foreach(string key in DataBaseReadOnly.Keys){
+                keys.Add(key);
+            }
+            foreach(string key in ObjectReadOnly.Keys){
+                keys.Add(key);
+            }
+            foreach(string key in DataBaseFiles.Keys){
+                keys.Add(key);
+            }
+            foreach(string key in ObjectFiles.Keys){
+                keys.Add(key);
+            }
+            return keys;
         }
 
         public void SetObject<TObject>(string path,string objectKey,TObject obj){
@@ -142,6 +211,10 @@ namespace EGFramework
 
         public static string GetGodotUserPath(this string path){
             return ProjectSettings.GlobalizePath("user://"+path);
+        }
+        
+        public static string GetDirectoryName(this string path){
+            return Path.GetDirectoryName(path);
         }
 
     }
