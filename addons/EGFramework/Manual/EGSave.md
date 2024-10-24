@@ -2,9 +2,11 @@
 
 ---
 
+注：下述`数据`无特殊声明默认指代：对象的集合。
+
 SaveTools使用了两种数据格式，一种是表式存储，一种是对象存储，统一使用key-value方式存储数据，通过唯一key值锁定对应的数据。如果是只读数据，则需指定唯一标识key，读写数据，这个key值则为文件路径（唯一）。
 
-在使用该库时，一定要保证该数据被加载。可以重复读取数据文件，如果外部进行了修改，新读取的数据会覆盖掉原来的数据。
+在使用该库时，一定要保证该数据被加载。可以重复读取数据文件，如果外部进行了修改，新读取的数据会覆盖掉原来的数据。使用流程：加载数据->读写数据或者其他操作
 
 需要在对应Godot的Node类下实现接口 `IEGFramework`
 
@@ -50,13 +52,9 @@ public partial class EGSaveTest : Node,IEGFramework{
 
 # EGSave
 
-
-
 ## 属性
 
 暂无
-
-
 
 ## 方法
 
@@ -73,12 +71,10 @@ public partial class EGSaveTest : Node,IEGFramework{
 | void SetObject<TObject>(string path,string objectKey,TObject obj) | 设置对象（写入文件）       |
 | TObject GetObject<TObject>(string path,string key)                | 获取对象（读取文件）       |
 | void SetData<TData>(string path,string dataKey,TData data,int id) | 设置数据（写入文件）       |
-| TData GetData<TData>(string path,string key,int id)               | 获取单个数据（读取文件）     |
-| IEnumerable<TData> GetAllData<TData>(string path,string key)      | 获取全部数据（读取文件）     |
+| TData GetData<TData>(string keyOrPath,string key,int id)          | 获取单个数据（读取文件）     |
+| IEnumerable<TData> GetAllData<TData>(string keyOrPath,string key) | 获取全部数据（读取文件）     |
 | OpenResPath()                                                     | 打开Res文件目录        |
 | OpenUserPath()                                                    | 打开User文件目录       |
-
-
 
 ## 扩展方法
 
@@ -88,13 +84,9 @@ public partial class EGSaveTest : Node,IEGFramework{
 | [string].GetGodotResPath(this string path)  | 转为res文件下的相对路径  |
 | [string].GetGodotUserPath(this string path) | 转为User文件下的相对路径 |
 
-
-
 ## 属性说明
 
 暂无
-
-
 
 ## 方法说明
 
@@ -110,8 +102,6 @@ public partial class EGSaveTest : Node,IEGFramework{
 string Path1 = "Data/Test1.csv".GetGodotResPath();
 this.EGSave().LoadDataFile<EGCsvSave>(Path1);
 ```
-
-
 
 ### ReadData<T>(string key,string data)
 
@@ -130,8 +120,6 @@ FileAccess testCsv = FileAccess.Open("res://TestCsv.csv", FileAccess.ModeFlags.R
 this.EGSave().ReadData<EGCsvSave>("TestCsv",testCsv.GetAsText());
 ```
 
-
-
 ### LoadObjectFile<T>(string path)
 
 从路径中加载对象文件，因为是可读写，所以必须指定对应的文件路径位置，如果不存在该文件则会新建对应数据文件。
@@ -144,8 +132,6 @@ this.EGSave().ReadData<EGCsvSave>("TestCsv",testCsv.GetAsText());
 string Path2 = "Data1.json".GetGodotResPath();
 this.EGSave().LoadObjectFile<EGJsonSave>(Path2);
 ```
-
-
 
 ### ReadObject<T>(string key,string data)
 
@@ -164,8 +150,6 @@ FileAccess testJson = FileAccess.Open("res://TestJson.json", FileAccess.ModeFlag
 this.EGSave().ReadObject<EGJsonSave>("TestJson",testJson.GetAsText());
 ```
 
-
-
 ### Unload(string keyOrPath)
 
 卸载已读取或者加载的数据，并删除对应key值下的数据，此方法执行后，不再能获取对应的数据，也不能写入文件，需要重新加载。
@@ -176,8 +160,6 @@ this.EGSave().ReadObject<EGJsonSave>("TestJson",testJson.GetAsText());
 this.EGSave().Unload("TestCsv");
 ```
 
-
-
 ### List<string> GetKeys()
 
 获取所有加载过的key值或者路径值。
@@ -186,13 +168,125 @@ this.EGSave().Unload("TestCsv");
 List<string> keys = this.EGSave().GetKeys();
 ```
 
+### SetObject<T>(string path,string objectKey,TObject obj)
+
+把对象写入文件中。需要先加载再写入。
+
+- T：指代任何一个对象工具类
+
+- path：对象文件的路径值
+
+- objectKey：对象文件的key值
+
+- obj：要写入的对象
+
+```csharp
+public class Customer
+{
+    [CsvParam("ID")]
+    public int Id { get; set; }
+    [CsvParam("Name")]
+    public string Name { get; set; }
+    public string[] Phones { get; set; }
+    [CsvParam("是否启用")]
+    public bool IsActive { get; set; }
+} 
+public partial class EGSaveTest : Node,IEGFramework{
+    public override void _Ready()
+    {
+        string Path2 = "Data1.json".GetGodotResPath();
+        this.EGSave().LoadObjectFile<EGJsonSave>(Path2);
+        this.EGSave().SetObject(Path2,"Customer1",new Customer()
+            { Name = "Andy" });
+    }
+}
+```
+
+### TObject GetObject<T>(string path,string key)
+
+从文件中获取对象，同样需要先加载再获取。
+
+- TObject：要获取的对象类型。
+
+- path：对象文件的路径值
+
+- key：对象的key值
+
+```csharp
+string Path2 = "Data1.json".GetGodotResPath();
+this.EGSave().LoadObjectFile<EGJsonSave>(Path2);
+Customer customer = this.EGSave().
+    GetObject<Customer>("Data1.json","Customer1");
+```
 
 
 
+### SetData<T>(string path,string dataKey,TData data,int id)
+
+把一条数据写入文件中的指定位置。特别注意，如果写入的位置超出了文件中的数据量，则会进行追加数据，否则覆盖对应位置的数据。
+
+- T：指代任何一个数据工具类
+
+- path：数据文件的路径值
+
+- dataKey：数据文件的key值
+
+- data：要写入的数据
+
+- id：指代第x条数据
+
+```csharp
+string Path2 = "TestCsv.csv".GetGodotResPath();
+this.EGSave().LoadObjectFile<EGJsonSave>(Path2);
+this.EGSave().SetData(Path1,"Customer1",
+    new Customer() { Name = "Andy" },9);
+```
 
 
 
-# 接口说明
+### TData GetData<T>(string keyOrPath,string key,int id)
+
+获取文件中特定key值的列表里，第x条数据。
+
+- keyOrPath：文件的路径，或者读取后存储的key值。
+
+- key：文件中的数据列表对应的key值。
+
+- id：第【id】条
+
+```csharp
+string Path1 = "SaveData/TestCsv.csv".GetGodotResPath();
+this.EGSave().LoadDataFile<EGCsvSave>(Path1);
+Customer customer1 = this.EGSave().GetData<Customer>(Path1,"",0);
+GD.Print(customer1.Id +"|" + customer1.Name);
+```
+
+### IEnumerable<T> GetAllData<T>(string keyOrPath,string key)
+
+获取文件中特定key值的全部数据。
+
+- keyOrPath：文件的路径，或者读取后存储的key值。
+
+- key：文件中的数据列表对应的key值。
+
+```csharp
+string Path1 = "SaveData/TestCsv.csv".GetGodotResPath();
+this.EGSave().LoadDataFile<EGCsvSave>(Path1);
+IEnumerable<Customer> allResult = this.EGSave().GetAllData<Customer>(Path1,"");
+foreach(Customer customer in allResult){
+    GD.Print(customer.Id +"|" + customer.Name);
+}
+```
+
+### OpenResPath()
+
+打开godot对应的res文件夹
+
+### OpenUserPath()
+
+打开godot对应的user文件夹
+
+# 接口说明与扩展建议
 
 ---
 

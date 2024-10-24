@@ -4,11 +4,11 @@ using LiteDB;
 namespace EGFramework.Examples.Test{
     public partial class EGSaveTest : Node,IEGFramework
     {
-        public override void _Ready()
-        {
-            base._Ready();
-            TestCode();
-        }
+    public override void _Ready()
+    {
+        base._Ready();
+        TestCode();
+    }
 
         public void TestSqlite(){
             // string result = this.EGSqlite().CreateTable<SqliteBackpackItem>();
@@ -30,16 +30,16 @@ namespace EGFramework.Examples.Test{
             // string Path2 = "Data1.json".GetGodotResPath();
             // this.EGSave().LoadObjectFile<EGJsonSave>(Path2);
             
-            // // this.EGSave().SetObject(CardPath1,"Customer1",new Customer() { Name = "Andy" });
-            // // this.EGSave().SetObject(CardPath1,"Customer3",new Customer() { Name = "Terry" });
+            // this.EGSave().SetObject(Path2,"Customer1",new Customer() { Name = "Andy" });
+            // this.EGSave().SetObject(Path2,"Customer3",new Customer() { Name = "Terry" });
 
             // string CardPath1 = "Card1";
             // FileAccess fileAccess = FileAccess.Open("res://SaveData/TestCsv.csv", FileAccess.ModeFlags.Read);
             // GD.Print(fileAccess.GetAsText());
-            FileAccess testJson = FileAccess.Open("res://TestJson.json", FileAccess.ModeFlags.Read);
-            this.EGSave().ReadObject<EGJsonSave>("TestJson",testJson.GetAsText());
-            Customer customer = this.EGSave().GetObject<Customer>("TestJson","Customer3");
-            GD.Print("ReadName is "+customer.Name);
+            // FileAccess testJson = FileAccess.Open("res://TestJson.json", FileAccess.ModeFlags.Read);
+            // this.EGSave().ReadObject<EGJsonSave>("TestJson",testJson.GetAsText());
+            // Customer customer = this.EGSave().GetObject<Customer>("TestJson","Customer3");
+            // GD.Print("ReadName is "+customer.Name);
 
             // FileAccess testCSV = FileAccess.Open("res://SaveData/TestCSV.json", FileAccess.ModeFlags.Read);
 
@@ -54,21 +54,26 @@ namespace EGFramework.Examples.Test{
             //     IsActive = true
             // };
             // csvSave.SetData("",testData,2)
-            // string Path1 = "Test.csv".GetGodotResPath();
-            // this.EGSave().LoadDataFile<EGCsvSave>(Path1);
-            
-            // FileAccess testCsv = FileAccess.Open("res://SaveData/TestCsv.csv", FileAccess.ModeFlags.Read);
-            // this.EGSave().ReadData<EGCsvSave>("TestCsv",testCsv.GetAsText());
-            // IEnumerable<Customer> allResult = this.EGSave().GetAllData<Customer>(CardPath1,"");
-            // GD.Print("Get result " + allResult.Count());
+
+            string Path1 = "SaveData/TestCsv.csv".GetGodotResPath();
+            this.EGSave().LoadDataFile<EGCsvSave>(Path1);
+            this.EGSave().SetData(Path1,"Customer1",new Customer() { Name = "Andy" },9);
+            // IEnumerable<Customer> allResult = this.EGSave().GetAllData<Customer>(Path1,"");
             // foreach(Customer customer in allResult){
             //     GD.Print(customer.Id +"|" + customer.Name);
             // }
+            // Customer customer1 = this.EGSave().GetData<Customer>(Path1,"",0);
+            // GD.Print(customer1.Id +"|" + customer1.Name);
 
-            this.EGSave().LoadObjectFile<EGByteSave>("SaveData/testDat.dat");
-            // this.EGSave().SetObject("SaveData/testDat.dat","",testData);
-            CustomerByte testDat = this.EGSave().GetObject<CustomerByte>("SaveData/testDat.dat","");
-            GD.Print(testDat.Id);
+            
+            // FileAccess testCsv = FileAccess.Open("res://SaveData/TestCsv.csv", FileAccess.ModeFlags.Read);
+            // this.EGSave().ReadData<EGCsvSave>("TestCsv",testCsv.GetAsText());
+            
+
+            // this.EGSave().LoadObjectFile<EGByteSave>("SaveData/testDat.dat");
+            // // this.EGSave().SetObject("SaveData/testDat.dat","",testData);
+            // CustomerByte testDat = this.EGSave().GetObject<CustomerByte>("SaveData/testDat.dat","");
+            // GD.Print(testDat.Id);
 
             // System.Linq.Expressions.Expression<Func<Customer, bool>> expr = i => i.Name == "Creature";
             // IEnumerable<Customer> linqResult = csvSave.FindData<Customer>("",expr);

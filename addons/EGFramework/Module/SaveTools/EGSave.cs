@@ -154,21 +154,21 @@ namespace EGFramework
                 throw new Exception("File not loaded, you should use LoadDataFile(path) first.");
             }
         }
-        public TData GetData<TData>(string path,string key,int id) where TData : new(){
-            if(DataBaseFiles.ContainsKey(path)){
-                return DataBaseFiles[path].GetData<TData>(key,id);
-            }else if(DataBaseReadOnly.ContainsKey(path)){
-                return DataBaseReadOnly[path].GetData<TData>(key,id);
+        public TData GetData<TData>(string keyOrPath,string key,int id) where TData : new(){
+            if(DataBaseFiles.ContainsKey(keyOrPath)){
+                return DataBaseFiles[keyOrPath].GetData<TData>(key,id);
+            }else if(DataBaseReadOnly.ContainsKey(keyOrPath)){
+                return DataBaseReadOnly[keyOrPath].GetData<TData>(key,id);
             }else{
                 throw new Exception("File not loaded, you should use LoadDataFile(key) or ReadData(key,data) first.");
             }
         }
 
-        public IEnumerable<TData> GetAllData<TData>(string path,string key) where TData : new(){
-            if(DataBaseFiles.ContainsKey(path)){
-                return DataBaseFiles[path].GetAll<TData>(key);
-            }else if(DataBaseReadOnly.ContainsKey(path)){
-                return DataBaseReadOnly[path].GetAll<TData>(key);
+        public IEnumerable<TData> GetAllData<TData>(string keyOrPath,string key) where TData : new(){
+            if(DataBaseFiles.ContainsKey(keyOrPath)){
+                return DataBaseFiles[keyOrPath].GetAll<TData>(key);
+            }else if(DataBaseReadOnly.ContainsKey(keyOrPath)){
+                return DataBaseReadOnly[keyOrPath].GetAll<TData>(key);
             }else{
                 throw new Exception("File not loaded, you should use LoadDataFile(key) or ReadData(key,data) first.");
             }
