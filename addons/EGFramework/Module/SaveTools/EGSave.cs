@@ -174,6 +174,16 @@ namespace EGFramework
             }
         }
 
+        public IEnumerable<TData> FindData<TData>(string keyOrPath,string key,System.Linq.Expressions.Expression<Func<TData, bool>> expression) where TData : new(){
+            if(DataBaseFiles.ContainsKey(keyOrPath)){
+                return DataBaseFiles[keyOrPath].FindData<TData>(key,expression);
+            }else if(DataBaseReadOnly.ContainsKey(keyOrPath)){
+                return DataBaseReadOnly[keyOrPath].FindData<TData>(key,expression);
+            }else{
+                throw new Exception("File not loaded, you should use LoadDataFile(key) or ReadData(key,data) first.");
+            }
+        }
+
 
         //------------------------------------------------------------------------------//
 

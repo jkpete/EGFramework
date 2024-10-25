@@ -57,7 +57,11 @@ namespace EGFramework.Examples.Test{
 
             string Path1 = "SaveData/TestCsv.csv".GetGodotResPath();
             this.EGSave().LoadDataFile<EGCsvSave>(Path1);
-            this.EGSave().SetData(Path1,"Customer1",new Customer() { Name = "Andy" },9);
+            IEnumerable<Customer> allResult = this.EGSave().FindData<Customer>(Path1,"",cus=>cus.Id==0);
+            foreach(Customer customer in allResult){
+                GD.Print(customer.Id +"|" + customer.Name);
+            }
+            // this.EGSave().SetData(Path1,"Customer1",new Customer() { Name = "Andy" },9);
             // IEnumerable<Customer> allResult = this.EGSave().GetAllData<Customer>(Path1,"");
             // foreach(Customer customer in allResult){
             //     GD.Print(customer.Id +"|" + customer.Name);
