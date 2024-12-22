@@ -4,7 +4,7 @@
 
 # 引言
 
-> `EGFramework`全称Everyone's Godot framework，基于`Godot`开源引擎，使用C#编写，目前仅兼容`Godot4.2 - .NET`，部分兼容`Godot3.5 - .NET`，是完全开源的组件式，功能分布的框架，使用时可以自己根据需求安装对应的`Module`来实现对应的功能，同样也可以裁剪对应的`Module`来删减对应的功能。
+> `EGFramework`全称Everyone's Godot framework，基于`Godot`开源引擎，使用C#编写，目前仅兼容`Godot4.3 - .NET`，部分兼容`Godot3.5 - .NET`，是完全开源的组件式，功能分布的框架，使用时可以自己根据需求安装对应的`Module`来实现对应的功能，同样也可以裁剪对应的`Module`来删减对应的功能。
 > 
 > `Module` 是`EGFramework`的核心组成部分，也是`EGFramework`中重要的扩展依据。详细可以查看第二部分-Module。
 
