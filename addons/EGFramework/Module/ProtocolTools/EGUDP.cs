@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
-
+using Godot;
 namespace EGFramework{
     public class EGUDP : IEGFramework, IModule, IProtocolSend, IProtocolReceived
     {
@@ -34,6 +33,7 @@ namespace EGFramework{
                 {
                     UdpClient udpDevice = new UdpClient(localPort);
                     UDPDevices.Add(localPort,udpDevice);
+                    //udpDevice.EnableBroadcast = true;
                     HandleUDPListenAsync(udpDevice);
                     //StartListening(localPort);
                 }
@@ -54,6 +54,7 @@ namespace EGFramework{
         {
             try
             {
+                //GD.Print("UDP listened in "+((IPEndPoint)client.Client.LocalEndPoint).Port);
                 while (true)
                 {
                     UdpReceiveResult data = await client.ReceiveAsync();
@@ -63,21 +64,30 @@ namespace EGFramework{
                     ResponseMsgs.Enqueue(receivedMsgs);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                GD.Print("Listen false by:"+e);
             }
         }
 
         public void SendByteData(string host,int port,byte[] data){
-            UdpClient udpClient = new UdpClient();
+            UdpClient udpClient;
+            if(UDPDevices.Count>0){
+                udpClient = UDPDevices.First().Value;
+            }else{
+                udpClient = new UdpClient();
+            }
             try{
+                GD.Print(udpClient.EnableBroadcast);
                 udpClient.Send(data, data.Length, host, port);
             }
             catch ( Exception e ){
                 Godot.GD.Print(e.ToString());	
             }
-            udpClient.Close();
-            udpClient.Dispose();
+            if(UDPDevices.Count<=0){
+                udpClient.Close();
+                udpClient.Dispose();
+            }
         }
         public void SendByteData(string destination,byte[] data){
             SendByteData(destination.GetHostByIp(),destination.GetPortByIp(),data);
@@ -117,6 +127,9 @@ namespace EGFramework{
 
         public static void EGUDPListen(this IEGFramework self ,int port){
             self.GetModule<EGUDP>().ListenUDP(port);
+        }
+        public static void EGUDPEndListen(this IEGFramework self ,int port){
+            self.GetModule<EGUDP>().EndListenUDP(port);
         }
     }
 }
