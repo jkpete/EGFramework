@@ -6,11 +6,6 @@ using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
 
 namespace EGFramework{
-    public interface IEGSqlite{
-        void SaveData<TData>(TData data) where TData : new();
-        List<TData> GetDataSet<TData>() where TData : new();
-        void InitDatabase(string dataBaseName);
-    }
     public class EGSqlite : EGModule
     {
         public string DBName = "Default";

@@ -10,11 +10,22 @@ namespace EGFramework{
         {
             return DateTime.Now.ToString("HH:mm:ss");
         }
-        public static long GetTimeStamp(this IEGFramework self)
+        public static long GetDateTime(this object self)
         {
-            TimeSpan ts = DateTime.Now - new DateTime(1970, 1, 1, 8, 0, 0, 0);
-            return System.Convert.ToInt64(ts.TotalSeconds);
+            DateTime dt = DateTime.Now;
+            return dt.Ticks;
+        }
+        public static string GetFullDateMsg(this long ticks){
+            DateTime dateTime = new DateTime(ticks);
+            return dateTime.ToString("yyyy-MM-dd") + " " + dateTime.ToString("HH:mm:ss");
+        }
+        public static string GetDayDateMsg(this long ticks){
+            DateTime dateTime = new DateTime(ticks);
+            return dateTime.ToString("HH:mm:ss");
+        }
+        public static string GetDateMsg(this long ticks){
+            DateTime dateTime = new DateTime(ticks);
+            return dateTime.ToString("yyyy-MM-dd");
         }
     }
 }
-    

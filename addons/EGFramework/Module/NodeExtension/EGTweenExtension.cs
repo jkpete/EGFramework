@@ -5,10 +5,10 @@ namespace EGFramework.EGTween{
     public static class EGTweenExtension
     {
 		#region Function
-			public static Tween KillOnEnd(this Tween self){
-				self.TweenCallback(Callable.From(self.Kill));
-				return self;
-			}
+		public static Tween KillOnEnd(this Tween self){
+			self.TweenCallback(Callable.From(self.Kill));
+			return self;
+		}
 		#endregion
 		#region Position
 		public static Tween TweenPosition(this Control self,Vector2 position,float delay){

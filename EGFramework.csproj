@@ -16,5 +16,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="8.0.0" />
     <PackageReference Include="LiteDB" Version="5.0.21" />
     <PackageReference Include="BACnet" Version="2.0.4" />
+    <PackageReference Include="MySql.Data" Version="9.1.0" />
+    <PackageReference Include="Dapper" Version="2.1.35" />
   </ItemGroup>
 </Project>

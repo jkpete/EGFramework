@@ -25,5 +25,25 @@ namespace EGFramework{
             }
         }
 
+        public static void ClearChildren<T>(this Node itemContainer) where T : Node
+        {
+            foreach (Node child in itemContainer.GetChildren())
+            {
+                if(child.GetType()==typeof(T)){
+                    child.QueueFree();
+                }
+            }
+        }
+
+        public static void ClearChildrenLabel(this Node itemContainer)
+        {
+            foreach (Node child in itemContainer.GetChildren())
+            {
+                if(child.GetType()==typeof(Label)){
+                    child.QueueFree();
+                }
+            }
+        }
+
     }
 }

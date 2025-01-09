@@ -6,11 +6,11 @@ using LiteDB;
 namespace EGFramework.Examples.Test{
     public partial class EGSaveTest : Node,IEGFramework
     {
-    public override void _Ready()
-    {
-        base._Ready();
-        TestCode();
-    }
+        public override void _Ready()
+        {
+            base._Ready();
+            TestCode();
+        }
 
         public void TestSqlite(){
             // string result = this.EGSqlite().CreateTable<SqliteBackpackItem>();
