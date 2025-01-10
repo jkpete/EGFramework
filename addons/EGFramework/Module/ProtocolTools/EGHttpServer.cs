@@ -64,7 +64,7 @@ namespace EGFramework{
                                     Dictionary<string,string> getDic = data.AllKeys.ToDictionary(k=>k,k=>data[k]);
                                     string getData = JsonConvert.SerializeObject(getDic);
                                     byte[] getBuffer = StringEncoding.GetBytes(getData);
-                                    responseKey = "GET:"+this.GetTimeStamp().ToString();
+                                    responseKey = "GET:"+this.GetDateTime().ToString();
                                     receivedMsgs = new ResponseMsg(getData,getBuffer,responseKey, ProtocolType.HttpServer);
                                     //GD.Print("Received from "+receivedMsgs.sender+": "+receivedMsgs.stringData);
                                 }

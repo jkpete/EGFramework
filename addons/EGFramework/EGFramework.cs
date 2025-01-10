@@ -165,19 +165,16 @@ namespace EGFramework
 	public struct CustomUnRegister : IUnRegister
 	{
 		/// <summary>
-		/// 委托对象
+		/// delegate object 
 		/// </summary>
 		private Action OnUnRegister { get; set; }
-		/// <summary>
-		/// 带参构造函数
-		/// </summary>
-		/// <param name="onDispose"></param>
+
 		public CustomUnRegister(Action onUnRegister)
 		{
 			OnUnRegister = onUnRegister;
 		}
 		/// <summary>
-		/// 资源释放
+		/// release by parent;
 		/// </summary>
 		public void UnRegister()
 		{

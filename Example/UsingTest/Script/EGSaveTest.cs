@@ -1,15 +1,28 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Godot;
 using LiteDB;
 
 namespace EGFramework.Examples.Test{
     public partial class EGSaveTest : Node,IEGFramework
     {
+        public Label Label { set; get; }
         public override void _Ready()
         {
-            base._Ready();
-            TestCode();
+            this.Label = this.GetNode<Label>("Label");
+            this.EGEnabledThread();
+            TestThread();
+            //base._Ready();
+            //TestCode();
+        }
+
+        public async void TestThread(){
+            await Task.Run(()=>{
+                this.ExecuteInMainThread(()=>{
+                    this.Label.Text = "Thread Test";
+                });
+            });
         }
 
         public void TestSqlite(){
