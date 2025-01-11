@@ -42,7 +42,7 @@ namespace EGFramework
 		}
     }
 	
-    public class EasyEvents
+	public class EasyEvents
 	{
 		private static EasyEvents GlobalEvents = new EasyEvents();
 		public static T Get<T>() where T : IEasyEvent
@@ -79,7 +79,67 @@ namespace EGFramework
 			return t;
 		}
 	}
-    
+
+	/// <summary>
+	/// This EasyEvent will release all registered function while invoked.
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public class EasyEventOnce<T> : IEasyEvent
+	{
+		private Action<T> OnEvent = e => { };
+		private List<CustomUnRegister> AutoUnRegister = new List<CustomUnRegister>();
+		public IUnRegister Register(Action<T> onEvent)
+		{
+			OnEvent += onEvent;
+			CustomUnRegister unRegister = new CustomUnRegister(() => { UnRegister(onEvent); });
+			AutoUnRegister.Add(unRegister);
+			return unRegister;
+		}
+		public void UnRegister(Action<T> onEvent)
+		{
+			OnEvent -= onEvent;
+		}
+		public void Invoke(T t)
+		{
+			if(AutoUnRegister.Count>0){
+				OnEvent?.Invoke(t);
+				foreach(CustomUnRegister unRegister in AutoUnRegister){
+					unRegister.UnRegister();
+				}
+				AutoUnRegister.Clear();
+			}
+		}
+	}
+
+	/// <summary>
+	/// This EasyEvent will release all registered function while invoked.
+	/// </summary>
+	public class EasyEventOnce : IEasyEvent{
+		private Action OnEvent = () => { };
+		private List<CustomUnRegister> AutoUnRegister = new List<CustomUnRegister>();
+		public IUnRegister Register(Action onEvent)
+		{
+			OnEvent += onEvent;
+			CustomUnRegister unRegister = new CustomUnRegister(() => { UnRegister(onEvent); });
+			AutoUnRegister.Add(unRegister);
+			return unRegister;
+		}
+		public void UnRegister(Action onEvent)
+		{
+			OnEvent -= onEvent;
+		}
+		public void Invoke()
+		{
+			if(AutoUnRegister.Count>0){
+				OnEvent?.Invoke();
+				foreach(CustomUnRegister unRegister in AutoUnRegister){
+					unRegister.UnRegister();
+				}
+				AutoUnRegister.Clear();
+			}
+		}
+	}
+
 
 	public static class CanRegisterEventExtension
 	{

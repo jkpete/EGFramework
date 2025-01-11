@@ -6,13 +6,14 @@ using System.Collections.Generic;
 namespace EGFramework{
     public partial class EGThread : Node,IModule,IEGFramework{
 
-        public Queue<Action> ActionQueue = new Queue<Action>();
-        public IOCContainer ActionPool = new IOCContainer();
+        public EasyEventOnce EventPool = new EasyEventOnce();
+        public Dictionary<Action,SceneTreeTimer> EventDelayPool = new Dictionary<Action, SceneTreeTimer>();
 
         public void Init()
         {
             
         }
+
         public override void _Ready()
         {
 
@@ -21,21 +22,20 @@ namespace EGFramework{
         public override void _Process(double delta)
         {
             //base._Process(delta);
-            if(ActionQueue.Count>0){
-                Action execute = ActionQueue.Dequeue();
-                execute.Invoke();
-                execute = null;
-            }
+            EventPool.Invoke();
         }
 
         public void ExecuteInMainThread(Action action){
-            ActionQueue.Enqueue(action);
+            //ActionQueue.Enqueue(action);
+            EventPool.Register(action);
         }
 
-        public void ExecuteInMainThread<T>(Action<T> action){
-
+        public void ExecuteAfterSecond(Action action,double delay){
+            SceneTreeTimer timer = this.GetTree().CreateTimer(delay);
+            timer.Timeout += action;
+            timer.Timeout += () => EventDelayPool.Remove(action);
+            EventDelayPool.Add(action,timer);
         }
-
 
         public IArchitecture GetArchitecture()
         {
@@ -49,16 +49,8 @@ namespace EGFramework{
             self.NodeModule<EGThread>().ExecuteInMainThread(action);
         }
 
-        public static void ExecuteInMainThread<T>(this Node self, Action<T> action){
-            //action.Invoke();
-        }
-
-        public static void ExecuteAfterSecond(this Node self, Action action,float delay){
-
-        }
-
-        public static void ExecuteAfterSecond<T>(this Node self, Action<T> action,float delay){
-
+        public static void ExecuteAfterSecond(this Node self, Action action,double delay){
+            self.NodeModule<EGThread>().ExecuteAfterSecond(action,delay);
         }
 
         public static void EGEnabledThread(this Node self){

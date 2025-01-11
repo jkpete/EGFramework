@@ -9,7 +9,7 @@ namespace EGFramework.Example.SystemExamples.PlayerStorage
     public interface IItem
     {
         public int GetItemId();
-        public string GetName();
+        public string GetItemName();
         public Texture GetIcon();
         public string GetInfo();   
     }

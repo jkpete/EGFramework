@@ -28,7 +28,7 @@ namespace EGFramework.Example.SystemExamples.PlayerStorage
             throw new NotImplementedException();
         }
 
-        public string GetName()
+        public string GetItemName()
         {
             throw new NotImplementedException();
         }

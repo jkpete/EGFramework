@@ -12,17 +12,21 @@ namespace EGFramework.Examples.Test{
         {
             this.Label = this.GetNode<Label>("Label");
             this.EGEnabledThread();
-            TestThread();
+            this.ExecuteAfterSecond(TestMainThreadFunc,2.0f);
             //base._Ready();
             //TestCode();
         }
 
         public async void TestThread(){
             await Task.Run(()=>{
-                this.ExecuteInMainThread(()=>{
-                    this.Label.Text = "Thread Test";
-                });
+                //this.ExecuteInMainThread(TestMainThreadFunc);
+                this.ExecuteAfterSecond(TestMainThreadFunc,2.0f);
             });
+        }
+
+        public void TestMainThreadFunc(){
+            this.Label.Text = "Thread Test";
+            GD.Print("Invoked!");
         }
 
         public void TestSqlite(){
