@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 using LiteDB;
+using Renci.SshNet;
 
 namespace EGFramework.Examples.Test{
     public partial class EGSaveTest : Node,IEGFramework
@@ -11,10 +12,23 @@ namespace EGFramework.Examples.Test{
         public override void _Ready()
         {
             this.Label = this.GetNode<Label>("Label");
-            this.EGEnabledThread();
-            this.ExecuteAfterSecond(TestMainThreadFunc,2.0f);
+            // this.EGEnabledThread();
+            // this.ExecuteAfterSecond(TestMainThreadFunc,2.0f);new PrivateKeyFile("../../../.ssh/id_ed25519")
             //base._Ready();
             //TestCode();
+
+            this.EGEnabledProtocolTool<EGSsh>();
+            this.EGOnMessage<EasyMessage>();
+            // this.EGRegisterMessageEvent<EasyMessage>((e,sender)=>{
+
+            // });
+            TestSsh();
+        }
+
+        public async void TestSsh(){
+            await this.EGSsh().ConnectSsh("127.0.0.1","jkpete",new PrivateKeyFile("../../../.ssh/id_ed25519"));
+            this.EGSendMessage(new EasyMessage(){sendString = "ls -la"},"127.0.0.1",ProtocolType.SSHClient);
+
         }
 
         public async void TestThread(){
@@ -161,6 +175,35 @@ namespace EGFramework.Examples.Test{
                 return false;
             }
         }
+    }
 
+    public class EasyMessage : IResponse, IRequest
+    {
+        public byte[] sendByte = null;
+        public string sendString = null;
+        public byte[] ToProtocolByteData()
+        {
+            return sendByte;
+        }
+
+        public string ToProtocolData()
+        {
+            return sendString;
+        }
+
+        public bool TrySetData(string protocolData, byte[] protocolBytes)
+        {
+            try
+            {
+                GD.Print("[String]"+protocolData);
+                GD.Print("[Bytes]"+protocolBytes);
+                return true;
+            }
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
+        }
     }
 }

@@ -321,7 +321,8 @@ namespace EGFramework
         FileStream = 0x50,
         MemoryStream = 0x60,
         MQTTClient = 0x70,
-        Bacnet = 0x80
+        Bacnet = 0x80,
+        SSHClient = 0x90
         //MQTT,SSH,etc...
     }
 }
