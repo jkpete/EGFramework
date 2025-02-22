@@ -181,13 +181,13 @@ namespace EGFramework{
             }
             if(ReceivedCache[serialPort.PortName].Length >= MinDataPackLength){
                 string str = StringEncoding.GetString(ReceivedCache[serialPort.PortName]);
-                Godot.GD.Print("[Receive]"+ReceivedCache[serialPort.PortName].ToStringByHex());
+                EG.Print("[Receive]"+ReceivedCache[serialPort.PortName].ToStringByHex());
                 ResponseMsgs.Enqueue(new ResponseMsg(str,ReceivedCache[serialPort.PortName],serialPort.PortName,ProtocolType.SerialPort));
                 ReceivedCache[serialPort.PortName] = new byte[0];
                 MinDataPackLength = 0;
                 //this.EGOnReceivedData(new ResponseMsg(str,buffer,serialPort.PortName,ProtocolType.SerialPort));
             }else{
-                Godot.GD.Print("[Data Get]" + ReceivedCache[serialPort.PortName].Length);
+                EG.Print("[Data Get]" + ReceivedCache[serialPort.PortName].Length);
                 string str = StringEncoding.GetString(ReceivedCache[serialPort.PortName]);
                 ResponseMsgs.Enqueue(new ResponseMsg(str,ReceivedCache[serialPort.PortName],serialPort.PortName,ProtocolType.SerialPort));
             }

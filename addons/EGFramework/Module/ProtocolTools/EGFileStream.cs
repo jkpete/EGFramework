@@ -73,7 +73,7 @@ namespace EGFramework{
             }
             catch (System.Exception e)
             {
-                Godot.GD.Print("e:" + e);
+                EG.Print("e:" + e);
                 throw;
             }
         }

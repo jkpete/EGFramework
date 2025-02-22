@@ -125,7 +125,7 @@ namespace EGFramework{
                 }
                 
             }
-            Godot.GD.Print("Server Overed");
+            EG.Print("Server Overed");
         }
 
         public IArchitecture GetArchitecture()

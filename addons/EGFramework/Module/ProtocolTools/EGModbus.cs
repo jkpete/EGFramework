@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Godot;
 
 namespace EGFramework{
     /// <summary>
@@ -55,7 +54,7 @@ namespace EGFramework{
                         //break;
                     }
                 });
-                GD.Print("-----Read"+messageId+" ----");
+                EG.Print("-----Read"+messageId+" ----");
                 //return null;
             }
             RTUCache.Clear();
@@ -118,7 +117,7 @@ namespace EGFramework{
                         //break;
                     }
                 });
-                GD.Print("-----Write"+messageId+" ----");
+                EG.Print("-----Write"+messageId+" ----");
                 //return null;
             }
             RTUCache.Clear();
@@ -175,7 +174,7 @@ namespace EGFramework{
                         //break;
                     }
                 });
-                GD.Print("-----Read"+messageId+" ----");
+                EG.Print("-----Read"+messageId+" ----");
                 //return null;
             }
             TCPCache.Clear();
@@ -222,7 +221,7 @@ namespace EGFramework{
                         //break;
                     }
                 });
-                GD.Print("-----Write"+messageId+" ----");
+                EG.Print("-----Write"+messageId+" ----");
                 //return null;
             }
             TCPCache.Clear();

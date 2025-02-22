@@ -5,7 +5,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Godot;
 using MQTTnet;
 using MQTTnet.Client;
 
@@ -53,16 +52,16 @@ namespace EGFramework{
                 };
                 await mqttClient.ConnectAsync(mqttClientOptions,CancellationToken.None);
                 MqttDevices.Add(serverURL,mqttClient);
-                GD.Print("Success Connect!"+MqttDevices[serverURL].IsConnected);
+                EG.Print("Success Connect!"+MqttDevices[serverURL].IsConnected);
                 OnMqttConnect.Invoke(serverURL);
             }else{
                 if(!MqttDevices[serverURL].IsConnected){
                     var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer(serverURL).Build();
                     await MqttDevices[serverURL].ConnectAsync(mqttClientOptions,CancellationToken.None);
-                    GD.Print("Success Connect!"+MqttDevices[serverURL].IsConnected);
+                    EG.Print("Success Connect!"+MqttDevices[serverURL].IsConnected);
                     OnMqttConnect.Invoke(serverURL);
                 }else{
-                    GD.Print("Server has been Connected"+MqttDevices[serverURL].IsConnected);
+                    EG.Print("Server has been Connected"+MqttDevices[serverURL].IsConnected);
                     OnMqttConnect.Invoke(serverURL);
                 }
             }
@@ -72,7 +71,7 @@ namespace EGFramework{
             if(MqttDevices.ContainsKey(serverURL) && MqttDevices[serverURL].IsConnected){
                 await MqttDevices[serverURL].DisconnectAsync(new MqttClientDisconnectOptionsBuilder().WithReason(MqttClientDisconnectOptionsReason.NormalDisconnection).Build());
             }else{
-                GD.Print("Not connect");
+                EG.Print("Not connect");
             }
         }
 
@@ -86,9 +85,9 @@ namespace EGFramework{
                 .Build();
             if(MqttDevices.ContainsKey(serverURL) && MqttDevices[serverURL].IsConnected){
                 await MqttDevices[serverURL].SubscribeAsync(mqttSubscribeOptions,CancellationToken.None);
-                GD.Print("Subscribe "+Theme+" success!");
+                EG.Print("Subscribe "+Theme+" success!");
             }else{
-                GD.Print("Not connect");
+                EG.Print("Not connect");
             }
         }
 
@@ -118,7 +117,7 @@ namespace EGFramework{
                 .Build();
             if(MqttDevices.ContainsKey(serverURL) && MqttDevices[serverURL].IsConnected){
                 await MqttDevices[serverURL].PublishAsync(applicationMessage, CancellationToken.None);
-                GD.Print("publish success!");
+                EG.Print("publish success!");
             }
         }
 

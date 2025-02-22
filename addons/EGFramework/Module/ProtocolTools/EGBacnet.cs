@@ -4,7 +4,6 @@ using System.IO.BACnet;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Godot;
 using Newtonsoft.Json;
 
 namespace EGFramework{
@@ -86,7 +85,7 @@ namespace EGFramework{
         public async void WaitForIamResponse(){
             IsWaitForIam = true;
             await Task.Delay(2000);
-            GD.Print("-----Get device----");
+            EG.Print("-----Get device----");
             string serializeData = JsonConvert.SerializeObject(new EGBacnetWhoIsResponse(DevicesList.Keys.ToList()));
             this.ResponseMsgs.Enqueue(new ResponseMsg(serializeData,StringEncoding.GetBytes(serializeData),"Who Is",ProtocolType.Bacnet));
             IsWaitForIam = false;
@@ -114,9 +113,9 @@ namespace EGFramework{
 		}
         public bool ExecuteBacnetData(EGBacnetRequest bacnetRequest){
             bool executeResult = false;
-            GD.Print("Execute bacnet request");
+            EG.Print("Execute bacnet request");
             if(bacnetRequest.OperateCode == EGBacnetOperateCode.WhoIsRequest){
-                GD.Print("Request for Who Is");
+                EG.Print("Request for Who Is");
                 BacnetClient.WhoIs();
                 return true;
             }
@@ -156,7 +155,7 @@ namespace EGFramework{
                         break;
                         
                 }
-                GD.Print(bacnetValueQuery[0].Value.GetType());
+                EG.Print(bacnetValueQuery[0].Value.GetType());
                 EGBacnetResponse response = new EGBacnetResponse(bacnetRequest,bacnetValueQuery);
                 response.IsSuccess = executeResult;
                 return response;
@@ -177,7 +176,7 @@ namespace EGFramework{
                 if(bacnetRequest.ValueType != BacnetApplicationTags.BACNET_APPLICATION_TAG_NULL){
                     bacnetRequest.Value = bacnetRequest.Value.ConvertBacnetValueType(bacnetRequest.ValueType);
                 }
-                GD.Print(bacnetRequest.Value.GetType());
+                EG.Print(bacnetRequest.Value.GetType());
                 BacnetAddress address = DevicesList[bacnetRequest.DeviceId];
                 switch(bacnetRequest.OperateCode){
                     case EGBacnetOperateCode.WritePropertyRequest:
@@ -246,7 +245,7 @@ namespace EGFramework{
             }
             catch (System.Exception e)
             {
-                GD.Print(e);
+                EG.Print(e);
                 throw;
             }
             return value;
@@ -274,7 +273,7 @@ namespace EGFramework{
             }
             catch (System.Exception e)
             {
-                GD.PrintErr(e);
+                EG.Print("Error:"+e);
                 throw;
             }
         }
@@ -319,7 +318,7 @@ namespace EGFramework{
             }
             catch (System.Exception e)
             {
-                GD.PrintErr("Who is error:"+ e);
+                EG.Print("Who is error:"+ e);
                 return false;
             }
         }
@@ -377,7 +376,7 @@ namespace EGFramework{
             }
             catch (System.Exception e)
             {
-                GD.PrintErr(e);
+                EG.Print("Error:"+e);
                 return false;
             }
         }
@@ -467,7 +466,7 @@ namespace EGFramework{
             }
             catch (System.Exception e)
             {
-                GD.PrintErr(e);
+                EG.Print("Error:"+e);
                 return false;
             }
         }
@@ -502,7 +501,7 @@ namespace EGFramework{
             }
             catch (System.Exception e)
             {
-                GD.Print(e);
+                EG.Print("Error:"+e);
                 return false;
             }
             //throw new System.NotImplementedException();

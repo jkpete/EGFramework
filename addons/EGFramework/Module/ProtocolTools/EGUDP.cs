@@ -38,7 +38,7 @@ namespace EGFramework{
                     //StartListening(localPort);
                 }
                 catch (Exception e){
-                    Godot.GD.Print("Error" + e);
+                    EG.Print("Error" + e);
                 }
             }
         }
@@ -54,7 +54,7 @@ namespace EGFramework{
         {
             try
             {
-                //GD.Print("UDP listened in "+((IPEndPoint)client.Client.LocalEndPoint).Port);
+                //EG.Print("UDP listened in "+((IPEndPoint)client.Client.LocalEndPoint).Port);
                 while (true)
                 {
                     UdpReceiveResult data = await client.ReceiveAsync();
@@ -66,7 +66,7 @@ namespace EGFramework{
             }
             catch (Exception e)
             {
-                GD.Print("Listen false by:"+e);
+                EG.Print("Listen false by:"+e);
             }
         }
 
@@ -78,11 +78,11 @@ namespace EGFramework{
                 udpClient = new UdpClient();
             }
             try{
-                GD.Print(udpClient.EnableBroadcast);
+                EG.Print(udpClient.EnableBroadcast);
                 udpClient.Send(data, data.Length, host, port);
             }
             catch ( Exception e ){
-                Godot.GD.Print(e.ToString());	
+                EG.Print(e.ToString());	
             }
             if(UDPDevices.Count<=0){
                 udpClient.Close();

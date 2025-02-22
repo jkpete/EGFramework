@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using log4net.Core;
 
 namespace EGFramework{
     /// <summary>

@@ -71,7 +71,7 @@ namespace EGFramework{
             }
             catch (HttpRequestException e)
             {
-                Godot.GD.Print("Exception Message : "+e.Message);
+                EG.Print("Exception Message : "+e.Message);
                 return default;
             }
         }
