@@ -83,7 +83,7 @@ namespace EGFramework{
                     }else{
                         CancellationTokenSource sourceReconnect = new CancellationTokenSource();
                         CancellationToken tokenReconnect = sourceReconnect.Token;
-                        tokenReconnect.Register(() => Godot.GD.Print("Ssh connect timeout!"));
+                        tokenReconnect.Register(() => EG.Print("Ssh connect timeout!"));
                         await SshClientDevices[host].ConnectAsync(tokenReconnect);
                         if(!SshClientDevices[host].IsConnected){
                             return false;
@@ -96,7 +96,7 @@ namespace EGFramework{
                 SshClient client = new SshClient(host, username, keyFile);
                 CancellationTokenSource source = new CancellationTokenSource();
                 CancellationToken token = source.Token;
-                token.Register(() => Godot.GD.Print("Ssh connect timeout!"));
+                token.Register(() => EG.Print("Ssh connect timeout!"));
                 source.CancelAfter(TimeOutDelay);
                 await client.ConnectAsync(token);
                 if(!client.IsConnected){

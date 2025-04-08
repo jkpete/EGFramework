@@ -15,7 +15,7 @@ namespace EGFramework
         public EasyEvent<RequestMsgEvent> OnRequest { set; get; } = new EasyEvent<RequestMsgEvent>();
 
         /// <summary>
-        /// Send delay in millisecond,if you don't need a Timer to delay send message,you can set it to 0.
+        /// Send delay in millisecond,if you don't need a Timer to delay send message,you can set it to 0. ( this delay options is prevent for sticky package )
         /// </summary>
         /// <value></value>
         public int SendDelay { set; get; } = 100;

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using Godot;
 
 namespace EGFramework
 {
@@ -33,7 +32,7 @@ namespace EGFramework
         public EGSave() {}
         public override void Init()
         {
-            LoadObjectFile<EGJsonSave>("SaveData/DefaultJsonSave.json".GetGodotResPath());
+            LoadObjectFile<EGJsonSave>("SaveData/DefaultJsonSave.json");
         }
 
         public void LoadDataFile<TSaveData>(string path) where TSaveData:IEGSaveData,IEGSave,new(){
@@ -196,31 +195,11 @@ namespace EGFramework
         }
         #endregion
 
-        //------------------------------------------------------------------------------//
-        
-
-        public void OpenResPath(){
-            OS.ShellOpen("".GetGodotResPath());   
-        }
-
-        public void OpenUserPath(){
-            OS.ShellOpen("".GetGodotUserPath());   
-        }
-
-        
     }
         
     public static class CanGetEGSaveExtension{
         public static EGSave EGSave(this IEGFramework self){
             return self.GetModule<EGSave>();
-        }
-
-        public static string GetGodotResPath(this string path){
-            return ProjectSettings.GlobalizePath("res://"+path);
-        }
-
-        public static string GetGodotUserPath(this string path){
-            return ProjectSettings.GlobalizePath("user://"+path);
         }
         
         public static string GetDirectoryName(this string path){

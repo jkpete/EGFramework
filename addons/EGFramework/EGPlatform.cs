@@ -16,6 +16,15 @@ namespace EGFramework{
 			// Console.WriteLine(what);
 		}
 	}
+	// if not use please explain this
+	public class EGPlatformDotnet : IPlatform{
+		public void Log(string message){
+			Console.WriteLine(message);
+		}
+		public void Log(params object[] what){
+			Console.WriteLine(what);
+		}
+	}
 	public static class EG
 	{
 		public static EGPlatformGodot Platform = new EGPlatformGodot();
