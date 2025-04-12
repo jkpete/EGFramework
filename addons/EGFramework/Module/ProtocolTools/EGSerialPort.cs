@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Concurrent;
 
 namespace EGFramework{
     public class EGSerialPort : IModule,IEGFramework,IProtocolSend,IProtocolReceived
@@ -21,7 +22,7 @@ namespace EGFramework{
 
         public Encoding StringEncoding { set; get; } = Encoding.UTF8;
 
-        public Queue<ResponseMsg> ResponseMsgs { set; get; } = new Queue<ResponseMsg>();
+        public ConcurrentQueue<ResponseMsg> ResponseMsgs { set; get; } = new ConcurrentQueue<ResponseMsg>();
 
         public Dictionary<string,byte[]> ReceivedCache { set; get; } = new Dictionary<string,byte[]>();
 
@@ -39,7 +40,7 @@ namespace EGFramework{
             });
         }
         
-        public Queue<ResponseMsg> GetReceivedMsg()
+        public ConcurrentQueue<ResponseMsg> GetReceivedMsg()
         {
             return this.ResponseMsgs;
         }

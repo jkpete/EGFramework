@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Timers;
 
 namespace EGFramework
@@ -19,7 +19,7 @@ namespace EGFramework
         /// </summary>
         /// <value></value>
         public int SendDelay { set; get; } = 100;
-        public Queue<RequestMsgEvent> RequestCache { set; get; } = new Queue<RequestMsgEvent>();
+        public ConcurrentDictionary<string,ConcurrentQueue<RequestMsgEvent>> RequestCache { set; get; } = new ConcurrentDictionary<string,ConcurrentQueue<RequestMsgEvent>>();
         private System.Timers.Timer RequestTimer { set; get; }
 
         public override void Init()
@@ -58,7 +58,10 @@ namespace EGFramework
         public void SendRequest<TRequest>(TRequest request,string sender,ProtocolType protocolType) where TRequest:IRequest
         {
             if(SendDelay>0){
-                RequestCache.Enqueue(new RequestMsgEvent(request,sender,protocolType));
+                if(!RequestCache.ContainsKey(sender)){
+                    RequestCache[sender] = new ConcurrentQueue<RequestMsgEvent>();
+                }
+                RequestCache[sender].Enqueue(new RequestMsgEvent(request,sender,protocolType));
             }else{
                 OnRequest.Invoke(new RequestMsgEvent(request,sender,protocolType));
             }
@@ -67,8 +70,11 @@ namespace EGFramework
         }
 
         private void ExecuteRequest(object source, ElapsedEventArgs e){
-            if(RequestCache.Count>0){
-                OnRequest.Invoke(RequestCache.Dequeue());
+            foreach(ConcurrentQueue<RequestMsgEvent> singleCache in RequestCache.Values){
+                if(singleCache.Count>0){
+                    singleCache.TryDequeue(out RequestMsgEvent msg);
+                    OnRequest.Invoke(msg);
+                }
             }
         }
         

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace EGFramework{
 
         public Encoding StringEncoding { set; get; } = Encoding.UTF8;
 
-        public Queue<ResponseMsg> ResponseMsgs { set; get; } = new Queue<ResponseMsg>();
+        public ConcurrentQueue<ResponseMsg> ResponseMsgs { set; get; } = new ConcurrentQueue<ResponseMsg>();
 
         public int TimeOutDelay = 5000;
         public void Init()
@@ -124,7 +125,7 @@ namespace EGFramework{
             }
         }
 
-        public Queue<ResponseMsg> GetReceivedMsg()
+        public ConcurrentQueue<ResponseMsg> GetReceivedMsg()
         {
             return ResponseMsgs;
         }

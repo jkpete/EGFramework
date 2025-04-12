@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -11,7 +12,7 @@ namespace EGFramework{
 
         public Encoding StringEncoding { set; get; } = Encoding.UTF8;
 
-        public Queue<ResponseMsg> ResponseMsgs { set; get; } = new Queue<ResponseMsg>();
+        public ConcurrentQueue<ResponseMsg> ResponseMsgs { set; get; } = new ConcurrentQueue<ResponseMsg>();
 
         public void Init()
         {
@@ -114,7 +115,7 @@ namespace EGFramework{
             return EGArchitectureImplement.Interface;
         }
 
-        public Queue<ResponseMsg> GetReceivedMsg()
+        public ConcurrentQueue<ResponseMsg> GetReceivedMsg()
         {
             return ResponseMsgs;
         }

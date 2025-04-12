@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Text;
 
 namespace EGFramework{
@@ -8,7 +8,7 @@ namespace EGFramework{
         public void SetEncoding(Encoding textEncoding);
     }
     public interface IProtocolReceived{
-        public Queue<ResponseMsg> GetReceivedMsg();
+        public ConcurrentQueue<ResponseMsg> GetReceivedMsg();
     }
 
     public interface IProtocolListener{

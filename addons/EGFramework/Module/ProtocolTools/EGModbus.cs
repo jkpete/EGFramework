@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,16 +9,16 @@ namespace EGFramework{
     /// </summary>
     public class EGModbus : IEGFramework, IModule
     {
-        public Queue<ModbusRTU_Response> RTUCache = new Queue<ModbusRTU_Response>();
-        public Queue<ModbusTCP_Response> TCPCache = new Queue<ModbusTCP_Response>();
+        public ConcurrentQueue<ModbusRTU_Response?> RTUCache = new ConcurrentQueue<ModbusRTU_Response?>();
+        public ConcurrentQueue<ModbusTCP_Response?> TCPCache = new ConcurrentQueue<ModbusTCP_Response?>();
 
         public int Delay = 2000;
 
-        public Queue<int> WaitForSendRTU = new Queue<int>();
+        public ConcurrentQueue<int> WaitForSendRTU = new ConcurrentQueue<int>();
         public int NextSendRTU = 0;
         public int SendPointerRTU = 1;
 
-        public Queue<int> WaitForSendTCP = new Queue<int>();
+        public ConcurrentQueue<int> WaitForSendTCP = new ConcurrentQueue<int>();
         public int NextSendTCP = 0;
         public int SendPointerTCP = 1;
 
@@ -90,7 +91,7 @@ namespace EGFramework{
                     timeout+=10;
                 }
                 if(RTUCache.Count>0){
-                    res = RTUCache.Dequeue();
+                    RTUCache.TryDequeue(out res);
                 }else{
                     //Print Error Timeout
                     OnReadTimeOut.Invoke();
@@ -99,7 +100,7 @@ namespace EGFramework{
             this.EGSerialPort().ClearReceivedCache(serialPort);
             IsRequestRTU = false;
             if(this.WaitForSendRTU.Count>0){
-                NextSendRTU = this.WaitForSendRTU.Dequeue();
+                this.WaitForSendRTU.TryDequeue(out NextSendRTU);
             }
             return res;
         }
@@ -143,7 +144,7 @@ namespace EGFramework{
                     timeout+=10;
                 }
                 if(RTUCache.Count>0){
-                    res = RTUCache.Dequeue();
+                    RTUCache.TryDequeue(out res);
                 }else{
                     //Print Error Timeout
                     OnReadTimeOut.Invoke();
@@ -152,7 +153,7 @@ namespace EGFramework{
             this.EGSerialPort().ClearReceivedCache(serialPort);
             IsRequestRTU = false;
             if(this.WaitForSendRTU.Count>0){
-                NextSendRTU = this.WaitForSendRTU.Dequeue();
+                this.WaitForSendRTU.TryDequeue(out NextSendRTU);
             }
             return res;
         }
@@ -195,7 +196,7 @@ namespace EGFramework{
                     timeout += 10;
                 }
                 if(TCPCache.Count>0){
-                    res = TCPCache.Dequeue();
+                    TCPCache.TryDequeue(out res);
                 }else{
                     //Print Error Timeout
                     OnReadTimeOut.Invoke();
@@ -203,7 +204,7 @@ namespace EGFramework{
             });
             IsRequestTCP = false;
             if(this.WaitForSendTCP.Count>0){
-                NextSendTCP = this.WaitForSendTCP.Dequeue();
+               this.WaitForSendTCP.TryDequeue(out NextSendTCP);
             }
             return res;
         }
@@ -250,7 +251,7 @@ namespace EGFramework{
                     timeout+=10;
                 }
                 if(TCPCache.Count>0){
-                    res = TCPCache.Dequeue();
+                    TCPCache.TryDequeue(out res);
                 }else{
                     //Print Error Timeout
                     OnReadTimeOut.Invoke();
@@ -258,10 +259,10 @@ namespace EGFramework{
             });
             IsRequestTCP = false;
             if(this.WaitForSendTCP.Count>0){
-                NextSendTCP = this.WaitForSendTCP.Dequeue();
+                this.WaitForSendTCP.TryDequeue(out NextSendTCP);
             }
             if(this.WaitForSendTCP.Count>0){
-                NextSendTCP = this.WaitForSendTCP.Dequeue();
+                this.WaitForSendTCP.TryDequeue(out NextSendTCP);
             }
             return res;
         }

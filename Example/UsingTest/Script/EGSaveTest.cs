@@ -18,17 +18,29 @@ namespace EGFramework.Examples.Test{
             //TestCode();
 
             this.EGEnabledProtocolTool<EGSsh>();
+            this.EGEnabledProtocolTool<EGTCPClient>();
             this.EGOnMessage<EasyMessage>();
             // this.EGRegisterMessageEvent<EasyMessage>((e,sender)=>{
 
             // });
-            TestSsh();
+            //TestSsh();
+            TestTCPSend();
         }
 
         public async void TestSsh(){
             await this.EGSsh().ConnectSsh("127.0.0.1","jkpete",new PrivateKeyFile("../../../.ssh/id_ed25519"));
+            // await this.EGSsh().ConnectSsh("byserver","bytech","bytech");
             this.EGSendMessage(new EasyMessage(){sendString = "ls -la"},"127.0.0.1",ProtocolType.SSHClient);
-
+        }
+        public async void TestTCPSend(){
+            await this.EGTCPClient().ConnectTCP("127.0.0.1",5555);
+            await this.EGTCPClient().ConnectTCP("127.0.0.1",6666);
+            this.EGSendMessage(new EasyMessage(){sendString = "ls -la"},"127.0.0.1:5555",ProtocolType.TCPClient);
+            this.EGSendMessage(new EasyMessage(){sendString = "ls -la"},"127.0.0.1:6666",ProtocolType.TCPClient);
+            this.EGSendMessage(new EasyMessage(){sendString = "ls -la"},"127.0.0.1:6666",ProtocolType.TCPClient);
+            this.EGSendMessage(new EasyMessage(){sendString = "ls -la"},"127.0.0.1:6666",ProtocolType.TCPClient);
+            this.EGSendMessage(new EasyMessage(){sendString = "ls -la"},"127.0.0.1:6666",ProtocolType.TCPClient);
+            this.EGSendMessage(new EasyMessage(){sendString = "ls -la"},"127.0.0.1:5555",ProtocolType.TCPClient);
         }
 
         public async void TestThread(){

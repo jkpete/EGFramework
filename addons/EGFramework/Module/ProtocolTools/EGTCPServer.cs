@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -18,7 +19,7 @@ namespace EGFramework{
         public EasyEvent<string> OnClientConnect { set; get; } = new EasyEvent<string>();
         public EasyEvent<string> OnClientDisconnect { set; get; } = new EasyEvent<string>();
 
-        public Queue<ResponseMsg> ResponseMsgs { set; get; } = new Queue<ResponseMsg>();
+        public ConcurrentQueue<ResponseMsg> ResponseMsgs { set; get; } = new ConcurrentQueue<ResponseMsg>();
 
         public string ErrorLogs { set; get; }
         public void Init()
@@ -35,7 +36,7 @@ namespace EGFramework{
             });
         }
 
-        public Queue<ResponseMsg> GetReceivedMsg()
+        public ConcurrentQueue<ResponseMsg> GetReceivedMsg()
         {
             return ResponseMsgs;
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -20,7 +21,7 @@ namespace EGFramework{
 
         public Encoding StringEncoding { set; get; } = Encoding.UTF8;
 
-        public Queue<ResponseMsg> ResponseMsgs { set; get; } = new Queue<ResponseMsg>();
+        public ConcurrentQueue<ResponseMsg> ResponseMsgs { set; get; } = new ConcurrentQueue<ResponseMsg>();
 
         public EasyEvent<string> OnMqttConnect { set; get; } = new EasyEvent<string>();
 
@@ -143,7 +144,7 @@ namespace EGFramework{
         {
             StringEncoding = textEncoding;
         }
-        public Queue<ResponseMsg> GetReceivedMsg()
+        public ConcurrentQueue<ResponseMsg> GetReceivedMsg()
         {
             return ResponseMsgs;
         }

@@ -9,7 +9,10 @@ namespace EGFramework{
         public void CheckedProcess(){
             foreach(IProtocolReceived tool in ProtocolTools.Values){
                 if(tool.GetReceivedMsg().Count>0){
-                    this.GetModule<EGMessage>().OnDataReceived.Invoke(tool.GetReceivedMsg().Dequeue());
+                    bool isDequeue = tool.GetReceivedMsg().TryDequeue(out ResponseMsg msg);
+                    if(isDequeue){
+                        this.GetModule<EGMessage>().OnDataReceived.Invoke(msg);
+                    }
                 }
             }
         }

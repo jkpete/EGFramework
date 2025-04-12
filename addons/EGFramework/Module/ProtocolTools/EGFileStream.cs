@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Collections.Concurrent;
 
 namespace EGFramework{
     public class EGFileStream : IEGFramework, IModule,IProtocolSend,IProtocolReceived
     {
         public Encoding StringEncoding { set; get; } = Encoding.UTF8;
 
-        public Queue<ResponseMsg> ResponseMsgs { set; get; } = new Queue<ResponseMsg>();
+        public ConcurrentQueue<ResponseMsg> ResponseMsgs { set; get; } = new ConcurrentQueue<ResponseMsg>();
 
         public void Init()
         {
@@ -83,7 +84,7 @@ namespace EGFramework{
             this.StringEncoding = textEncoding;
         }
 
-        public Queue<ResponseMsg> GetReceivedMsg()
+        public ConcurrentQueue<ResponseMsg> GetReceivedMsg()
         {
             return this.ResponseMsgs;
         }

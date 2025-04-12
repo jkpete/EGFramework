@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO.BACnet;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace EGFramework{
 		public Dictionary<uint,BacnetAddress> DevicesList = new Dictionary<uint,BacnetAddress>();
         public Encoding StringEncoding { set; get; } = Encoding.ASCII;
 
-        public Queue<ResponseMsg> ResponseMsgs { set; get; } = new Queue<ResponseMsg>();
+        public ConcurrentQueue<ResponseMsg> ResponseMsgs { set; get; } = new ConcurrentQueue<ResponseMsg>();
 
         public void Init()
         {
@@ -283,7 +284,7 @@ namespace EGFramework{
             this.StringEncoding = textEncoding;
         }
 
-        public Queue<ResponseMsg> GetReceivedMsg()
+        public ConcurrentQueue<ResponseMsg> GetReceivedMsg()
         {
             return this.ResponseMsgs;
         }
