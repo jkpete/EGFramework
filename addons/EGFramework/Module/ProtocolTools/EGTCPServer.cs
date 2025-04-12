@@ -9,12 +9,10 @@ using System.Threading.Tasks;
 namespace EGFramework{
     public class EGTCPServer : IModule, IEGFramework,IProtocolReceived
     {
-        public TcpListener TcpServer { set; get; }
-
-        public bool IsListening { set; get; }
+        public Dictionary<int,TcpListener> TcpServerDevices { set; get; } = new Dictionary<int, TcpListener>();
+        public Dictionary<int,bool> IsListening { set; get; } = new Dictionary<int, bool>();
         public Dictionary<string, TcpClient> LinkedClients { set; get; } = new Dictionary<string, TcpClient>();
         public Encoding StringEncoding { set; get; } = Encoding.UTF8;
-        public List<string> ClientNames = new List<string>();
 
         public EasyEvent<string> OnClientConnect { set; get; } = new EasyEvent<string>();
         public EasyEvent<string> OnClientDisconnect { set; get; } = new EasyEvent<string>();
@@ -44,24 +42,33 @@ namespace EGFramework{
         public async void StartServer(int port)
         {
             IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Any, port);
-            TcpServer = new(ipEndPoint);
+            TcpListener tcpServer = new TcpListener(ipEndPoint);
+            if(TcpServerDevices.ContainsKey(port)){
+                return;
+            }else{
+                TcpServerDevices.Add(port,tcpServer);
+                IsListening.Add(port,true);
+            }
+            TcpServerDevices[port].Start();
             try
             {
-                TcpServer.Start();
-                IsListening = true;
-                while (IsListening)
+                while (IsListening[port])
                 {
-                    TcpClient client = await TcpServer.AcceptTcpClientAsync();
-                    ClientNames.Add(client.Client.RemoteEndPoint.ToString());
+                    TcpClient client = await TcpServerDevices[port].AcceptTcpClientAsync();
                     LinkedClients.Add(client.Client.RemoteEndPoint.ToString(), client);
                     OnClientConnect.Invoke(client.Client.RemoteEndPoint.ToString());
                     _ = HandleClientAsync(client);
+                    EG.Print("[EGTCPServer]"+port+" Client connected: " + client.Client.RemoteEndPoint.ToString());
                 }
-                TcpServer.Stop();
+                TcpServerDevices[port].Stop();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                EG.Print("[EGTCPServer]"+port+" Error: " + e.ToString());
             }
+        }
+        public void EndServer(int port){
+            IsListening[port] = false;
         }
 
         public async Task HandleClientAsync(TcpClient client)
@@ -70,7 +77,7 @@ namespace EGFramework{
             {
                 NetworkStream stream = client.GetStream();
                 string ClientName = client.Client.RemoteEndPoint.ToString();
-                while (true)
+                while (client.Connected)
                 {
                     byte[] buffer = new byte[1024];
                     int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
@@ -85,6 +92,7 @@ namespace EGFramework{
                     ResponseMsgs.Enqueue(receivedMsgs);
                 }
                 //await Task.Run(() => DeleteClient(client)).ConfigureAwait(false);
+                EG.Print("[EGTCPServer] Client Disconnected: " + client.Client.LocalEndPoint.ToString() +"--"+ client.Client.RemoteEndPoint.ToString());
                 DeleteClient(client);
                 client.Close();
             }
@@ -109,9 +117,6 @@ namespace EGFramework{
         public void DeleteClient(TcpClient client)
         {
             string clientName = client.Client.RemoteEndPoint.ToString();
-            if (ClientNames.Contains(clientName)) {
-                ClientNames.Remove(clientName);
-            }
             if (LinkedClients.ContainsKey(clientName)) {
                 LinkedClients.Remove(clientName);
             }
@@ -132,6 +137,9 @@ namespace EGFramework{
 
         public static void EGTCPServerListen(this IEGFramework self ,int port){
             self.GetModule<EGTCPServer>().StartServer(port);
+        }
+        public static void EGTCPServerEndListen(this IEGFramework self ,int port){
+            self.GetModule<EGTCPServer>().EndServer(port);
         }
 
     }
