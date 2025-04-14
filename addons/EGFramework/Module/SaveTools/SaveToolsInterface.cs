@@ -8,7 +8,7 @@ namespace EGFramework
 {
     #region Sync_Interface
     public interface IEGSave{
-        void InitSaveFile(string path);
+        void InitSave(string path);
     }
 
     public interface IEGSaveReadOnly{
@@ -24,6 +24,7 @@ namespace EGFramework
         TData GetData<TData>(string dataKey,object id) where TData : new();
         IEnumerable<TData> GetAll<TData>(string dataKey) where TData : new();
         IEnumerable<TData> FindData<TData>(string dataKey,Expression<Func<TData, bool>> expression) where TData : new();
+        IEnumerable<string> GetKeys();
     }
     
     public interface IEGSaveObject : IEGSaveObjectReadOnly{
@@ -41,6 +42,10 @@ namespace EGFramework
     
     public interface IEGSaveData : IEGSaveDataReadOnly{
         void SetData<TData>(string dataKey,TData data,object id);
+        void AddData<TData>(string dataKey,TData data);
+        void AddData<TData>(string dataKey,IEnumerable<TData> data);
+        void RemoveData<TData>(string dataKey,object id);
+        void UpdateData<TData>(string dataKey,TData data,object id);
     }
     #endregion
 

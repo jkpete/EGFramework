@@ -58,7 +58,7 @@ namespace EGFramework
             }
         }
 
-        public void InitSaveFile(string path)
+        public void InitSave(string path)
         {
             ReadDataBlock(path);
         }

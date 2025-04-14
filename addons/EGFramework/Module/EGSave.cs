@@ -37,7 +37,7 @@ namespace EGFramework
         #region Load Data or Object and Unload
         public void LoadDataFile<TSaveData>(string path) where TSaveData:IEGSaveData,IEGSave,new(){
             TSaveData saveData = new TSaveData();
-            saveData.InitSaveFile(path);
+            saveData.InitSave(path);
             if(!DataBaseFiles.ContainsKey(path)){
                 DataBaseFiles.Add(path,saveData);
             }else{
@@ -67,7 +67,7 @@ namespace EGFramework
 
         public void LoadObjectFile<TSaveObject>(string path) where TSaveObject:IEGSaveObject,IEGSave,new(){
             TSaveObject saveObject = new TSaveObject();
-            saveObject.InitSaveFile(path);
+            saveObject.InitSave(path);
             if(!ObjectFiles.ContainsKey(path)){
                 ObjectFiles.Add(path, saveObject);
             }else{

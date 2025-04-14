@@ -15,13 +15,13 @@ namespace EGFramework
         private LiteDatabase Database{ 
             get {
                 if(_Database == null){
-                    InitSaveFile(DefaultPath);
+                    InitSave(DefaultPath);
                 }
                 return _Database;
             }
         }
         
-        public void InitSaveFile(string path)
+        public void InitSave(string path)
         {
             DefaultPath = path;
             if (!Directory.Exists(Path.GetDirectoryName(DefaultPath)))
@@ -60,6 +60,35 @@ namespace EGFramework
             return collection.Find(expression);
         }
 
-        
+        public void AddData<TData>(string dataKey, TData data)
+        {
+            LiteCollection<TData> collection = (LiteCollection<TData>)Database.GetCollection<TData>(dataKey);
+            collection.Insert(data);
+        }
+
+        public void AddData<TData>(string dataKey, IEnumerable<TData> data)
+        {
+            LiteCollection<TData> collection = (LiteCollection<TData>)Database.GetCollection<TData>(dataKey);
+            collection.Insert(data);
+        }
+
+        public void RemoveData<TData>(string dataKey,object id)
+        {
+            LiteCollection<TData> collection = (LiteCollection<TData>)Database.GetCollection<TData>(dataKey);
+            if(collection.FindById((BsonValue)id)==null){
+                collection.Delete((BsonValue)id);
+            }
+        }
+
+        public void UpdateData<TData>(string dataKey, TData data, object id)
+        {
+            LiteCollection<TData> collection = (LiteCollection<TData>)Database.GetCollection<TData>(dataKey);
+            collection.Update((BsonValue)id,data);
+        }
+        public IEnumerable<string> GetKeys()
+        {
+            return Database.GetCollectionNames();
+        }
+
     }
 }

@@ -9,6 +9,9 @@ using System.Reflection;
 
 namespace EGFramework
 {
+    /// <summary>
+    /// CSV Save tools, support read and write CSV file.The dataKey param is not use.please use "" or any string.
+    /// </summary>
     public class EGCsvSave : IEGSaveData, IEGSave, IEGSaveReadOnly
     {
         public bool IsReadOnly { get; set; }
@@ -20,7 +23,7 @@ namespace EGFramework
         private string ReadText { set; get; }
 
 
-        public void InitSaveFile(string path)
+        public void InitSave(string path)
         {
             ReadDataBlock(path);
         }
@@ -214,6 +217,99 @@ namespace EGFramework
             }
             return sourceList.Where(expression.Compile());
         }
+
+        public void AddData<TData>(string dataKey, TData data)
+        {
+            if(IsReadOnly){
+                throw new Exception("This file is readonly! can't set any data to file.");
+            }
+            string[] csvSet = new string[CsvDataHeader.Keys.Count()];
+            foreach(PropertyInfo property in data.GetType().GetProperties()){
+                CsvParamAttribute csvParam = property.GetCustomAttribute<CsvParamAttribute>();
+                if(csvParam != null && CsvDataHeader.ContainsKey(csvParam._name)){
+                    csvSet[CsvDataHeader[csvParam._name]] = property.GetValue(data).ToString();
+                }
+            }
+            CsvDataBlock.Add(csvSet);
+            this.WriteDataBlock(DefaultPath);
+        }
+
+        public void AddData<TData>(string dataKey, IEnumerable<TData> dataSet)
+        {
+            if(IsReadOnly){
+                throw new Exception("This file is readonly! can't set any data to file.");
+            }
+            foreach(TData data in dataSet){
+                string[] csvSet = new string[CsvDataHeader.Keys.Count()];
+                foreach(PropertyInfo property in data.GetType().GetProperties()){
+                    CsvParamAttribute csvParam = property.GetCustomAttribute<CsvParamAttribute>();
+                    if(csvParam != null && CsvDataHeader.ContainsKey(csvParam._name)){
+                        csvSet[CsvDataHeader[csvParam._name]] = property.GetValue(data).ToString();
+                    }
+                }
+                CsvDataBlock.Add(csvSet);
+            }
+            this.WriteDataBlock(DefaultPath);
+        }
+
+        public void RemoveData<TData>(string dataKey, object id)
+        {
+            if(IsReadOnly){
+                throw new Exception("This file is readonly! can't set any data to file.");
+            }
+            bool IsAdd = false;
+            int dataID = 0;
+            if(id.GetType()==typeof(int)){
+                dataID = (int)id;
+            }else if(int.TryParse(id.ToString() ,out dataID)){
+                throw new Exception("Id cannot be convert to int!");
+            }
+            if(dataID>=CsvDataBlock.Count() || dataID < 0){
+                IsAdd = true;
+            }
+            if(IsAdd){
+                return;
+            }else{
+                CsvDataBlock.RemoveAt(dataID);
+            }
+            this.WriteDataBlock(DefaultPath);
+        }
+
+        public void UpdateData<TData>(string dataKey, TData data, object id)
+        {
+            if(IsReadOnly){
+                throw new Exception("This file is readonly! can't set any data to file.");
+            }
+            bool IsAdd = false;
+            int dataID = 0;
+            if(id.GetType()==typeof(int)){
+                dataID = (int)id;
+            }else if(int.TryParse(id.ToString() ,out dataID)){
+                throw new Exception("Id cannot be convert to int!");
+            }
+            if(dataID>=CsvDataBlock.Count() || dataID < 0){
+                IsAdd = true;
+            }
+            string[] csvSet = new string[CsvDataHeader.Keys.Count()];
+            foreach(PropertyInfo property in data.GetType().GetProperties()){
+                CsvParamAttribute csvParam = property.GetCustomAttribute<CsvParamAttribute>();
+                if(csvParam != null && CsvDataHeader.ContainsKey(csvParam._name)){
+                    csvSet[CsvDataHeader[csvParam._name]] = property.GetValue(data).ToString();
+                }
+            }
+            if(!IsAdd){
+                CsvDataBlock[dataID] = csvSet;
+            }else{
+                throw new Exception("Data not found!");
+            }
+            this.WriteDataBlock(DefaultPath);
+        }
+
+        public IEnumerable<string> GetKeys()
+        {
+            return CsvDataHeader.Keys;
+        }
+
     }
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]

@@ -16,7 +16,7 @@ namespace EGFramework
         private JObject SaveObject{ 
             get {
                 if(_SaveObject == null){
-                    InitSaveFile(DefaultPath);
+                    InitSave(DefaultPath);
                 }
                 return _SaveObject;
             }
@@ -25,7 +25,7 @@ namespace EGFramework
         /// <summary>
         /// Init a new save data file or load an other file with json suffix, if you want to load other save data, please use this function to reload;
         /// </summary>
-        public void InitSaveFile(string path)
+        public void InitSave(string path)
         {
             DefaultPath = path;
             if(!File.Exists(path)){
