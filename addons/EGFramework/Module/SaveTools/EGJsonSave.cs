@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
@@ -79,5 +80,51 @@ namespace EGFramework
             return data;
         }
 
+        public void RemoveObject<TObject>(string objectKey)
+        {
+            if(IsReadOnly){
+                throw new Exception("This file is readonly! can't set any object to file.");
+            }
+            if(SaveObject.ContainsKey(objectKey)){
+                SaveObject.Remove(objectKey);
+            }
+            File.WriteAllText(DefaultPath,JsonConvert.SerializeObject(SaveObject,Formatting.Indented));
+        }
+
+        public void AddObject<TObject>(string objectKey, TObject obj)
+        {
+            if(IsReadOnly){
+                throw new Exception("This file is readonly! can't set any object to file.");
+            }
+            if(!SaveObject.ContainsKey(objectKey)){
+                SaveObject.Add(objectKey,JToken.FromObject(obj));
+            }else{
+                throw new Exception("Key already exists!");
+            }
+            File.WriteAllText(DefaultPath,JsonConvert.SerializeObject(SaveObject,Formatting.Indented));
+        }
+
+        public void UpdateObject<TObject>(string objectKey, TObject obj)
+        {
+            if(IsReadOnly){
+                throw new Exception("This file is readonly! can't set any object to file.");
+            }
+             if(SaveObject.ContainsKey(objectKey)){
+                SaveObject[objectKey] = JToken.FromObject(obj);
+            }else{
+                throw new Exception("Key not found!");
+            }
+            File.WriteAllText(DefaultPath,JsonConvert.SerializeObject(SaveObject,Formatting.Indented));
+        }
+
+        public IEnumerable<string> GetKeys()
+        {
+            List<string> keys = new List<string>();
+            foreach(string key in SaveObject.Properties())
+            {
+                keys.Add(key);
+            }
+            return keys;
+        }
     }
 }

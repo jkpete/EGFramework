@@ -34,7 +34,7 @@ namespace EGFramework
         {
             LoadObjectFile<EGJsonSave>("SaveData/DefaultJsonSave.json");
         }
-
+        #region Load Data or Object and Unload
         public void LoadDataFile<TSaveData>(string path) where TSaveData:IEGSaveData,IEGSave,new(){
             TSaveData saveData = new TSaveData();
             saveData.InitSaveFile(path);
@@ -110,7 +110,9 @@ namespace EGFramework
                 throw new Exception("Key is not found!");
             }
         }
-        
+        #endregion
+
+        #region Keys Operation
         public List<string> GetKeys(){
             List<string> keys = new List<string>();
             foreach(string key in DataBaseReadOnly.Keys){
@@ -128,14 +130,9 @@ namespace EGFramework
             return keys;
         }
 
-        public void SetObject<TObject>(string path,string objectKey,TObject obj){
-            if(ObjectFiles.ContainsKey(path)){
-                ObjectFiles[path].SetObject(objectKey,obj);
-            }else{
-                throw new Exception("File not loaded, you should use LoadObjectFile(key) first.");
-            }
-        }
+        #endregion
         
+        #region Get or Search data and object
         public TObject GetObject<TObject>(string path,string key) where TObject : new(){
             if(ObjectFiles.ContainsKey(path)){
                 return ObjectFiles[path].GetObject<TObject>(key);
@@ -143,14 +140,6 @@ namespace EGFramework
                 return ObjectReadOnly[path].GetObject<TObject>(key);
             }else{
                 throw new Exception("File not loaded, you should use LoadObjectFile(key) or ReadObject(key) first.");
-            }
-        }
-
-        public void SetData<TData>(string path,string dataKey,TData data,int id){
-            if(DataBaseFiles.ContainsKey(path)){
-                DataBaseFiles[path].SetData(dataKey,data,id);
-            }else{
-                throw new Exception("File not loaded, you should use LoadDataFile(path) first.");
             }
         }
         public TData GetData<TData>(string keyOrPath,string key,int id) where TData : new(){
@@ -172,6 +161,25 @@ namespace EGFramework
                 throw new Exception("File not loaded, you should use LoadDataFile(key) or ReadData(key,data) first.");
             }
         }
+        #endregion
+        
+        #region Set or Add or Update data and object
+        public void SetObject<TObject>(string path,string objectKey,TObject obj){
+            if(ObjectFiles.ContainsKey(path)){
+                ObjectFiles[path].SetObject(objectKey,obj);
+            }else{
+                throw new Exception("File not loaded, you should use LoadObjectFile(key) first.");
+            }
+        }
+
+        public void SetData<TData>(string path,string dataKey,TData data,int id){
+            if(DataBaseFiles.ContainsKey(path)){
+                DataBaseFiles[path].SetData(dataKey,data,id);
+            }else{
+                throw new Exception("File not loaded, you should use LoadDataFile(path) first.");
+            }
+        }
+        
 
         public IEnumerable<TData> FindData<TData>(string keyOrPath,string key,System.Linq.Expressions.Expression<Func<TData, bool>> expression) where TData : new(){
             if(DataBaseFiles.ContainsKey(keyOrPath)){
@@ -182,9 +190,7 @@ namespace EGFramework
                 throw new Exception("File not loaded, you should use LoadDataFile(key) or ReadData(key,data) first.");
             }
         }
-
-
-        //------------------------------------------------------------------------------//
+        #endregion
 
         #region Default Json Operation
         public void SetObjectToJson<TObject>(TObject obj){
