@@ -5,14 +5,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Dapper;
-
+//ORM Save tools. First support SQLite and MySQL,In future we will support other Database who implement DBConnection.
 namespace EGFramework
 {
-
     public abstract class EGDapper : IEGSave, IEGSaveData, IEGCanGetDBConnection
     {
-        public string DBName = "Default";
-        private string DefaultDBFolder = "SaveData";
         public DbConnection Connection { get; set; }
         public string ExceptionMsg;
 

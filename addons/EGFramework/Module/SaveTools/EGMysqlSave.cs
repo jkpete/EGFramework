@@ -1,20 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using MySql.Data.MySqlClient;
-using Dapper;
-using System.Reflection;
-using System.Linq;
-using System.Data.Common;
 
-//ORM Save tools. First support SQLite and MySQL,In future we will support other Database who implement DBConnection.
 namespace EGFramework{
     /// <summary>
     /// This Class used Dapper for operate MySQL database.
     /// </summary>
     public class EGMysqlSave : EGDapper
     {
-        private string Conn { set; get; }
+        public string Conn { set; get; }
         public bool IsInit { set; get; }
         /// <summary>
         /// "server="+Address+";port="+Port+";uid="+UserName+";pwd="+Password+";database="+DataBase+";"
@@ -26,6 +18,7 @@ namespace EGFramework{
             {
                 Connection = new MySqlConnection(conn);
                 IsInit = true;
+                this.Conn = conn;
             }
             catch (System.Exception e)
             {
