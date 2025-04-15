@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using Dapper;
 
 namespace EGFramework
 {
@@ -113,6 +114,11 @@ namespace EGFramework
         #endregion
 
         #region Keys Operation
+
+        /// <summary>
+        /// Get all file keys which has been loaded.
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetKeys(){
             List<string> keys = new List<string>();
             foreach(string key in DataBaseReadOnly.Keys){
@@ -122,6 +128,36 @@ namespace EGFramework
                 keys.Add(key);
             }
             foreach(string key in DataBaseFiles.Keys){
+                keys.Add(key);
+            }
+            foreach(string key in ObjectFiles.Keys){
+                keys.Add(key);
+            }
+            return keys;
+        }
+
+        /// <summary>
+        /// Get all data file keys (or relational database in remote such as mysql) which has been loaded.
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetDataKeys(){
+            List<string> keys = new List<string>();
+            foreach(string key in DataBaseReadOnly.Keys){
+                keys.Add(key);
+            }
+            foreach(string key in DataBaseFiles.Keys){
+                keys.Add(key);
+            }
+            return keys;
+        }
+        
+        /// <summary>
+        /// Get all object file keys (or key-value database in remote such as redis) which has been loaded.
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetObjectKeys(){
+            List<string> keys = new List<string>();
+            foreach(string key in ObjectReadOnly.Keys){
                 keys.Add(key);
             }
             foreach(string key in ObjectFiles.Keys){
@@ -161,6 +197,16 @@ namespace EGFramework
                 throw new Exception("File not loaded, you should use LoadDataFile(key) or ReadData(key,data) first.");
             }
         }
+
+        public IEnumerable<TData> FindData<TData>(string keyOrPath,string key,System.Linq.Expressions.Expression<Func<TData, bool>> expression) where TData : new(){
+            if(DataBaseFiles.ContainsKey(keyOrPath)){
+                return DataBaseFiles[keyOrPath].FindData<TData>(key,expression);
+            }else if(DataBaseReadOnly.ContainsKey(keyOrPath)){
+                return DataBaseReadOnly[keyOrPath].FindData<TData>(key,expression);
+            }else{
+                throw new Exception("File not loaded, you should use LoadDataFile(key) or ReadData(key,data) first.");
+            }
+        }
         #endregion
         
         #region Set or Add or Update data and object
@@ -180,16 +226,56 @@ namespace EGFramework
             }
         }
         
-
-        public IEnumerable<TData> FindData<TData>(string keyOrPath,string key,System.Linq.Expressions.Expression<Func<TData, bool>> expression) where TData : new(){
-            if(DataBaseFiles.ContainsKey(keyOrPath)){
-                return DataBaseFiles[keyOrPath].FindData<TData>(key,expression);
-            }else if(DataBaseReadOnly.ContainsKey(keyOrPath)){
-                return DataBaseReadOnly[keyOrPath].FindData<TData>(key,expression);
+        public void AddObject<TObject>(string path,string objectKey,TObject obj){
+            if(ObjectFiles.ContainsKey(path)){
+                ObjectFiles[path].AddObject(objectKey,obj);
             }else{
-                throw new Exception("File not loaded, you should use LoadDataFile(key) or ReadData(key,data) first.");
+                throw new Exception("File not loaded, you should use LoadObjectFile(key) first.");
             }
         }
+        public void AddData<TData>(string path,string dataKey,TData data){
+            if(DataBaseFiles.ContainsKey(path)){
+                DataBaseFiles[path].AddData(dataKey,data);
+            }else{
+                throw new Exception("File not loaded, you should use LoadDataFile(path) first.");
+            }
+        }
+        public void AddData<TData>(string path,string dataKey,IEnumerable<TData> data){
+            if(DataBaseFiles.ContainsKey(path)){
+                DataBaseFiles[path].AddData(dataKey,data);
+            }else{
+                throw new Exception("File not loaded, you should use LoadDataFile(path) first.");
+            }
+        }
+        public void UpdateObject<TObject>(string path,string objectKey,TObject obj){
+            if(ObjectFiles.ContainsKey(path)){
+                ObjectFiles[path].UpdateObject(objectKey,obj);
+            }else{
+                throw new Exception("File not loaded, you should use LoadObjectFile(key) first.");
+            }
+        }
+        public void UpdateData<TData>(string path,string dataKey,TData data,int id){
+            if(DataBaseFiles.ContainsKey(path)){
+                DataBaseFiles[path].UpdateData(dataKey,data,id);
+            }else{
+                throw new Exception("File not loaded, you should use LoadDataFile(path) first.");
+            }
+        }
+        public void RemoveObject<TObject>(string path,string objectKey){
+            if(ObjectFiles.ContainsKey(path)){
+                ObjectFiles[path].RemoveObject<TObject>(objectKey);
+            }else{
+                throw new Exception("File not loaded, you should use LoadObjectFile(key) first.");
+            }
+        }
+        public void RemoveData<TData>(string path,string dataKey,int id){
+            if(DataBaseFiles.ContainsKey(path)){
+                DataBaseFiles[path].RemoveData<TData>(dataKey,id);
+            }else{
+                throw new Exception("File not loaded, you should use LoadDataFile(path) first.");
+            }
+        }
+
         #endregion
 
         #region Default Json Operation

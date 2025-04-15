@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -14,6 +15,10 @@ namespace EGFramework
     public interface IEGSaveReadOnly{
         void InitReadOnly(string data);
         void InitReadOnly(byte[] data);
+    }
+
+    public interface IEGCanGetDBConnection{
+        DbConnection GetConnection();
     }
 
     public interface IEGSaveObjectReadOnly{
