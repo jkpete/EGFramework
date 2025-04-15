@@ -19,12 +19,15 @@ namespace EGFramework
     public interface IEGSaveObjectReadOnly{
         TObject GetObject<TObject>(string objectKey) where TObject : new();
         IEnumerable<string> GetKeys();
+        bool ContainsKey(string objectKey);
     }
     public interface IEGSaveDataReadOnly{
         TData GetData<TData>(string dataKey,object id) where TData : new();
         IEnumerable<TData> GetAll<TData>(string dataKey) where TData : new();
         IEnumerable<TData> FindData<TData>(string dataKey,Expression<Func<TData, bool>> expression) where TData : new();
         IEnumerable<string> GetKeys();
+        bool ContainsKey(string dataKey);
+        bool ContainsData(string dataKey,object id);
     }
     
     public interface IEGSaveObject : IEGSaveObjectReadOnly{

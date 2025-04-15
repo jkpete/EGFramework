@@ -126,5 +126,11 @@ namespace EGFramework
             }
             return keys;
         }
+
+        public bool ContainsKey(string objectKey)
+        {
+            return SaveObject.ContainsKey(objectKey);
+        }
+
     }
 }

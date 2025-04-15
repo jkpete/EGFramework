@@ -310,6 +310,15 @@ namespace EGFramework
             return CsvDataHeader.Keys;
         }
 
+        public bool ContainsKey(string dataKey)
+        {
+            return CsvDataHeader.ContainsKey(dataKey);
+        }
+
+        public bool ContainsData(string dataKey, object id)
+        {
+            return CsvDataBlock.Count() > 0 && id.GetType() == typeof(int) && (int)id < CsvDataBlock.Count();
+        }
     }
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]

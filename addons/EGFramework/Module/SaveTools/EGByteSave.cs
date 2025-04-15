@@ -110,6 +110,10 @@ namespace EGFramework
             throw new NotImplementedException();
         }
 
+        public bool ContainsKey(string objectKey)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public interface IEGByteInit{

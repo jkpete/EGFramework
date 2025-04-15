@@ -90,5 +90,14 @@ namespace EGFramework
             return Database.GetCollectionNames();
         }
 
+        public bool ContainsKey(string dataKey)
+        {
+            return GetKeys().Contains(dataKey);
+        }
+
+        public bool ContainsData(string dataKey, object id)
+        {
+            return Database.GetCollection(dataKey).Exists((BsonValue)id);
+        }
     }
 }

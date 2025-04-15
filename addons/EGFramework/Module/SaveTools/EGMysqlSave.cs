@@ -34,8 +34,6 @@ namespace EGFramework{
             }
         }
 
-        
-
         public IEnumerable<TData> GetAll<TData>(string dataKey) where TData : new()
         {
             IEnumerable<TData> result = Connection.Query<TData>("select * from "+dataKey);
@@ -56,11 +54,25 @@ namespace EGFramework{
 
         public void SetData<TData>(string dataKey, TData data, object id)
         {
-            throw new NotImplementedException();
+            if(data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }else{
+                if(this.ContainsData(dataKey,id)){
+                    UpdateData(dataKey,data,id);
+                }else{
+                    AddData(dataKey,data);
+                }
+                //EG.Print("data:" + data);
+            }
         }
 
         public void AddData<TData>(string dataKey, TData data)
         {
+            if(data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
             // throw new System.NotImplementedException();
             Type DataType = typeof(TData);
             var properties = DataType.GetProperties();
@@ -95,13 +107,16 @@ namespace EGFramework{
 
         public void RemoveData<TData>(string dataKey, object id)
         {
-            Type DataType = typeof(TData);
             int count = Connection.Execute(@"delete from "+dataKey+" where ID = @ID",new {ID = id});
             //EG.Print("count:" + count);
         }
 
         public void UpdateData<TData>(string dataKey, TData data, object id)
         {
+            if(data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
             Type DataType = typeof(TData);
             EG.Print("----"+DataType.Name);
             var properties = DataType.GetProperties();
@@ -121,8 +136,31 @@ namespace EGFramework{
 
         public IEnumerable<string> GetKeys()
         {
-            throw new NotImplementedException();
+            IEnumerable<string> result = Connection.Query<string>("show tables");
+            return result;
         }
 
+        public bool ContainsKey(string dataKey)
+        {
+            return GetKeys().Contains(dataKey);
+        }
+
+        public bool ContainsData(string dataKey, object id)
+        {
+            try
+            {
+                var result = Connection.QuerySingle("select * from "+dataKey+" where ID = @ID",new {ID = id});
+                if(result == null){
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+            
+        }
     }
 }
