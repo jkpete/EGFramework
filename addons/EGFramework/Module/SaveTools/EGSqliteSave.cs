@@ -1,35 +1,47 @@
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using MySql.Data.MySqlClient;
-using Dapper;
-using System.Reflection;
+using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using Dapper;
+using Microsoft.Data.Sqlite;
 
-//ORM Save tools. First support SQLite and MySQL,In future we will support other Database who implement DBConnection.
 namespace EGFramework{
-    /// <summary>
-    /// This Class used Dapper for operate MySQL database.
-    /// </summary>
-    public class EGMysqlSave : IEGSave, IEGSaveData
+    public class EGSqliteSave : IEGSave, IEGSaveData
     {
         private string Conn { set; get; }
-        public MySqlConnection Connection { set; get; }
+        public SqliteConnection Connection { set; get; }
         public bool IsInit { set; get; }
+        public string ExceptionMsg;
+
         /// <summary>
-        /// "server="+Address+";port="+Port+";uid="+UserName+";pwd="+Password+";database="+DataBase+";"
+        /// If path not exist, create it.
         /// </summary>
-        /// <param name="conn">files conn Str or address ip port,username and passwd</param>
-        public void InitSave(string conn)
+        /// <param name="path"></param>
+        public void InitSave(string path)
         {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            InitDatabase(path);
+        }
+
+        /// <summary>
+        /// Init database with path.
+        /// </summary>
+        /// <param name="dataBaseName">name is the file path.</param>
+        public void InitDatabase(string dataBaseName)
+        {
+            Connection = new SqliteConnection("Data Source="+dataBaseName+";Mode=ReadWriteCreate;");            // Open the connection:
             try
             {
-                Connection = new MySqlConnection(conn);
-                IsInit = true;
+                Connection.Open();
             }
-            catch (System.Exception e)
+            catch (Exception ex)
             {
-                EG.Print("e:" + e);
+                ExceptionMsg = ex.ToString();
             }
         }
 
