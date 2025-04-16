@@ -202,7 +202,7 @@ namespace EGFramework{
         }
     }
 
-    public struct WebDavFileMsg{
+    public struct WebDavFileMsg : IEGFileMsg{
         public string FileName { set; get; }
         public bool IsCollection { set; get; }
 
@@ -212,6 +212,17 @@ namespace EGFramework{
         public long? ContentLength { set; get; }
         public string Uri { set; get; }
         public DateTime? LastUpdateTime { set; get; }
+
+        public DateTime? LastModify  { set; get; }
+
+        public void Init(string fileName, bool isCollection, string uri, long? contentLength = null, DateTime? lastModify = null)
+        {
+            this.FileName = fileName;
+            this.IsCollection = isCollection;
+            this.Uri = uri;
+            this.ContentLength = contentLength;
+            this.LastModify = lastModify;
+        }
     }
 
     public static class EGWebDavExtension{
