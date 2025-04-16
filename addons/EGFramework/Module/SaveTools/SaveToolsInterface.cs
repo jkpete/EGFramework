@@ -106,6 +106,7 @@ namespace EGFramework
         IEnumerable<IEGFileMsg> ListRemoteFilePath(string remotePath);
         IEnumerable<IEGFileMsg> ListLocalFilePath(string localPath);
         bool IsRemoteFileExist(string remotePath);
+        bool IsRemoteDirectoryExist(string remotePath);
         void DownloadFile(string remotePath,string localPath);
         Stream DownloadFile(string remotePath);
         void SyncFile(string remotePath,string localPath);
@@ -113,10 +114,10 @@ namespace EGFramework
     public interface IEGSaveFile:IEGSaveFileReadOnly{
         void UploadFile(FileStream localFileStream,string remotePath);
         void UploadFile(string localPath,string remotePath);
-        void RemoveRemote(string remotePath);
-        void MakeDictionaryRemote(string remotePath);
-        void CopyRemote(string sourcePath,string copyPath);
-        void MoveRemote(string sourcePath,string movePath);
+        void CopyFile(string sourcePath,string copyPath);
+        void MoveFile(string sourcePath,string movePath);
+        void RemoveFile(string remotePath);
+        void MakeDirectory(string remotePath);
     }
     #endregion
 }
