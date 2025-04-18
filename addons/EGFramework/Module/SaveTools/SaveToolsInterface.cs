@@ -97,14 +97,27 @@ namespace EGFramework
         /// <summary>
         /// unit is kb
         /// </summary>
-        public long? ContentLength { get; }
+        public long? Size { get; }
         public string Uri { get; }
         public DateTime? LastModify { get; }
-        public void Init(string fileName,bool isCollection,string uri,long? contentLength,DateTime? lastmodify);
+        public void Init(string fileName,bool isCollection,string uri,long? size,DateTime? lastmodify);
+    }
+    public struct EGFileMsg : IEGFileMsg{
+        public string FileName { get; set; }
+        public bool IsCollection { get; set; }
+        public long? Size { get; set; }
+        public string Uri { get; set; }
+        public DateTime? LastModify { get; set; }
+        public void Init(string fileName,bool isCollection,string uri,long? size,DateTime? lastmodify){
+            this.FileName = fileName;
+            this.IsCollection = isCollection;
+            this.Uri = uri;
+            this.Size = size;
+            this.LastModify = lastmodify;
+        }
     }
     public interface IEGSaveFileReadOnly{
         IEnumerable<IEGFileMsg> ListRemoteFilePath(string remotePath);
-        IEnumerable<IEGFileMsg> ListLocalFilePath(string localPath);
         bool IsRemoteFileExist(string remotePath);
         bool IsRemoteDirectoryExist(string remotePath);
         void DownloadFile(string remotePath,string localPath);

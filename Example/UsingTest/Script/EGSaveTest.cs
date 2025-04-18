@@ -17,16 +17,25 @@ namespace EGFramework.Examples.Test{
             //base._Ready();
             //TestCode();
 
-            this.EGEnabledProtocolTool<EGSsh>();
-            this.EGEnabledProtocolTool<EGTCPClient>();
-            this.EGEnabledProtocolTool<EGTCPServer>();
-            this.EGOnMessage<EasyMessage>();
-            // this.EGRegisterMessageEvent<EasyMessage>((e,sender)=>{
+            // this.EGEnabledProtocolTool<EGSsh>();
+            // this.EGEnabledProtocolTool<EGTCPClient>();
+            // this.EGEnabledProtocolTool<EGTCPServer>();
+            // this.EGOnMessage<EasyMessage>();
+            // // this.EGRegisterMessageEvent<EasyMessage>((e,sender)=>{
 
-            // });
-            //TestSsh();
-            //TestTCPSend();
-            TestTCPServer();
+            // // });
+            // //TestSsh();
+            // //TestTCPSend();
+            // TestTCPServer();
+            TestFTP();
+        }
+        public void TestFTP(){
+            EGFtpSave ftp = new EGFtpSave();
+            ftp.InitSave("127.0.0.1");
+            IEnumerable<IEGFileMsg> msgs = ftp.ListRemoteFilePath("/App/");
+            foreach(IEGFileMsg msg in msgs){
+                GD.Print(msg.FileName+" | "+msg.IsCollection+" | "+msg.Size+"kb | "+msg.LastModify);
+            }
         }
 
         public async void TestSsh(){

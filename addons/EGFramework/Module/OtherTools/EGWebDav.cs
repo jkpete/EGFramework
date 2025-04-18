@@ -130,7 +130,7 @@ namespace EGFramework{
                     ResultFileList.Add(new WebDavFileMsg{
                         FileName = res.DisplayName ,
                         IsCollection = res.IsCollection ,
-                        ContentLength = res.ContentLength ,
+                        Size = res.ContentLength ,
                         Uri = res.Uri ,
                         LastUpdateTime = res.LastModifiedDate
                     });
@@ -155,7 +155,7 @@ namespace EGFramework{
                     CurrentFileList.Add(new WebDavFileMsg{
                         FileName = res.DisplayName ,
                         IsCollection = res.IsCollection ,
-                        ContentLength = res.ContentLength ,
+                        Size = res.ContentLength ,
                         Uri = res.Uri ,
                         LastUpdateTime = res.LastModifiedDate
                     });
@@ -209,18 +209,18 @@ namespace EGFramework{
         /// <summary>
         /// unit is kb
         /// </summary>
-        public long? ContentLength { set; get; }
+        public long? Size { set; get; }
         public string Uri { set; get; }
         public DateTime? LastUpdateTime { set; get; }
 
         public DateTime? LastModify  { set; get; }
 
-        public void Init(string fileName, bool isCollection, string uri, long? contentLength = null, DateTime? lastModify = null)
+        public void Init(string fileName, bool isCollection, string uri, long? size = null, DateTime? lastModify = null)
         {
             this.FileName = fileName;
             this.IsCollection = isCollection;
             this.Uri = uri;
-            this.ContentLength = contentLength;
+            this.Size = size;
             this.LastModify = lastModify;
         }
     }
