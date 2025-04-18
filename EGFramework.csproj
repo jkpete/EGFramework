@@ -20,5 +20,6 @@
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="SSH.NET" Version="2024.2.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.31" />
+    <PackageReference Include="FluentFTP" Version="52.1.0" />
   </ItemGroup>
 </Project>

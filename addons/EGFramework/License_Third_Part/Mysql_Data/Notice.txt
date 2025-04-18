@@ -1,0 +1,3 @@
+GPL-2.0-only license licenseWITH license licenseUniversal-FOSS-exception-1.0 license
+https://licenses.nuget.org/GPL-2.0-only
+https://licenses.nuget.org/Universal-FOSS-exception-1.0
