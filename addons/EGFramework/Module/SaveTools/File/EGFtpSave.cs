@@ -18,27 +18,42 @@ namespace EGFramework{
 
         public void CopyFile(string sourcePath, string copyPath)
         {
-            throw new System.NotImplementedException();
+            FTPClient.Connect();
+            Stream fileStream = FTPClient.OpenRead(sourcePath);
+            FTPClient.UploadStream(fileStream, copyPath, FtpRemoteExists.Overwrite, true);
+            fileStream.Close();
+            FTPClient.Disconnect();
         }
 
         public void DownloadFile(string remotePath, string localPath)
         {
-            throw new System.NotImplementedException();
+            FTPClient.Connect();
+            FTPClient.DownloadFile(localPath, remotePath, FtpLocalExists.Overwrite);
+            FTPClient.Disconnect();
         }
 
         public Stream DownloadFile(string remotePath)
         {
-            throw new System.NotImplementedException();
+            FTPClient.Connect();
+            Stream fileStream = FTPClient.OpenRead(remotePath);
+            FTPClient.Disconnect();
+            return fileStream;
         }
 
         public bool IsRemoteDirectoryExist(string remotePath)
         {
-            throw new System.NotImplementedException();
+            FTPClient.Connect();
+            bool isExist = FTPClient.DirectoryExists(remotePath);
+            FTPClient.Disconnect();
+            return isExist;
         }
 
         public bool IsRemoteFileExist(string remotePath)
         {
-            throw new System.NotImplementedException();
+            FTPClient.Connect();
+            bool isExist = FTPClient.FileExists(remotePath);
+            FTPClient.Disconnect();
+            return isExist;
         }
 
         public IEnumerable<IEGFileMsg> ListRemoteFilePath(string remotePath) 
@@ -58,17 +73,23 @@ namespace EGFramework{
 
         public void MakeDirectory(string remotePath)
         {
-            throw new System.NotImplementedException();
+            FTPClient.Connect();
+            FTPClient.CreateDirectory(remotePath, true);
+            FTPClient.Disconnect();
         }
 
         public void MoveFile(string sourcePath, string movePath)
         {
-            throw new System.NotImplementedException();
+            FTPClient.Connect();
+            FTPClient.MoveFile(sourcePath, movePath ,FtpRemoteExists.Overwrite);
+            FTPClient.Disconnect();
         }
 
         public void RemoveFile(string remotePath)
         {
-            throw new System.NotImplementedException();
+            FTPClient.Connect();
+            FTPClient.DeleteFile(remotePath);
+            FTPClient.Disconnect();
         }
 
         public void SyncFile(string remotePath, string localPath)
@@ -80,7 +101,9 @@ namespace EGFramework{
 
         public void UploadFile(FileStream localFileStream, string remotePath)
         {
-            throw new System.NotImplementedException();
+            FTPClient.Connect();
+            FTPClient.UploadStream(localFileStream, remotePath, FtpRemoteExists.Overwrite, true);
+            FTPClient.Disconnect();
         }
 
         public void UploadFile(string localPath, string remotePath)
