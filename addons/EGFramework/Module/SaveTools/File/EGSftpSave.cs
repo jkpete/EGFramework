@@ -1,12 +1,32 @@
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
+using Renci.SshNet;
 
 namespace EGFramework{
+    public struct EGSftpHost
+    {
+        public string Host { set; get; }
+        public string User { set; get; }
+        public string Password { set; get; }
+        public int Port { set; get; }
+    }
     public class EGSftpSave : IEGSave,IEGSaveFile
     {
-        public void InitSave(string path)
+        public SftpClient Sftp { set; get; }
+        
+        /// <summary>
+        /// Host is a json string, such as {"Host":"","User":"","Password":"","Port":22}
+        /// </summary>
+        /// <param name="hostJson"></param>
+        public void InitSave(string hostJson)
         {
-            throw new System.NotImplementedException();
+            EGSftpHost host = JsonConvert.DeserializeObject<EGSftpHost>(hostJson);
+            if(host.Port == 0){
+                host.Port = 22;
+            }
+            this.Sftp = new SftpClient(host.Host, host.Port, host.User, host.Password);
+            // this.Sftp = new SftpClient(path);
         }
 
         public void CopyFile(string sourcePath, string copyPath)
