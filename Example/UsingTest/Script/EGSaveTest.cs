@@ -20,15 +20,21 @@ namespace EGFramework.Examples.Test{
             // this.EGEnabledProtocolTool<EGSsh>();
             // this.EGEnabledProtocolTool<EGTCPClient>();
             // this.EGEnabledProtocolTool<EGTCPServer>();
-            // this.EGOnMessage<EasyMessage>();
-            // // this.EGRegisterMessageEvent<EasyMessage>((e,sender)=>{
-
-            // // });
+            this.EGOnMessage<EasyMessage>();
+            this.EGRegisterMessageEvent<EasyMessage>((e,sender)=>{
+            });
+            TestProcess();
             // //TestSsh();
             // //TestTCPSend();
             // TestTCPServer();
-            TestFTP();
+            // TestFTP();
         }
+
+        public override void _ExitTree()
+        {
+            this.EGProcess().CloseProcess("cmd.exe");
+        }
+
         public void TestFTP(){
             EGFtpSave ftp = new EGFtpSave();
             ftp.InitSave("127.0.0.1");
@@ -36,6 +42,12 @@ namespace EGFramework.Examples.Test{
             foreach(IEGFileMsg msg in msgs){
                 GD.Print(msg.FileName+" | "+msg.IsCollection+" | "+msg.Size+"kb | "+msg.LastModify);
             }
+        }
+
+        public void TestProcess(){
+            this.EGEnabledProtocolTool<EGProcess>();
+            this.EGProcess().InitProcess("cmd.exe");
+            this.EGProcess().SendStringData("cmd.exe","ipconfig");
         }
 
         public async void TestSsh(){

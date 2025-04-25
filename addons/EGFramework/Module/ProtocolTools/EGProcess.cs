@@ -37,8 +37,13 @@ namespace EGFramework{
             try{
                 if(!Processes.ContainsKey(processName)){
                     Process process = new Process();
-                    process.StartInfo.FileName = processName.GetStrFrontSymbol(' ');
-                    process.StartInfo.Arguments = processName.GetStrBehindSymbol(' ');; // Add any arguments if needed
+                    if(processName.GetStrFrontSymbol(' ') == ""){
+                        process.StartInfo.FileName = processName.GetStrBehindSymbol(' ');
+                    }else{
+                        process.StartInfo.FileName = processName.GetStrFrontSymbol(' ');
+                        process.StartInfo.Arguments = processName.GetStrBehindSymbol(' ');; // Add any arguments if needed
+                    }
+                    EG.Print("[open process]"+process.StartInfo.FileName+" "+process.StartInfo.Arguments);
                     process.StartInfo.UseShellExecute = false;
                     process.StartInfo.RedirectStandardInput = true;
                     process.StartInfo.RedirectStandardOutput = true;
@@ -48,6 +53,7 @@ namespace EGFramework{
                     process.OutputDataReceived += (sender, e) => {
                         if (!string.IsNullOrEmpty(e.Data)) {
                             ResponseMsgs.Enqueue(new ResponseMsg { sender = processName, stringData = e.Data });
+                            EG.Print("[process output]"+processName+" "+e.Data);
                         }
                     };
                     process.Exited += (sender, e) => {
@@ -58,7 +64,16 @@ namespace EGFramework{
                 }
             }
             catch(Exception e){
-                ErrorLogs = "[open port error]" + e.ToString();
+                ErrorLogs = "[open process error]" + e.ToString();
+                EG.Print(ErrorLogs);
+            }
+        }
+
+        public void CloseProcess(string processName){
+            if(Processes.ContainsKey(processName)){
+                Processes[processName].Kill();
+                Processes.Remove(processName);
+                EG.Print("[close process]"+processName);
             }
         }
         
@@ -86,6 +101,15 @@ namespace EGFramework{
         public IArchitecture GetArchitecture()
         {
             return EGArchitectureImplement.Interface;
+        }
+    }
+    public static class CanGetEGProcessExtension{
+        public static EGProcess EGProcess(this IEGFramework self){
+            return self.GetModule<EGProcess>();
+        }
+
+        public static Process EGGetSshClient(this IEGFramework self,string processName){
+            return self.GetModule<EGProcess>().Processes[processName];
         }
     }
 }
