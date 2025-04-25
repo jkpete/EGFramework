@@ -52,8 +52,16 @@ namespace EGFramework{
                     process.EnableRaisingEvents = true;
                     process.OutputDataReceived += (sender, e) => {
                         if (!string.IsNullOrEmpty(e.Data)) {
-                            ResponseMsgs.Enqueue(new ResponseMsg { sender = processName, stringData = e.Data });
-                            EG.Print("[process output]"+processName+" "+e.Data);
+                            try
+                            {
+                                ResponseMsgs.Enqueue(new ResponseMsg { sender = processName, stringData = e.Data });
+                            }
+                            catch (Exception err)
+                            {
+                                ErrorLogs = "[process output error]" + err.ToString();
+                                EG.Print(ErrorLogs);
+                            }
+                            
                         }
                     };
                     process.Exited += (sender, e) => {
@@ -61,6 +69,7 @@ namespace EGFramework{
                     };
                     Processes.Add(processName,process);
                     process.Start();
+                    process.BeginOutputReadLine();
                 }
             }
             catch(Exception e){

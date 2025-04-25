@@ -47,7 +47,7 @@ namespace EGFramework.Examples.Test{
         public void TestProcess(){
             this.EGEnabledProtocolTool<EGProcess>();
             this.EGProcess().InitProcess("cmd.exe");
-            this.EGProcess().SendStringData("cmd.exe","ipconfig");
+            this.EGProcess().SendStringData("cmd.exe","SaveData\\ffmpeg.exe -version\n");
         }
 
         public async void TestSsh(){
@@ -234,8 +234,8 @@ namespace EGFramework.Examples.Test{
         {
             try
             {
-                GD.Print("[String]"+protocolData);
-                GD.Print("[Bytes]"+protocolBytes);
+                GD.Print(protocolData);
+                // GD.Print("[Bytes]"+protocolBytes);
                 return true;
             }
             catch (System.Exception)
