@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=3 uid="uid://df4gmjq2o1ttn"]
+
+[ext_resource type="Script" path="res://Example/LocalMediaViewer/Script/ViewLocalVideoMediaViewer.cs" id="1_hfhp3"]
+
+[node name="LocalMediaViewer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hfhp3")
+
+[node name="ViewVideo" type="VideoStreamPlayer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_right = 1.0
+anchor_bottom = 0.8
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="ViewImage" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_right = 1.0
+anchor_bottom = 0.8
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.2
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="MediaList" type="VBoxContainer" parent="Scroll"]
+layout_mode = 2
+
+[node name="ControlList" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_top = 0.8
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
