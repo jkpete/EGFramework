@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://1garq2laye1n"]
+[gd_scene load_steps=2 format=3 uid="uid://1garq2laye1n"]
 
 [ext_resource type="Script" path="res://Example/Tween/Script/TweenTest.cs" id="1_jpym0"]
-[ext_resource type="StyleBox" uid="uid://t4prctf3uxtb" path="res://Example/Theme/StyleBox/CardFrame.tres" id="2_cbb73"]
 
 [node name="EgTween" type="Control" node_paths=PackedStringArray("Target", "Target2D")]
 layout_mode = 3
@@ -20,7 +19,6 @@ Target2D = NodePath("Polygon2D")
 offset_right = 90.0
 offset_bottom = 160.0
 pivot_offset = Vector2(45, 80)
-theme_override_styles/panel = ExtResource("2_cbb73")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(146, 80)

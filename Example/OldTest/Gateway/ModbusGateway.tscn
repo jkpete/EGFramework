@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c8vhi8ojdtjnb"]
 
-[ext_resource type="Script" path="res://Example/Gateway/Script/View/ViewModbusGateway.cs" id="1_34uaa"]
+[ext_resource type="Script" path="res://Example/OldTest/Gateway/Script/View/ViewModbusGateway.cs" id="1_34uaa"]
 
 [node name="ModbusGateway" type="Control"]
 layout_mode = 3

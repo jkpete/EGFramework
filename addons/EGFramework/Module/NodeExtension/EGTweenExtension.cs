@@ -52,6 +52,22 @@ namespace EGFramework.EGTween{
 			tween.TweenProperty(self,"rotation",angle*Mathf.Pi/180,delay);
 			return tween;
 		}
+		public static Tween TweenRotationByRad(this Node3D self,Vector3 rad,float delay){
+			Tween tween = self.CreateTween();
+			tween.TweenProperty(self,"rotation",rad,delay);
+			return tween;
+		}
+		public static Tween TweenRotationByAngle(this Node3D self,Vector3 eulerAngle,float delay){
+			Tween tween = self.CreateTween();
+			tween.TweenProperty(self,"rotation",eulerAngle*Mathf.Pi/180,delay);
+			return tween;
+		}
+		public static Vector3 EulerAngleToRad(this Vector3 eulerAngle){
+			return new Vector3(eulerAngle.X*Mathf.Pi/180,eulerAngle.Y*Mathf.Pi/180,eulerAngle.Z*Mathf.Pi/180);
+		}
+		public static Vector3 RadToEulerAngle(this Vector3 rad){
+			return new Vector3(rad.X/Mathf.Pi*180,rad.Y/Mathf.Pi*180,rad.Z/Mathf.Pi*180);
+		}
 		
 		#endregion
 

@@ -1,9 +1,9 @@
 [gd_scene load_steps=19 format=3 uid="uid://05atvgqt8tku"]
 
-[ext_resource type="Texture2D" uid="uid://ss8dh8aaqc4w" path="res://Example/Action3D/SkyBox/lakeside.jpg" id="1_akq3m"]
+[ext_resource type="Texture2D" uid="uid://ss8dh8aaqc4w" path="res://Example/OldTest/Action3D/SkyBox/lakeside.jpg" id="1_akq3m"]
 [ext_resource type="Texture2D" uid="uid://31r216hix0wk" path="res://icon.svg" id="2_b66wh"]
-[ext_resource type="Script" path="res://Example/Action3D/Script/ActionPlayer.cs" id="2_c0s4j"]
-[ext_resource type="Script" path="res://Example/Action3D/Script/ActionCamera.cs" id="3_ue0e3"]
+[ext_resource type="Script" path="res://Example/OldTest/Action3D/Script/ActionPlayer.cs" id="2_c0s4j"]
+[ext_resource type="Script" path="res://Example/OldTest/Action3D/Script/ActionCamera.cs" id="3_ue0e3"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hbme1"]
 panorama = ExtResource("1_akq3m")

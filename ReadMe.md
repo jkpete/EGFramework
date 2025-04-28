@@ -18,6 +18,10 @@
 > 
 > Godot 在 [宽松的 MIT 许可证](https://docs.godotengine.org/zh-cn/4.x/about/complying_with_licenses.html#doc-complying-with-licenses) 下完全自由且开源，没有附加条件、没有抽成、什么都没有。用户的游戏乃至引擎的每一行代码，都归用户自己所有。Godot 的开发完全独立且由社区驱动，允许用户为满足需求重塑引擎。它受到不以盈利为目标的 [Godot 基金会](https://godot.foundation/)支持。
 
+---
+
+
+
 # 一、准备工作
 
 ## 1.下载开发环境
@@ -64,7 +68,44 @@
 
 无需担心，除了部分Module存在相关依赖，大部分Module是支持直接删除的。
 
-## 5.EGFramework构成一栏
+---
+
+
+
+# 二、框架简介
+
+由于该框架使用了较多的Nuget包实现相关的功能，所以安装较为繁琐，同时因为用到较多的扩展方法，提示词可能比较冗余。您可以通过删除对应的Module来定制化自己的框架，也可以新增自己的Module来扩展自己的框架。
+
+如果使用的Nuget包牵扯有侵犯您的许可，请联系作者Mail：1031139173@qq.com，作者尽可能第一时间删除对应的Module功能。
+
+第三方许可文件均存放在目录addons\EGFramework\License_Third_Part下面
+
+## 2.1 使用框架
+
+添加using，并继承接口IEGFramework，即可使用该框架了。
+
+```csharp
+using Godot;
+using static Godot.GD;
+using System.Collections.Generic;
+using EGFramework;
+
+public partial class EGTest : Node,IEGFramework{
+    
+}
+```
+
+更多可参考Example。
+
+## 2.2 发送与监听消息
+
+
+
+## 2.3 使用本地存储
+
+
+
+# 三、EGFramework-API
 
 目前已有的EGFramework功能组件。标记是目前已编写完成，未标记是未编写完成或未测试。
 
@@ -76,7 +117,7 @@
 - [ ] GenerateTools
 - [ ] UITools
 
-### 5.1 消息篇（EGMessage-ProtocolTools）
+### 3.1 消息篇（EGMessage-ProtocolTools）
 
 ---
 
@@ -98,7 +139,7 @@
 - [x] FileStream
 - [x] Process
 
-### 5.2 存储篇（EGMessage-ProtocolTools）
+### 3.2 存储篇（EGMessage-ProtocolTools）
 
 #### 键值对象存储支持
 
@@ -120,32 +161,3 @@
 - [x] LocalFile
 - [ ] Sftp
 - [ ] WebDav
-
-# 二、框架简介
-
-由于该框架使用了较多的Nuget包实现相关的功能，所以安装较为繁琐，同时因为用到较多的扩展方法，提示词可能比较冗余。您可以通过删除对应的Module来定制化自己的框架，也可以新增自己的Module来扩展自己的框架。
-
-如果使用的Nuget包牵扯有侵犯您的许可，请联系作者Mail：1031139173@qq.com，作者尽可能第一时间删除对应的Module功能。
-
-第三方许可文件均存放在目录addons\EGFramework\License_Third_Part下面
-
-## 1.使用框架
-
-添加using，并继承接口IEGFramework，即可使用该框架了。
-
-```csharp
-using Godot;
-using static Godot.GD;
-using System.Collections.Generic;
-using EGFramework;
-
-public partial class EGTest : Node,IEGFramework{
-    this.EGSave();
-}
-public class DataTest{
-    public string PlayerName;
-    public int Hp;
-}
-```
-
-

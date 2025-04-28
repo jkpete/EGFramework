@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c8kk7iegicmdr"]
 
-[ext_resource type="Script" path="res://Example/ModbusDebugTool/Script/ViewModbusItem.cs" id="1_ih8g3"]
+[ext_resource type="Script" path="res://Example/OldTest/ModbusDebugTool/Script/ViewModbusItem.cs" id="1_ih8g3"]
 [ext_resource type="FontFile" uid="uid://b1atsgy4xkk7d" path="res://Font/SourceHanSansCN-Regular.otf" id="1_upshn"]
 
 [node name="ModbusItem" type="Control"]

@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=3 uid="uid://hp4ae14r3hpm"]
 
-[ext_resource type="Script" path="res://Example/Gateway/Script/View/ViewGateway.cs" id="1_tas7d"]
-[ext_resource type="Script" path="res://Example/Gateway/Script/View/ViewTcpGateway.cs" id="2_ct4oh"]
-[ext_resource type="Script" path="res://Example/Gateway/Script/View/ViewBacNetGateway.cs" id="3_ip8nj"]
-[ext_resource type="Script" path="res://Example/Gateway/Script/View/ViewBacnetHttpServer.cs" id="4_plubp"]
+[ext_resource type="Script" path="res://Example/OldTest/Gateway/Script/View/ViewGateway.cs" id="1_tas7d"]
+[ext_resource type="Script" path="res://Example/OldTest/Gateway/Script/View/ViewTcpGateway.cs" id="2_ct4oh"]
+[ext_resource type="Script" path="res://Example/OldTest/Gateway/Script/View/ViewBacNetGateway.cs" id="3_ip8nj"]
+[ext_resource type="Script" path="res://Example/OldTest/Gateway/Script/View/ViewBacnetHttpServer.cs" id="4_plubp"]
 [ext_resource type="FontFile" uid="uid://b1atsgy4xkk7d" path="res://Font/SourceHanSansCN-Regular.otf" id="5_q4lsg"]
 
 [node name="Gateway" type="Control"]

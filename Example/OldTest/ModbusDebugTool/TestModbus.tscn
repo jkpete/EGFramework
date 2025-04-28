@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://qo2w16ececmu"]
 
-[ext_resource type="Script" path="res://Example/ModbusDebugTool/Script/ViewMenu.cs" id="1_7ubyu"]
+[ext_resource type="Script" path="res://Example/OldTest/ModbusDebugTool/Script/ViewMenu.cs" id="1_7ubyu"]
 [ext_resource type="FontFile" uid="uid://b1atsgy4xkk7d" path="res://Font/SourceHanSansCN-Regular.otf" id="1_tw1qu"]
-[ext_resource type="PackedScene" uid="uid://c8kk7iegicmdr" path="res://Example/ModbusDebugTool/Component/modbus_item.tscn" id="3_c8jeq"]
-[ext_resource type="Script" path="res://Example/ModbusDebugTool/Script/ViewEdit.cs" id="4_smsvf"]
-[ext_resource type="Script" path="res://Example/ModbusDebugTool/Script/ViewMessage.cs" id="5_8s6lk"]
-[ext_resource type="Script" path="res://Example/ModbusDebugTool/Script/ViewSettings.cs" id="6_38tri"]
+[ext_resource type="PackedScene" uid="uid://c8kk7iegicmdr" path="res://Example/OldTest/ModbusDebugTool/Component/modbus_item.tscn" id="3_c8jeq"]
+[ext_resource type="Script" path="res://Example/OldTest/ModbusDebugTool/Script/ViewEdit.cs" id="4_smsvf"]
+[ext_resource type="Script" path="res://Example/OldTest/ModbusDebugTool/Script/ViewMessage.cs" id="5_8s6lk"]
+[ext_resource type="Script" path="res://Example/OldTest/ModbusDebugTool/Script/ViewSettings.cs" id="6_38tri"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3

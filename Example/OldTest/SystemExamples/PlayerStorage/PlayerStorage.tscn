@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://tee7nc525si7"]
 
-[ext_resource type="Script" path="res://Example/SystemExamples/PlayerStorage/Script/ViewStorage.cs" id="1_goow2"]
+[ext_resource type="Script" path="res://Example/OldTest/SystemExamples/PlayerStorage/Script/ViewStorage.cs" id="1_goow2"]
 
 [node name="PlayerStorage" type="Control"]
 layout_mode = 3

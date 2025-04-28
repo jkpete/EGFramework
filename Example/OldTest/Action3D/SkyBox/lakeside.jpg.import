@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ss8dh8aaqc4w"
-path.s3tc="res://.godot/imported/lakeside.jpg-33a4031d53286dbc1f7dd66477cda464.s3tc.ctex"
-path.etc2="res://.godot/imported/lakeside.jpg-33a4031d53286dbc1f7dd66477cda464.etc2.ctex"
+path.s3tc="res://.godot/imported/lakeside.jpg-73a51a0ded8953c63fe1a3672086bc03.s3tc.ctex"
+path.etc2="res://.godot/imported/lakeside.jpg-73a51a0ded8953c63fe1a3672086bc03.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://Example/Action3D/SkyBox/lakeside.jpg"
-dest_files=["res://.godot/imported/lakeside.jpg-33a4031d53286dbc1f7dd66477cda464.s3tc.ctex", "res://.godot/imported/lakeside.jpg-33a4031d53286dbc1f7dd66477cda464.etc2.ctex"]
+source_file="res://Example/OldTest/Action3D/SkyBox/lakeside.jpg"
+dest_files=["res://.godot/imported/lakeside.jpg-73a51a0ded8953c63fe1a3672086bc03.s3tc.ctex", "res://.godot/imported/lakeside.jpg-73a51a0ded8953c63fe1a3672086bc03.etc2.ctex"]
 
 [params]
 
