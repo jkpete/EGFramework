@@ -1,4 +1,6 @@
-![](EGframework.png)
+<svg height="128" width="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 64 0 L 116 48 L 64 12L 32 56 L 64 64 L32 72 L64 116L 96 72 L 80 64 L128 64 L 64 128 L 0 64 " fill="#DDDDDD" stroke-width="0" stroke="#000000" /> 
+    <path d="M 64 0 L 0 64 L 64 128 L 32 72 L 48 64L 32 56Z" fill="#000000" stroke-width="0" stroke="#000000" /></svg>
 
 # EGFramework 使用手册
 
