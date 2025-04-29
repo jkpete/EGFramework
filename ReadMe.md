@@ -1,4 +1,4 @@
-![](EGframework.svg)
+![](EGframework.png)
 
 # EGFramework 使用手册
 
