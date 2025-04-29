@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bvnma1n064xbx"]
+[gd_scene load_steps=3 format=3 uid="uid://bvnma1n064xbx"]
 
 [ext_resource type="Script" path="res://Example/SaveSystem/Script/ViewSaveSystem.cs" id="1_mtdgp"]
+[ext_resource type="Texture2D" uid="uid://bpmhdi6qsq8xk" path="res://EGFramework.svg" id="2_qt8hb"]
 
 [node name="SaveSystem" type="Control"]
 layout_mode = 3
@@ -10,3 +11,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mtdgp")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_qt8hb")
