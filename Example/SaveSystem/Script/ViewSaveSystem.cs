@@ -20,14 +20,12 @@ namespace EGFramework.Examples.Test{
             string[] c = {"Jerry","20"};
             DataList[2] = c;
             this.GetNode<TabContainer>("TabContainer").CreateTable(DataList,"Student");
-            DataList2 = new string[3][];
-            string[] d = {"Name","Age"};
-            DataList2[0] = d; 
-            string[] e = {"Jim","60"};
-            DataList2[1] = e;
-            string[] f = {"Bob","50"};
-            DataList2[2] = f;
-            this.GetNode<TabContainer>("TabContainer").CreateTable(DataList2,"Teacher");
+            DataStudent dataStudent = new DataStudent("S",18);
+            DataStudent dataStudent2 = new DataStudent(null,20);
+            List<DataStudent> dataStudents = new List<DataStudent>();
+            dataStudents.Add(dataStudent);
+            dataStudents.Add(dataStudent2);
+            this.GetNode<TabContainer>("TabContainer").CreateTable<DataStudent>(dataStudents,"Teacher");
         }
 
         public override void _ExitTree()
@@ -35,5 +33,15 @@ namespace EGFramework.Examples.Test{
             
         }
         
+    }
+    public struct DataStudent{
+        public string Name { get; set; }
+        public int Age;
+        public int ID;
+        public DataStudent(string name,int age){
+            Name = name;
+            Age = age;
+            ID = 0;
+        }
     }
 }

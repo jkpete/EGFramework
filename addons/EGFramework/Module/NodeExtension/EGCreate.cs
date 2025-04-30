@@ -1,5 +1,11 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Godot;
+using Mysqlx.Crud;
 using static Godot.GD;
 
 namespace EGFramework{
@@ -53,8 +59,13 @@ namespace EGFramework{
             RowData.Name = rowName;
             foreach(string s in titleList){
                 Label label = new Label();
-                label.Name = s;
-                label.Text = s;
+                if(s != null){
+                    label.Name = s;
+                    label.Text = s;
+                }else{
+                    label.Name = "Null";
+                    label.Text = "Null";
+                }
                 label.HorizontalAlignment = HorizontalAlignment.Center;
                 label.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
                 RowData.AddChild(label);
@@ -71,8 +82,37 @@ namespace EGFramework{
                 dataPointer++;
             }
             self.AddChild(Table);
-            EG.Print("CreateTable",tableStr.Length);
             return Table;
+        }
+        public static VBoxContainer CreateTable<T>(this Node self,IEnumerable<T> tableData,string tableName = "ObjectTable",int limit = 0){
+            VBoxContainer Table = new VBoxContainer();
+            Table.Name = tableName;
+            MemberInfo[] propertyNames = typeof(T).GetProperties();
+            MemberInfo[] fieldNames = typeof(T).GetFields();
+            MemberInfo[] memberInfos = propertyNames.Concat(fieldNames).ToArray();
+            string[] propertyName = new string[memberInfos.Length];
+            int dataPointer = 0;
+            for (int i = 0; i < memberInfos.Length; i++)
+            {
+                propertyName[i] = memberInfos[i].Name;
+            }
+            Table.CreateRowData(propertyName,"Title");
+            foreach (T t in tableData)
+            {
+                string[] s = t.GetType().GetProperties().Select(p => p.GetValue(t)?.ToString()).ToArray();
+                string[] a = t.GetType().GetFields().Select(p => p.GetValue(t)?.ToString()).ToArray();
+                string[] result = s.Concat(a).ToArray();
+                Table.CreateRowData(result, "tableRowData"+dataPointer);
+                dataPointer++;
+            }
+            self.AddChild(Table);
+            return Table;
+        }
+        public static Tree CreateTree(this Node self,string treeName = "Tree"){
+            Tree tree = new Tree();
+            tree.Name = treeName;
+            self.AddChild(tree);
+            return tree;
         }
     }
 }
