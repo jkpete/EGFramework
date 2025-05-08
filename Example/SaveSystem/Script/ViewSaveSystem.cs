@@ -26,6 +26,7 @@ namespace EGFramework.Examples.Test{
             dataStudents.Add(dataStudent);
             dataStudents.Add(dataStudent2);
             this.GetNode<TabContainer>("TabContainer").CreateTable<DataStudent>(dataStudents,"Teacher");
+            this.Alert("Hello World");
         }
 
         public override void _ExitTree()

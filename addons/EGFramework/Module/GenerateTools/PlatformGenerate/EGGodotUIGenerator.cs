@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using EGFramework.UI;
 using Godot;
 
 namespace EGFramework{
@@ -35,8 +36,8 @@ namespace EGFramework{
             self.AddChild(Table);
             return Table;
         }
-        public static VBoxContainer CreateTable<T>(this Node self,IEnumerable<T> tableData,string tableName = "ObjectTable",int limit = 0){
-            VBoxContainer Table = new VBoxContainer();
+        public static EGodotTable CreateTable<T>(this Node self,IEnumerable<T> tableData,string tableName = "ObjectTable",int limit = 0){
+            EGodotTable Table = new EGodotTable();
             Table.Name = tableName;
             MemberInfo[] propertyNames = typeof(T).GetProperties();
             MemberInfo[] fieldNames = typeof(T).GetFields();
