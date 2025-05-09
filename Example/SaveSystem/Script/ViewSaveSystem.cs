@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EGFramework.UI;
 using Godot;
 using LiteDB;
 using Renci.SshNet;
@@ -26,13 +27,25 @@ namespace EGFramework.Examples.Test{
             dataStudents.Add(dataStudent);
             dataStudents.Add(dataStudent2);
             this.GetNode<TabContainer>("TabContainer").CreateTable<DataStudent>(dataStudents,"Teacher");
-            this.Alert("Hello World");
+            // Button btn = this.CreateNode<Button>("Test");
+            // btn.Text = "Test";
+            // btn.Position = new Vector2(100,100);
+            // btn.Connect("pressed",Callable.From (() => { 
+            //     this.Alert("Test");
+            // }));
+            EGodotEditDialog Edit = this.CreateNode<EGodotEditDialog>("Edit");
+            Edit.InitDialog(new Dictionary<string, object>() {{"Name","Tom"},{"Age",18}},(data) => {
+                GD.Print(data["Name"]);
+                GD.Print(data["Age"]);
+            });
+
         }
 
         public override void _ExitTree()
         {
             
         }
+
         
     }
     public struct DataStudent{
