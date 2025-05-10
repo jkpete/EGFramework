@@ -65,10 +65,12 @@ namespace EGFramework
     public interface IEGSaveDataReadOnly{
         TData GetData<TData>(string dataKey,object id) where TData : new();
         IEnumerable<TData> GetAll<TData>(string dataKey) where TData : new();
+        IEnumerable<TData> GetPage<TData>(string dataKey,int pageIndex,int pageSize) where TData : new();
         IEnumerable<TData> FindData<TData>(string dataKey,Expression<Func<TData, bool>> expression) where TData : new();
         IEnumerable<string> GetKeys();
         bool ContainsKey(string dataKey);
         bool ContainsData(string dataKey,object id);
+        int GetDataCount(string dataKey);
     }
 
     public interface IEGSaveData : IEGSaveDataReadOnly{

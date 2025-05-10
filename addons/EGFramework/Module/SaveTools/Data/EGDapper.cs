@@ -20,6 +20,16 @@ namespace EGFramework
             return result;
         }
 
+        public IEnumerable<TData> GetPage<TData>(string dataKey, int pageIndex, int pageSize) where TData : new()
+        {
+            if(pageIndex <= 0){
+                pageIndex = 1;
+            }
+            int startPointer = (pageIndex - 1) * pageSize;
+            IEnumerable<TData> result = Connection.Query<TData>("select * from "+dataKey+" limit "+startPointer+","+pageIndex);
+            return result;
+        }
+
         public TData GetData<TData>(string dataKey, object id) where TData : new()
         {
             TData result = Connection.QuerySingle<TData>("select * from "+dataKey+" where ID = @ID",new {ID = id});
@@ -140,6 +150,12 @@ namespace EGFramework
             {
                 return false;
             }
+        }
+
+        public int GetDataCount(string dataKey)
+        {
+            int count = Connection.QuerySingle<int>("select COUNT(*) from " + dataKey);
+            return count;
         }
 
         public DbConnection GetConnection()

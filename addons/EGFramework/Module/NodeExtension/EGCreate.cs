@@ -41,7 +41,7 @@ namespace EGFramework{
             return nodeData;
         }
         
-        public static void Alert(this Node self,string alertMsg){
+        public static void Alert(this Node self,string alertMsg,string title = "Alert"){
             AcceptDialog acceptDialog;
             if(EGArchitectureImplement.Interface.GetModule<EGSingletonNode>().NodeContainer.Get<AcceptDialog>()!=null){
                 acceptDialog = EGArchitectureImplement.Interface.GetModule<EGSingletonNode>().NodeContainer.Get<AcceptDialog>();
@@ -50,9 +50,29 @@ namespace EGFramework{
             }
             EGArchitectureImplement.Interface.GetModule<EGSingletonNode>().NodeContainer.Register(acceptDialog);
             acceptDialog.Name = "AlertDialog";
-            acceptDialog.Title = "Alert";
+            acceptDialog.Title = title;
             acceptDialog.DialogText = alertMsg;
             acceptDialog.PopupCentered();
+        }
+
+        public static void Confirm(this Node self,string alertMsg,Action<bool> callback,string title = "Confirm"){
+            ConfirmationDialog confirmDialog;
+            if(EGArchitectureImplement.Interface.GetModule<EGSingletonNode>().NodeContainer.Get<ConfirmationDialog>()!=null){
+                confirmDialog = EGArchitectureImplement.Interface.GetModule<EGSingletonNode>().NodeContainer.Get<ConfirmationDialog>();
+            }else{
+                confirmDialog = self.CreateNode<ConfirmationDialog>();
+            }
+            EGArchitectureImplement.Interface.GetModule<EGSingletonNode>().NodeContainer.Register(confirmDialog);
+            confirmDialog.Name = "ConfirmDialog";
+            confirmDialog.Title = title;
+            confirmDialog.DialogText = alertMsg;
+            confirmDialog.PopupCentered();
+            confirmDialog.Connect("confirmed",Callable.From(() => {
+                callback(true);
+            }));
+            confirmDialog.Connect("canceled",Callable.From(() => {
+                callback(false);
+            }));
         }
         public static Tree CreateTree(this Node self,string treeName = "Tree"){
             Tree tree = new Tree();

@@ -26,19 +26,22 @@ namespace EGFramework.Examples.Test{
             List<DataStudent> dataStudents = new List<DataStudent>();
             dataStudents.Add(dataStudent);
             dataStudents.Add(dataStudent2);
-            this.GetNode<TabContainer>("TabContainer").CreateTable<DataStudent>(dataStudents,"Teacher");
+            EGodotTable table = this.GetNode<TabContainer>("TabContainer").CreateTable<DataStudent>(dataStudents,"Teacher");
             // Button btn = this.CreateNode<Button>("Test");
             // btn.Text = "Test";
             // btn.Position = new Vector2(100,100);
             // btn.Connect("pressed",Callable.From (() => { 
             //     this.Alert("Test");
             // }));
-            EGodotEditDialog Edit = this.CreateNode<EGodotEditDialog>("Edit");
-            Edit.InitDialog(new Dictionary<string, object>() {{"Name","Tom"},{"Age",18}},(data) => {
-                GD.Print(data["Name"]);
-                GD.Print(data["Age"]);
-            });
+            // EGodotEditDialog Edit = this.CreateNode<EGodotEditDialog>("Edit");
+            // Edit.InitDialog(new Dictionary<string, object>() {{"Name","Tom"},{"Age",18}},(data) => {
+            //     GD.Print(data["Name"]);
+            //     GD.Print(data["Age"]);
+            // });
 
+            EGodotTableRowData rowData = table.CreateNode<EGodotTableRowData>("RowData");
+            rowData.InitRowData(new Dictionary<string, object>() {{"Name","Tom"},{"Age",18}});
+            
         }
 
         public override void _ExitTree()

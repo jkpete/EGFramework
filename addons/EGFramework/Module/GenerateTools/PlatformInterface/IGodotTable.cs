@@ -3,4 +3,7 @@ namespace EGFramework{
     {
         
     }
+    public interface IGodotRowData{
+        
+    }
 }

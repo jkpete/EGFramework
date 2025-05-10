@@ -206,6 +206,33 @@ namespace EGFramework
             TypeDataContainer.Register(DataList);
             return DataList;
         }
+
+        public IEnumerable<TData> GetPage<TData>(string dataKey, int pageIndex, int pageSize) where TData : new()
+        {
+            if(pageIndex <= 0){
+                pageIndex = 1;
+            }
+            int startPointer = (pageIndex - 1) * pageSize;
+            List<TData> DataList = new List<TData>();
+            PropertyInfo[] properties = typeof(TData).GetProperties();
+            for (int dataID = startPointer; dataID < startPointer+pageSize; dataID++){
+                TData data = new TData();
+                foreach(PropertyInfo property in properties){
+                    CsvParamAttribute csvParam = property.GetCustomAttribute<CsvParamAttribute>();
+                    if(csvParam != null && CsvDataHeader.ContainsKey(csvParam._name)){
+                        string valueStr = CsvDataBlock[dataID][CsvDataHeader[csvParam._name]];
+                        if(property.PropertyType==typeof(string)){
+                            property.SetValue(data,valueStr);
+                        }else{
+                            property.SetValue(data,Convert.ChangeType(valueStr,property.PropertyType));
+                        }
+                    }
+                }
+                DataList.Add(data);
+            }
+            TypeDataContainer.Register(DataList);
+            return DataList;
+        }
         
         public IEnumerable<TData> FindData<TData>(string dataKey, Expression<Func<TData, bool>> expression) where TData : new()
         {
@@ -318,6 +345,11 @@ namespace EGFramework
         public bool ContainsData(string dataKey, object id)
         {
             return CsvDataBlock.Count() > 0 && id.GetType() == typeof(int) && (int)id < CsvDataBlock.Count();
+        }
+
+        public int GetDataCount(string dataKey)
+        {
+            return CsvDataBlock.Count();
         }
     }
 

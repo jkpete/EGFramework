@@ -54,6 +54,17 @@ namespace EGFramework
             return collection.FindAll();
         }
 
+        public IEnumerable<TData> GetPage<TData>(string dataKey, int pageIndex, int pageSize) where TData : new()
+        {
+            if(pageIndex <= 0){
+                pageIndex = 1;
+            }
+            int startPointer = (pageIndex - 1) * pageSize;
+            LiteCollection<TData> collection = (LiteCollection<TData>)Database.GetCollection<TData>(dataKey);
+            IEnumerable<TData> result = collection.FindAll().Skip(startPointer).Take(pageSize);
+            return result;
+        }
+
         public IEnumerable<TData> FindData<TData>(string dataKey, Expression<Func<TData, bool>> expression) where TData : new()
         {
             LiteCollection<TData> collection = (LiteCollection<TData>)Database.GetCollection<TData>(dataKey);
@@ -98,6 +109,11 @@ namespace EGFramework
         public bool ContainsData(string dataKey, object id)
         {
             return Database.GetCollection(dataKey).Exists((BsonValue)id);
+        }
+
+        public int GetDataCount(string dataKey)
+        {
+            return Database.GetCollection(dataKey).Count();
         }
     }
 }
