@@ -1,4 +1,4 @@
-namespace EGFramework{
+namespace EGFramework.Generate{
     public class EGSvgGenerator : IGenerateToolsInterface
     {
         public string SvgHeader { get ; private set;}
