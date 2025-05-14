@@ -10,3 +10,112 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_47a58")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.9
+anchor_right = 0.2
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "新建连接"
+
+[node name="Link" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.2
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="Link"]
+layout_mode = 2
+text = "连接1"
+
+[node name="ProtocolScroll" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Protocol" type="VBoxContainer" parent="ProtocolScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="ProtocolScroll/Protocol"]
+layout_mode = 2
+text = "协议1"
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_right = 0.8
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VSplitContainer" type="VSplitContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[color=green]【13:45:55:265】127.0.0.1@6000:[/color]Request
+[color=cyan]【13:45:55:358】127.0.0.1@6000:[/color][color=yellow]Response[/color]"
+
+[node name="VSplitContainer" type="VSplitContainer" parent="PanelContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control" type="Control" parent="PanelContainer/VSplitContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VSplitContainer/VSplitContainer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "连接设置"
+
+[node name="Button2" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "服务设置"
+
+[node name="Button3" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "清空记录"
+
+[node name="Button4" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Hex显示"
+
+[node name="Button5" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Hex发送"
+
+[node name="Button6" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "发送"
+
+[node name="TextEdit" type="TextEdit" parent="PanelContainer/VSplitContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
