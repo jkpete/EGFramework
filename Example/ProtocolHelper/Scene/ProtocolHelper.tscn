@@ -11,44 +11,104 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_47a58")
 
-[node name="Link" type="VBoxContainer" parent="."]
+[node name="ConnectMenu" type="VSplitContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.01
 anchor_top = 0.01
 anchor_right = 0.19
 anchor_bottom = 0.99
-grow_horizontal = 2
-grow_vertical = 2
 
-[node name="HSplitContainer" type="HSplitContainer" parent="Link"]
+[node name="ConnectScroll" type="ScrollContainer" parent="ConnectMenu"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="ConnectList" type="VBoxContainer" parent="ConnectMenu/ConnectScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ConnectItem" type="HSplitContainer" parent="ConnectMenu/ConnectScroll/ConnectList"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="Link/HSplitContainer"]
+[node name="Button" type="Button" parent="ConnectMenu/ConnectScroll/ConnectList/ConnectItem"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "连接1"
+expand_icon = true
 
-[node name="CheckBox" type="CheckBox" parent="Link/HSplitContainer"]
+[node name="CheckBox" type="CheckBox" parent="ConnectMenu/ConnectScroll/ConnectList/ConnectItem"]
 layout_mode = 2
 
-[node name="ProtocolScroll" type="ScrollContainer" parent="."]
+[node name="ConnectFunctionList" type="VBoxContainer" parent="ConnectMenu"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Open" type="Button" parent="ConnectMenu/ConnectFunctionList"]
+layout_mode = 2
+text = "启动连接"
+
+[node name="Close" type="Button" parent="ConnectMenu/ConnectFunctionList"]
+layout_mode = 2
+text = "关闭连接"
+
+[node name="Add" type="Button" parent="ConnectMenu/ConnectFunctionList"]
+layout_mode = 2
+text = "增加连接"
+
+[node name="Modify" type="Button" parent="ConnectMenu/ConnectFunctionList"]
+layout_mode = 2
+text = "修改连接"
+
+[node name="Delete" type="Button" parent="ConnectMenu/ConnectFunctionList"]
+layout_mode = 2
+text = "删除连接"
+
+[node name="ProtocolMenu" type="VSplitContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.81
 anchor_top = 0.01
 anchor_right = 0.99
 anchor_bottom = 0.99
-grow_horizontal = 0
+grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Protocol" type="VBoxContainer" parent="ProtocolScroll"]
+[node name="ProtocolScroll" type="ScrollContainer" parent="ProtocolMenu"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="Protocol" type="VBoxContainer" parent="ProtocolMenu/ProtocolScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="ProtocolScroll/Protocol"]
+[node name="ProtocolName" type="HSplitContainer" parent="ProtocolMenu/ProtocolScroll/Protocol"]
 layout_mode = 2
+
+[node name="Button" type="Button" parent="ProtocolMenu/ProtocolScroll/Protocol/ProtocolName"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "协议1"
+
+[node name="CheckBox" type="CheckBox" parent="ProtocolMenu/ProtocolScroll/Protocol/ProtocolName"]
+layout_mode = 2
+
+[node name="FunctionList" type="VBoxContainer" parent="ProtocolMenu"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Add" type="Button" parent="ProtocolMenu/FunctionList"]
+layout_mode = 2
+text = "增加协议"
+
+[node name="Modify" type="Button" parent="ProtocolMenu/FunctionList"]
+layout_mode = 2
+text = "修改协议"
+
+[node name="Delete" type="Button" parent="ProtocolMenu/FunctionList"]
+layout_mode = 2
+text = "删除协议"
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -62,106 +122,107 @@ grow_vertical = 2
 [node name="VSplitContainer" type="VSplitContainer" parent="PanelContainer"]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/VSplitContainer"]
+[node name="Terminal" type="RichTextLabel" parent="PanelContainer/VSplitContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
-text = "[color=green]【13:45:55:265】127.0.0.1@6000:[/color]Request
+text = "[color=gray]【13:45:55:105】127.0.0.1@6000 has been connected[/color]
+[color=green]【13:45:55:265】127.0.0.1@6000:[/color]Request
 [color=cyan]【13:45:55:358】127.0.0.1@6000:[/color][color=yellow]Response[/color]"
 
-[node name="VSplitContainer" type="VSplitContainer" parent="PanelContainer/VSplitContainer"]
+[node name="SettingGroup" type="VSplitContainer" parent="PanelContainer/VSplitContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VSplitContainer" type="VSplitContainer" parent="PanelContainer/VSplitContainer/VSplitContainer"]
+[node name="VSplitContainer" type="VSplitContainer" parent="PanelContainer/VSplitContainer/SettingGroup"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="FunctionList2" type="HBoxContainer" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer"]
+[node name="FunctionList2" type="HBoxContainer" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer/FunctionList2"]
+[node name="Button" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList2"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "报文筛选"
 
-[node name="Button2" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer/FunctionList2"]
+[node name="Button2" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList2"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "报文分析"
 
-[node name="Button4" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer/FunctionList2"]
+[node name="Button4" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList2"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "保存记录"
 
-[node name="Button3" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer/FunctionList2"]
+[node name="Button3" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList2"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "清空记录"
 
-[node name="Button5" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer/FunctionList2"]
+[node name="Button5" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList2"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "报文显示格式"
 
-[node name="Button6" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer/FunctionList2"]
+[node name="Button6" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList2"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="FunctionList1" type="HBoxContainer" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer"]
+[node name="FunctionList1" type="HBoxContainer" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer/FunctionList1"]
+[node name="Button" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList1"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "连接设置"
 
-[node name="Button2" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer/FunctionList1"]
+[node name="Button2" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList1"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "服务设置"
 
-[node name="Button3" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer/FunctionList1"]
+[node name="Button3" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList1"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "发送设置"
 
-[node name="Button4" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer/FunctionList1"]
+[node name="Button4" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList1"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "协议设置"
 
-[node name="Button5" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer/FunctionList1"]
+[node name="Button5" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList1"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button6" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer/FunctionList1"]
+[node name="Button6" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList1"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VSplitContainer2" type="VSplitContainer" parent="PanelContainer/VSplitContainer/VSplitContainer"]
+[node name="SendArea" type="VSplitContainer" parent="PanelContainer/VSplitContainer/SettingGroup"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="TextEdit" type="TextEdit" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer2"]
+[node name="SendEdit" type="TextEdit" parent="PanelContainer/VSplitContainer/SettingGroup/SendArea"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer2"]
+[node name="SendButton" type="HBoxContainer" parent="PanelContainer/VSplitContainer/SettingGroup/SendArea"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer2/HBoxContainer"]
+[node name="Send" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/SendArea/SendButton"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "发送"
 
-[node name="Button2" type="Button" parent="PanelContainer/VSplitContainer/VSplitContainer/VSplitContainer2/HBoxContainer"]
+[node name="HexSend" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/SendArea/SendButton"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Hex发送"
