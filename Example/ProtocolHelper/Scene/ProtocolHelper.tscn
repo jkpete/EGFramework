@@ -126,9 +126,9 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
-text = "[color=gray]【13:45:55:105】127.0.0.1@6000 has been connected[/color]
-[color=green]【13:45:55:265】127.0.0.1@6000:[/color]Request
-[color=cyan]【13:45:55:358】127.0.0.1@6000:[/color][color=yellow]Response[/color]"
+text = "[color=gray]【13:45:55:105】【TCP】127.0.0.1@6000 has been connected[/color]
+[color=green]【13:45:55:265】【TCP】127.0.0.1@6000:[/color]Request
+[color=cyan]【13:45:55:358】【TCP】127.0.0.1@6000:[/color][color=yellow]Response[/color]"
 
 [node name="SettingGroup" type="VSplitContainer" parent="PanelContainer/VSplitContainer"]
 layout_mode = 2

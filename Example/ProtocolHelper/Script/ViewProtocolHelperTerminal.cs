@@ -1,20 +1,26 @@
+using EGFramework;
 using Godot;
 using System;
+using System.Collections.Generic;
 
-public partial class ViewProtocolHelperTerminal : RichTextLabel
+namespace EGFramework.ProtocolHelper
 {
-    public override void _Ready()
+    public partial class ViewProtocolHelperTerminal : RichTextLabel
     {
-        base._Ready();
-    }
+        public Dictionary<long, ResponseMsg> MessageMappings { set; get; } = new Dictionary<long, ResponseMsg>();
+        public override void _Ready()
+        {
 
-    public void ClearArea()
-    {
+        }
+
+        public void ClearArea()
+        {
+
+        }
+        public void RefreshProtocol()
+        {
+
+        }
 
     }
-    public void RefreshProtocol()
-    {
-        
-    }
-
 }
