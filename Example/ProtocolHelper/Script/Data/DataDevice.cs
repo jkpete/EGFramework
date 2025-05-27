@@ -1,6 +1,6 @@
 namespace EGFramework.ProtocolHelper
 {
-    public struct DataConnection
+    public struct DataDevice
     {
         public string Sender { set; get; }
         public ProtocolType ProtocolType { set; get; }

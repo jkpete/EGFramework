@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_47a58")
 
-[node name="ConnectMenu" type="VSplitContainer" parent="."]
+[node name="DeviceMenu" type="VSplitContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.01
@@ -19,50 +19,51 @@ anchor_top = 0.01
 anchor_right = 0.19
 anchor_bottom = 0.99
 
-[node name="ConnectScroll" type="ScrollContainer" parent="ConnectMenu"]
+[node name="DeviceScroll" type="ScrollContainer" parent="DeviceMenu"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 
-[node name="ConnectList" type="VBoxContainer" parent="ConnectMenu/ConnectScroll"]
+[node name="DeviceList" type="VBoxContainer" parent="DeviceMenu/DeviceScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ConnectItem" type="HSplitContainer" parent="ConnectMenu/ConnectScroll/ConnectList"]
+[node name="Device1" type="HSplitContainer" parent="DeviceMenu/DeviceScroll/DeviceList"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="ConnectMenu/ConnectScroll/ConnectList/ConnectItem"]
+[node name="Button" type="Button" parent="DeviceMenu/DeviceScroll/DeviceList/Device1"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "连接1"
+text = "Device1
+"
 expand_icon = true
 
-[node name="CheckBox" type="CheckBox" parent="ConnectMenu/ConnectScroll/ConnectList/ConnectItem"]
+[node name="CheckBox" type="CheckBox" parent="DeviceMenu/DeviceScroll/DeviceList/Device1"]
 layout_mode = 2
 
-[node name="ConnectFunctionList" type="VBoxContainer" parent="ConnectMenu"]
+[node name="DeviceFunctionList" type="VBoxContainer" parent="DeviceMenu"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Open" type="Button" parent="ConnectMenu/ConnectFunctionList"]
+[node name="Open" type="Button" parent="DeviceMenu/DeviceFunctionList"]
 layout_mode = 2
-text = "启动连接"
+text = "启动设备"
 
-[node name="Close" type="Button" parent="ConnectMenu/ConnectFunctionList"]
+[node name="Close" type="Button" parent="DeviceMenu/DeviceFunctionList"]
 layout_mode = 2
-text = "关闭连接"
+text = "关闭设备"
 
-[node name="Add" type="Button" parent="ConnectMenu/ConnectFunctionList"]
+[node name="Add" type="Button" parent="DeviceMenu/DeviceFunctionList"]
 layout_mode = 2
-text = "增加连接"
+text = "增加设备"
 
-[node name="Modify" type="Button" parent="ConnectMenu/ConnectFunctionList"]
+[node name="Modify" type="Button" parent="DeviceMenu/DeviceFunctionList"]
 layout_mode = 2
-text = "修改连接"
+text = "修改设备"
 
-[node name="Delete" type="Button" parent="ConnectMenu/ConnectFunctionList"]
+[node name="Delete" type="Button" parent="DeviceMenu/DeviceFunctionList"]
 layout_mode = 2
-text = "删除连接"
+text = "删除设备"
 
 [node name="ProtocolMenu" type="VSplitContainer" parent="."]
 layout_mode = 1
