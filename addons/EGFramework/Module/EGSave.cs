@@ -167,14 +167,85 @@ namespace EGFramework
         }
 
         #endregion
-        
+
         #region Get or Search data and object
-        public TObject GetObject<TObject>(string path,string key) where TObject : new(){
-            if(ObjectFiles.ContainsKey(path)){
+
+        public bool ContainsObject(string path, string key)
+        {
+            if (ObjectFiles.ContainsKey(path))
+            {
+                return ObjectFiles[path].ContainsKey(key);
+            }
+            else if (ObjectReadOnly.ContainsKey(path))
+            {
+                return ObjectReadOnly[path].ContainsKey(key);
+            }
+            else
+            {
+                throw new Exception("File not loaded, you should use LoadObjectFile(key) or ReadObject(key) first.");
+            }
+        }
+
+        public bool ContainsData(string path, string key)
+        {
+            if (DataBaseFiles.ContainsKey(path))
+            {
+                return DataBaseFiles[path].ContainsKey(key);
+            }
+            else if (DataBaseReadOnly.ContainsKey(path))
+            {
+                return DataBaseReadOnly[path].ContainsKey(key);
+            }
+            else
+            {
+                throw new Exception("File not loaded, you should use LoadDataFile(key) or ReadData(key) first.");
+            }
+        }
+
+        public IEnumerable<string> ListObject(string path)
+        {
+            if (ObjectFiles.ContainsKey(path))
+            {
+                return ObjectFiles[path].GetKeys();
+            }
+            else if (ObjectReadOnly.ContainsKey(path))
+            {
+                return ObjectReadOnly[path].GetKeys();
+            }
+            else
+            {
+                throw new Exception("File not loaded, you should use LoadObjectFile(key) or ReadObject(key) first.");
+            }
+        }
+
+        public IEnumerable<string> ListData(string path, string key)
+        {
+            if (DataBaseFiles.ContainsKey(path))
+            {
+                return DataBaseFiles[path].GetKeys();
+            }
+            else if (DataBaseReadOnly.ContainsKey(path))
+            {
+                return DataBaseReadOnly[path].GetKeys();
+            }
+            else
+            {
+                throw new Exception("File not loaded, you should use LoadDataFile(key) or ReadData(key) first.");
+            }
+        }
+
+        public TObject GetObject<TObject>(string path, string key) where TObject : new()
+        {
+            if (ObjectFiles.ContainsKey(path))
+            {
                 return ObjectFiles[path].GetObject<TObject>(key);
-            }else if(ObjectReadOnly.ContainsKey(path)){
+            }
+            else if (ObjectReadOnly.ContainsKey(path))
+            {
                 return ObjectReadOnly[path].GetObject<TObject>(key);
-            }else{
+            }
+            else
+            {
                 throw new Exception("File not loaded, you should use LoadObjectFile(key) or ReadObject(key) first.");
             }
         }
