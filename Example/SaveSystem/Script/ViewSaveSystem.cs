@@ -14,19 +14,19 @@ namespace EGFramework.Examples.Test{
         public override void _Ready()
         {
             DataList = new string[3][];
-            string[] a = {"Name","Age"};
+            string[] a = { "Name", "Age" };
             DataList[0] = a;
-            string[] b = {"Tom","18"};
+            string[] b = { "Tom", "18" };
             DataList[1] = b;
-            string[] c = {"Jerry","20"};
+            string[] c = { "Jerry", "20" };
             DataList[2] = c;
-            this.GetNode<TabContainer>("TabContainer").CreateTable(DataList,"Student");
-            DataStudent dataStudent = new DataStudent("S",18);
-            DataStudent dataStudent2 = new DataStudent(null,20);
+            this.GetNode<TabContainer>("TabContainer").CreateTable(DataList, "Student");
+            DataStudent dataStudent = new DataStudent("S", 18);
+            DataStudent dataStudent2 = new DataStudent(null, 20);
             List<DataStudent> dataStudents = new List<DataStudent>();
             dataStudents.Add(dataStudent);
             dataStudents.Add(dataStudent2);
-            EGodotTable table = this.GetNode<TabContainer>("TabContainer").CreateTable<DataStudent>(dataStudents,"Teacher");
+            EGodotTable table = this.GetNode<TabContainer>("TabContainer").CreateTable<DataStudent>(dataStudents, "Teacher");
             // Button btn = this.CreateNode<Button>("Test");
             // btn.Text = "Test";
             // btn.Position = new Vector2(100,100);
@@ -40,13 +40,12 @@ namespace EGFramework.Examples.Test{
             // });
 
             EGodotTableRowData rowData = table.CreateNode<EGodotTableRowData>("RowData");
-            rowData.InitRowData(new Dictionary<string, object>() {{"Name","Tom"},{"Age",18}});
-            
+            rowData.InitRowData(new Dictionary<string, object>() { { "Name", "Tom" }, { "Age", 18 } });
         }
 
         public override void _ExitTree()
         {
-            
+
         }
 
         
