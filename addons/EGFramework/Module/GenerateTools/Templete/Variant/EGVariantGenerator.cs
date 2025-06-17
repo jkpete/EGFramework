@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace EGFramework.Generate{
+namespace EGFramework{
     public static class EGenerateVariant{
         public static Dictionary<string,object> EGenerateDictiontaryByObject<T>(this T self){
             PropertyInfo[] propertyNames = typeof(T).GetProperties();
