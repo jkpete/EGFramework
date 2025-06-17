@@ -34,12 +34,14 @@ namespace EGFramework{
                 }
             }
         }
-
+        
+        [Obsolete("This method can be replaced by ClearChildren<Label>")]
         public static void ClearChildrenLabel(this Node itemContainer)
         {
             foreach (Node child in itemContainer.GetChildren())
             {
-                if(child.GetType()==typeof(Label)){
+                if (child.GetType() == typeof(Label))
+                {
                     child.QueueFree();
                 }
             }
