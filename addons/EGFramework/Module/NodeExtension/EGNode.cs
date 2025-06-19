@@ -4,15 +4,19 @@ using System;
 namespace EGFramework{
     public static class EGNodeExtension
     {
-        public static TModule NodeModule<TModule>(this Node self) where TModule : Node,IModule,new(){
-            if(EGArchitectureImplement.Interface.IsInitModule<TModule>()){
+        public static TModule NodeModule<TModule>(this Node self) where TModule : Node, IModule, new()
+        {
+            if (EGArchitectureImplement.Interface.IsInitModule<TModule>())
+            {
                 TModule module = new TModule();
                 module.Name = typeof(TModule).ToString();
                 Print(module.Name);
                 self.AddChild(module);
                 EGArchitectureImplement.Interface.RegisterModule(module);
                 return module;
-            }else{
+            }
+            else
+            {
                 return EGArchitectureImplement.Interface.GetModule<TModule>();
             }
         }
@@ -29,12 +33,13 @@ namespace EGFramework{
         {
             foreach (Node child in itemContainer.GetChildren())
             {
-                if(child.GetType()==typeof(T)){
+                if (child.GetType() == typeof(T))
+                {
                     child.QueueFree();
                 }
             }
         }
-        
+
         [Obsolete("This method can be replaced by ClearChildren<Label>")]
         public static void ClearChildrenLabel(this Node itemContainer)
         {
@@ -45,6 +50,11 @@ namespace EGFramework{
                     child.QueueFree();
                 }
             }
+        }
+
+        public static void ToEnd(this Node child)
+        {
+            child.GetParent()?.MoveChild(child,-1);
         }
 
     }

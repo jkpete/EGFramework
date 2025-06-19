@@ -43,6 +43,8 @@ namespace EGFramework.Examples.Test{
             rowData.Init(new Dictionary<string, object>() { { "Name", "Tom" }, { "Age", 18 } });
             EGodotRowData rowData2 = table.CreateNode<EGodotRowData>("RowData2");
             rowData2.Init(new Dictionary<string, object>() { { "Name", "Z" }, { "Age", 1 } });
+            EGodotEditParam editParam = table.CreateNode<EGodotEditParam>("editParam");
+            editParam.Init(new KeyValuePair<string, object>("数量",1));
         }
 
         public override void _ExitTree()

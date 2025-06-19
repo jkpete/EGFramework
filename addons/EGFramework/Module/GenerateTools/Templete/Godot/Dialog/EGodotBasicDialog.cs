@@ -2,7 +2,7 @@ using System;
 using Godot;
 namespace EGFramework.UI
 {
-    public static class EGBasicDialogExtension
+    public static class EGodotBasicDialogExtension
     {
         public static void EGAlert(this Node self, string alertMsg, string title = "Alert")
         {

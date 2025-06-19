@@ -1,17 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
 namespace EGFramework.UI
 {
-    public interface IEGodotParam : IEGodotData
+    public partial class EGodotEditParam : EGodotParam, IEGFramework
     {
-        public void Init(KeyValuePair<string, object> data);
-        public void RefreshData(KeyValuePair<string, object> data);
-        public KeyValuePair<string, object> GetData();
-    }
-    public partial class EGodotEditParam : HBoxContainer, IEGFramework
-    {
-        public Label ParamName { get; set; }
         public LineEdit ParamEdit { get; set; }
         public OptionButton ParamOption { get; set; }
         public CheckButton ParamCheck { get; set; }
@@ -19,18 +13,11 @@ namespace EGFramework.UI
         public Label ParamReadOnly { get; set; }
         public SpinBox ParamSpinBox { get; set; }
         public HSlider ParamSlider { get; set; }
+        private Type ValueType { set; get; }
 
-        public KeyValuePair<string, object> EditValue { get; set; }
-
-        public void Init(KeyValuePair<string, object> editValue)
+        public override void Init(KeyValuePair<string, object> editValue)
         {
-            EditValue = editValue;
-            this.ParamName = new Label();
-            ParamName.Name = "ParamName";
-            ParamName.Text = editValue.Key;
-            ParamName.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-            this.AddChild(ParamName);
-            ParamName.Text = editValue.Key;
+            base.Init(editValue);
             if (editValue.Value is string)
             {
                 this.ParamEdit = new LineEdit();
@@ -74,32 +61,35 @@ namespace EGFramework.UI
                 this.ParamSpinBox = new SpinBox();
                 ParamSpinBox.Name = "ParamSpinBox";
                 ParamSpinBox.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-                ParamSpinBox.Value = (int)editValue.Value;
                 ParamSpinBox.MaxValue = int.MaxValue;
                 ParamSpinBox.MinValue = int.MinValue;
+                ParamSpinBox.Value = (int)editValue.Value;
                 this.AddChild(ParamSpinBox);
+                ValueType = typeof(int);
             }
             else if (editValue.Value is float)
             {
                 this.ParamSpinBox = new SpinBox();
                 ParamSpinBox.Name = "ParamSpinBox";
                 ParamSpinBox.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-                ParamSpinBox.Value = (float)editValue.Value;
                 ParamSpinBox.MaxValue = float.MaxValue;
                 ParamSpinBox.MinValue = float.MinValue;
+                ParamSpinBox.Value = (float)editValue.Value;
                 ParamSpinBox.Step = 0.01f;
                 this.AddChild(ParamSpinBox);
+                ValueType = typeof(float);
             }
             else if (editValue.Value is double)
             {
                 this.ParamSpinBox = new SpinBox();
                 ParamSpinBox.Name = "ParamSpinBox";
                 ParamSpinBox.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-                ParamSpinBox.Value = (double)editValue.Value;
                 ParamSpinBox.MaxValue = double.MaxValue;
                 ParamSpinBox.MinValue = double.MinValue;
+                ParamSpinBox.Value = (double)editValue.Value;
                 ParamSpinBox.Step = 0.0001f;
                 this.AddChild(ParamSpinBox);
+                ValueType = typeof(double);
             }
             else if (editValue.Value is EGRangeParam)
             {
@@ -117,7 +107,7 @@ namespace EGFramework.UI
 
         public string GetKey()
         {
-            return EditValue.Key;
+            return ParamValue.Key;
         }
 
         public object GetValue()
@@ -140,6 +130,14 @@ namespace EGFramework.UI
             }
             else if (ParamSpinBox != null)
             {
+                if (ValueType == typeof(int))
+                {
+                    return (int)ParamSpinBox.Value;
+                }
+                else if(ValueType == typeof(float))
+                {
+                    return (float)ParamSpinBox.Value;
+                }
                 return ParamSpinBox.Value;
             }
             else if (ParamSlider != null)
@@ -149,5 +147,14 @@ namespace EGFramework.UI
             return null;
         }
 
+        public override KeyValuePair<string, object> GetData()
+        {
+            return new KeyValuePair<string, object>(GetKey(), GetValue());
+        }
+        
+        public override void RefreshData(KeyValuePair<string, object> data)
+        {
+            //this param cannot be Refreshed,please remove and recreate a new EGodotEditParam.
+        }
     }
 }

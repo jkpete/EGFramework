@@ -9,12 +9,9 @@ namespace EGFramework.UI{
         public Button Modify { get; set; }
         public Button Delete { get; set; }
 
-        private Action<Dictionary<string,object>> OnDataEdit;
-
         public override void Init(Dictionary<string, object> data)
         {
             base.Init(data);
-            
             Operate = new HBoxContainer();
             Operate.Name = "Operate";
             Operate.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
@@ -31,18 +28,28 @@ namespace EGFramework.UI{
             Operate.AddChild(Delete);
             Modify.Connect("pressed",Callable.From(OnEdit));
             Delete.Connect("pressed",Callable.From(OnDelete));
-            OnDataEdit = e => {
-
-            };
         }
         public void OnEdit(){
-            // if(Data == null){
-            //     return ;
-            // }
-            // this.EditParams(Data.GetModifyParams(),OnDataEdit,"修改");
+            if(Data == null){
+                return ;
+            }
+            this.EGEditDialog(Data,OnDataEdit,"修改");
         }
 
-        public void OnDelete(){
+        public virtual void OnDataEdit(Dictionary<string, object> e)
+        {
+            this.Data = e;
+            this.RefreshData();
+        }
+
+        public override void RefreshData(Dictionary<string, object> data)
+        {
+            base.RefreshData(data);
+            Operate.ToEnd();
+        }
+
+        public void OnDelete()
+        {
 
         }
     }
