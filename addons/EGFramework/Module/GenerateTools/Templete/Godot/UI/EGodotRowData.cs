@@ -4,12 +4,14 @@ using System.Collections.Generic;
 
 namespace EGFramework.UI
 {
-    public interface IEGRowData
+
+    public interface IEGodotRowData:IEGodotData
     {
-        public void InitRowData(Dictionary<string, object> data);
+        public void Init(Dictionary<string, object> data);
         public void RefreshData(Dictionary<string, object> data);
+        public Dictionary<string, object> GetData();
     }
-    public partial class EGRowData : PanelContainer, IEGFramework,IEGRowData
+    public partial class EGodotRowData : PanelContainer, IEGFramework, IEGodotRowData
     {
 
         public Button ItemHover { get; set; }
@@ -19,14 +21,20 @@ namespace EGFramework.UI
 
         protected Dictionary<string, object> Data { get; set; }
         protected bool IsInit { set; get; } = false;
-        
-        public virtual void InitRowData(Dictionary<string, object> data)
+
+        public Dictionary<string, object> GetData()
+        {
+            return this.Data;
+        }
+
+
+        public virtual void Init(Dictionary<string, object> data)
         {
             if (IsInit)
             {
                 this.Data = data;
                 this.RefreshData(data);
-                return; 
+                return;
             }
             this.Data = data;
             BackGround = new ColorRect();
@@ -57,6 +65,7 @@ namespace EGFramework.UI
                 });
             }
             this.AddThemeStyleboxOverride("panel", new StyleBoxEmpty());
+            IsInit = true;
         }
 
         public virtual void RefreshData(Dictionary<string, object> data)
@@ -71,6 +80,25 @@ namespace EGFramework.UI
                     HorizontalAlignment = HorizontalAlignment.Center,
                     SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
                 });
+            }
+        }
+
+        public void RefreshData()
+        {
+            this.RefreshData(this.Data);
+        }
+        public void SetBackgroundColor(Color color)
+        {
+            if (this.BackGround != null)
+            {
+                this.BackGround.Color = color;
+            }
+        }
+        public void SetLineColor(Color color)
+        {
+            if (this.Line != null)
+            {
+                this.Line.Color = color;
             }
         }
     }

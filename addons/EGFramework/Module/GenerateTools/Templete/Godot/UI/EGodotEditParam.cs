@@ -3,7 +3,13 @@ using Godot;
 
 namespace EGFramework.UI
 {
-    public partial class EGodotEditParam : HBoxContainer,IEGFramework
+    public interface IEGodotParam : IEGodotData
+    {
+        public void Init(KeyValuePair<string, object> data);
+        public void RefreshData(KeyValuePair<string, object> data);
+        public KeyValuePair<string, object> GetData();
+    }
+    public partial class EGodotEditParam : HBoxContainer, IEGFramework
     {
         public Label ParamName { get; set; }
         public LineEdit ParamEdit { get; set; }
@@ -14,9 +20,10 @@ namespace EGFramework.UI
         public SpinBox ParamSpinBox { get; set; }
         public HSlider ParamSlider { get; set; }
 
-        public KeyValuePair<string,object> EditValue { get; set; }
+        public KeyValuePair<string, object> EditValue { get; set; }
 
-        public void Init(KeyValuePair<string,object> editValue){
+        public void Init(KeyValuePair<string, object> editValue)
+        {
             EditValue = editValue;
             this.ParamName = new Label();
             ParamName.Name = "ParamName";
@@ -24,7 +31,8 @@ namespace EGFramework.UI
             ParamName.SizeFlagsHorizontal = SizeFlags.ExpandFill;
             this.AddChild(ParamName);
             ParamName.Text = editValue.Key;
-            if(editValue.Value is string){
+            if (editValue.Value is string)
+            {
                 this.ParamEdit = new LineEdit();
                 ParamEdit.Name = "ParamEdit";
                 ParamEdit.SizeFlagsHorizontal = SizeFlags.ExpandFill;
@@ -32,7 +40,8 @@ namespace EGFramework.UI
                 this.AddChild(ParamEdit);
                 ParamEdit.Text = (string)editValue.Value;
             }
-            else if(editValue.Value is bool){
+            else if (editValue.Value is bool)
+            {
                 this.ParamCheck = new CheckButton();
                 ParamCheck.Name = "ParamCheck";
                 ParamCheck.SizeFlagsHorizontal = SizeFlags.ExpandFill;
@@ -40,24 +49,28 @@ namespace EGFramework.UI
                 ParamCheck.ButtonPressed = (bool)editValue.Value;
                 this.AddChild(ParamCheck);
             }
-            else if(editValue.Value is IEGReadOnlyString){
+            else if (editValue.Value is IEGReadOnlyString)
+            {
                 this.ParamReadOnly = new Label();
                 ParamReadOnly.Name = "ParamReadOnly";
                 ParamReadOnly.SizeFlagsHorizontal = SizeFlags.ExpandFill;
                 ParamReadOnly.Text = ((IEGReadOnlyString)editValue.Value).GetString();
                 this.AddChild(ParamReadOnly);
             }
-            else if(editValue.Value is EGSelectParam){
+            else if (editValue.Value is EGSelectParam)
+            {
                 this.ParamOption = new OptionButton();
                 ParamOption.Name = "ParamOption";
                 ParamOption.SizeFlagsHorizontal = SizeFlags.ExpandFill;
                 this.AddChild(ParamOption);
-                foreach(KeyValuePair<int,string> selectOptions in ((EGSelectParam)editValue.Value).SelectList){
-                    this.ParamOption.AddItem(selectOptions.Value,selectOptions.Key);
+                foreach (KeyValuePair<int, string> selectOptions in ((EGSelectParam)editValue.Value).SelectList)
+                {
+                    this.ParamOption.AddItem(selectOptions.Value, selectOptions.Key);
                 }
                 this.ParamOption.Selected = this.ParamOption.GetItemIndex(((EGSelectParam)editValue.Value).SelectID);
             }
-            else if(editValue.Value is int){
+            else if (editValue.Value is int)
+            {
                 this.ParamSpinBox = new SpinBox();
                 ParamSpinBox.Name = "ParamSpinBox";
                 ParamSpinBox.SizeFlagsHorizontal = SizeFlags.ExpandFill;
@@ -66,7 +79,8 @@ namespace EGFramework.UI
                 ParamSpinBox.MinValue = int.MinValue;
                 this.AddChild(ParamSpinBox);
             }
-            else if(editValue.Value is float){
+            else if (editValue.Value is float)
+            {
                 this.ParamSpinBox = new SpinBox();
                 ParamSpinBox.Name = "ParamSpinBox";
                 ParamSpinBox.SizeFlagsHorizontal = SizeFlags.ExpandFill;
@@ -76,7 +90,8 @@ namespace EGFramework.UI
                 ParamSpinBox.Step = 0.01f;
                 this.AddChild(ParamSpinBox);
             }
-            else if(editValue.Value is double){
+            else if (editValue.Value is double)
+            {
                 this.ParamSpinBox = new SpinBox();
                 ParamSpinBox.Name = "ParamSpinBox";
                 ParamSpinBox.SizeFlagsHorizontal = SizeFlags.ExpandFill;
@@ -86,7 +101,8 @@ namespace EGFramework.UI
                 ParamSpinBox.Step = 0.0001f;
                 this.AddChild(ParamSpinBox);
             }
-            else if(editValue.Value is EGRangeParam){
+            else if (editValue.Value is EGRangeParam)
+            {
                 this.ParamSlider = new HSlider();
                 ParamSlider.Name = "ParamSlider";
                 ParamSlider.SizeFlagsHorizontal = SizeFlags.ExpandFill;
@@ -99,27 +115,35 @@ namespace EGFramework.UI
             }
         }
 
-        public string GetKey(){
+        public string GetKey()
+        {
             return EditValue.Key;
         }
 
-        public object GetValue(){
-            if(ParamEdit != null){
+        public object GetValue()
+        {
+            if (ParamEdit != null)
+            {
                 return ParamEdit.Text;
             }
-            else if(ParamCheck != null){
+            else if (ParamCheck != null)
+            {
                 return ParamCheck.ButtonPressed;
             }
-            else if(ParamOption != null){
+            else if (ParamOption != null)
+            {
                 return ParamOption.Selected;
             }
-            else if(ParamReadOnly != null){
+            else if (ParamReadOnly != null)
+            {
                 return ParamReadOnly.Text;
             }
-            else if(ParamSpinBox != null){
+            else if (ParamSpinBox != null)
+            {
                 return ParamSpinBox.Value;
             }
-            else if(ParamSlider != null){
+            else if (ParamSlider != null)
+            {
                 return ParamSlider.Value;
             }
             return null;

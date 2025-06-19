@@ -40,7 +40,9 @@ namespace EGFramework.Examples.Test{
             // });
 
             EGodotTableRowData rowData = table.CreateNode<EGodotTableRowData>("RowData");
-            rowData.InitRowData(new Dictionary<string, object>() { { "Name", "Tom" }, { "Age", 18 } });
+            rowData.Init(new Dictionary<string, object>() { { "Name", "Tom" }, { "Age", 18 } });
+            EGodotRowData rowData2 = table.CreateNode<EGodotRowData>("RowData2");
+            rowData2.Init(new Dictionary<string, object>() { { "Name", "Z" }, { "Age", 1 } });
         }
 
         public override void _ExitTree()

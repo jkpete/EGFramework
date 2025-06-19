@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Godot;
 
 namespace EGFramework.UI{
-    public partial class EGodotTableRowData : EGRowData
+    public partial class EGodotTableRowData : EGodotRowData
     {
         public Control Operate { get; set; }
         public Button Modify { get; set; }
@@ -11,9 +11,9 @@ namespace EGFramework.UI{
 
         private Action<Dictionary<string,object>> OnDataEdit;
 
-        public override void InitRowData(Dictionary<string, object> data)
+        public override void Init(Dictionary<string, object> data)
         {
-            base.InitRowData(data);
+            base.Init(data);
             
             Operate = new HBoxContainer();
             Operate.Name = "Operate";
