@@ -15,7 +15,7 @@ namespace EGFramework.Examples.Test{
         {
 
             Container container = this.GetNode<TabContainer>("TabContainer");
-            DataStudent dataStudent = new DataStudent("S", 18);
+            DataStudent dataStudent = new DataStudent(null, 18);
             DataStudent dataStudent2 = new DataStudent("F", 20);
             List<DataStudent> dataStudents = new List<DataStudent>();
             dataStudents.Add(dataStudent);

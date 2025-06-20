@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using Tmds.Linux;
 
 namespace EGFramework.UI{
     public partial class EGodotTableRowData : EGodotRowData
@@ -8,6 +9,9 @@ namespace EGFramework.UI{
         public Control Operate { get; set; }
         public Button Modify { get; set; }
         public Button Delete { get; set; }
+
+        public EasyEvent<Dictionary<string, object>> OnModify { set; get; } = new EasyEvent<Dictionary<string, object>>();
+        public EasyEvent OnDelete { set; get; } = new EasyEvent();
 
         public override void Init(Dictionary<string, object> data)
         {
@@ -26,14 +30,14 @@ namespace EGFramework.UI{
             Delete.Text = "Delete";
             Delete.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
             Operate.AddChild(Delete);
-            Modify.Connect("pressed",Callable.From(OnEdit));
-            Delete.Connect("pressed",Callable.From(OnDelete));
+            Modify.Connect("pressed", Callable.From(OnEdit));
+            Delete.Connect("pressed", Callable.From(OnDelete.Invoke));
         }
         public void OnEdit(){
             if(Data == null){
                 return ;
             }
-            this.EGEditDialog(Data,OnDataEdit,"修改");
+            OnModify.Invoke(Data);
         }
 
         public virtual void OnDataEdit(Dictionary<string, object> e)
@@ -46,11 +50,6 @@ namespace EGFramework.UI{
         {
             base.RefreshData(data);
             Operate.ToEnd();
-        }
-
-        public void OnDelete()
-        {
-
         }
     }
 }

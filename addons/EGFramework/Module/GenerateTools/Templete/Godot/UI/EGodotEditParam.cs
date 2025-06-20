@@ -18,7 +18,7 @@ namespace EGFramework.UI
         public override void Init(KeyValuePair<string, object> editValue)
         {
             base.Init(editValue);
-            if (editValue.Value is string)
+            if (editValue.Value is string || editValue.Value is null)
             {
                 this.ParamEdit = new LineEdit();
                 ParamEdit.Name = "ParamEdit";

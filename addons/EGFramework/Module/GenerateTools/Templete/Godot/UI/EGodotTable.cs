@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using Godot;
 
 namespace EGFramework.UI{ 
@@ -11,7 +12,7 @@ namespace EGFramework.UI{
     public partial class EGodotTable : BoxContainer, IEGFramework, IEGodotTable
     {
         public BoxContainer FunctionContainer { set; get; }
-        public EGodotTableRowData Title { set; get; }
+        public EGodotRowData Title { set; get; }
         public BoxContainer RowDataContainer { set; get; }
         public ScrollContainer RowDataScroll { set; get; }
         public BoxContainer PageContainer { set; get; }
@@ -20,6 +21,9 @@ namespace EGFramework.UI{
         public Dictionary<string, string> TitleList { set; get; } = new Dictionary<string, string>();
         private EGodotTablePageAdapter PageAdapter { set; get; }
         private bool IsSearched { set; get; }
+
+        public Color MainColor { set; get; } = new Color();
+        public Color MinorColor { set; get; } = new Color();
 
         /// <summary>
         /// The max data count for one page.
@@ -59,7 +63,8 @@ namespace EGFramework.UI{
         {
             if (Title == null)
             {
-                Title = this.CreateNode<EGodotTableRowData>("TitleContainer");
+                Title = this.CreateNode<EGodotRowData>("TitleContainer");
+                titleData.Add("Operate", "");
                 Title.Init(titleData);
             }
             else
@@ -75,6 +80,10 @@ namespace EGFramework.UI{
             {
                 EGodotTableRowData rowData = this.CreateNode<EGodotTableRowData>("row" + dataPointer);
                 rowData.Init(row);
+                rowData.OnModify.Register(data=>
+                {
+                    this.EGEditDialog(data,rowData.OnDataEdit,"Modify");
+                });
                 dataPointer++;
             }
         }
@@ -84,6 +93,43 @@ namespace EGFramework.UI{
             {
                 PageContainer = this.CreateNode<BoxContainer>("PageContainer");
                 PageContainer.Vertical = false;
+                PageContainer.Alignment = AlignmentMode.End;
+
+
+                Label labelCount = PageContainer.CreateNode<Label>("to");
+                labelCount.Text = "Data count : "+PageAdapter.DataLength;
+
+                Control empty1 = PageContainer.CreateNode<Control>("empty1");
+                empty1.CustomMinimumSize = new Vector2(32, 0);
+
+                Button firstPage = PageContainer.CreateNode<Button>("firstPage");
+                firstPage.Text = "<<";
+
+                Button lastPage = PageContainer.CreateNode<Button>("lastPage");
+                lastPage.Text = "<";
+
+                Label currentPage = PageContainer.CreateNode<Label>("currenLabel");
+                currentPage.Text = PageAdapter.CurrentPage.ToString();
+                
+                Button nextPage = PageContainer.CreateNode<Button>("next");
+                nextPage.Text = ">";
+                
+                Button endPage = PageContainer.CreateNode<Button>("firstPage");
+                endPage.Text = ">>";
+
+                Control empty2 = PageContainer.CreateNode<Control>("empty2");
+                empty2.CustomMinimumSize = new Vector2(32, 0);
+
+                Label labelTo = PageContainer.CreateNode<Label>("to");
+                labelTo.Text = "To";
+                SpinBox inputPage = PageContainer.CreateNode<SpinBox>("pageEdit");
+                inputPage.SetSize(new Vector2(120, 60));
+                inputPage.MinValue = 0;
+                inputPage.MaxValue = PageAdapter.MaxPage;
+                inputPage.Alignment = HorizontalAlignment.Center;
+                Label labelPage = PageContainer.CreateNode<Label>("page");
+                labelPage.Text = "page";
+
             }
         }
 
@@ -99,31 +145,6 @@ namespace EGFramework.UI{
         //     foreach (string[] s in tableStr)
         //     {
         //         Table.CreateRowData(s, "tableRowData" + dataPointer);
-        //         dataPointer++;
-        //     }
-        //     self.AddChild(Table);
-        //     return Table;
-        // }
-        // public static EGodotTable CreateTable<T>(this Node self, IEnumerable<T> tableData, string tableName = "ObjectTable", int limit = 0)
-        // {
-        //     EGodotTable Table = new EGodotTable();
-        //     Table.Name = tableName;
-        //     MemberInfo[] propertyNames = typeof(T).GetProperties();
-        //     MemberInfo[] fieldNames = typeof(T).GetFields();
-        //     MemberInfo[] memberInfos = propertyNames.Concat(fieldNames).ToArray();
-        //     string[] propertyName = new string[memberInfos.Length];
-        //     int dataPointer = 0;
-        //     for (int i = 0; i < memberInfos.Length; i++)
-        //     {
-        //         propertyName[i] = memberInfos[i].Name;
-        //     }
-        //     Table.CreateRowData(propertyName, "Title");
-        //     foreach (T t in tableData)
-        //     {
-        //         string[] s = t.GetType().GetProperties().Select(p => p.GetValue(t)?.ToString()).ToArray();
-        //         string[] a = t.GetType().GetFields().Select(p => p.GetValue(t)?.ToString()).ToArray();
-        //         string[] result = s.Concat(a).ToArray();
-        //         Table.CreateRowData(result, "tableRowData" + dataPointer);
         //         dataPointer++;
         //     }
         //     self.AddChild(Table);

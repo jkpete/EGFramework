@@ -59,7 +59,7 @@ namespace EGFramework.UI
                 this.List.AddChild(new Label()
                 {
                     Name = kv.Key,
-                    Text = kv.Value.ToString(),
+                    Text = kv.Value?.ToString(),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     SizeFlagsHorizontal = Control.SizeFlags.ExpandFill
                 });
