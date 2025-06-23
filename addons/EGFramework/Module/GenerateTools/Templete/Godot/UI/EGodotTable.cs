@@ -18,18 +18,15 @@ namespace EGFramework.UI
         public ScrollContainer RowDataScroll { set; get; }
         public BoxContainer PageContainer { set; get; }
 
-        public IEGSaveData SaveData { set; get; }
-        public Dictionary<string, string> TitleList { set; get; } = new Dictionary<string, string>();
-
         public Color MainColor { set; get; } = new Color();
         public Color MinorColor { set; get; } = new Color();
 
-        private EGodotTablePageAdapter PageAdapter { set; get; }
-        private bool IsSearched { set; get; }
-        private EasyEvent OnPageChanged { set; get; } = new EasyEvent();
-        private IUnRegister PageChangedRealease { set; get; }
+        protected EGodotTablePageAdapter PageAdapter { set; get; }
+        protected bool IsSearched { set; get; }
+        protected EasyEvent OnPageChanged { set; get; } = new EasyEvent();
+        protected IUnRegister PageChangedRealease { set; get; }
 
-        private List<Dictionary<string, object>> TableData { set; get; }
+        protected List<Dictionary<string, object>> TableData { set; get; }
 
         /// <summary>
         /// The max data count for one page.
@@ -172,6 +169,8 @@ namespace EGFramework.UI
                 inputPage.MinValue = 1;
                 inputPage.MaxValue = PageAdapter.MaxPage;
                 inputPage.Alignment = HorizontalAlignment.Center;
+                inputPage.Connect("value_changed", Callable.From<int>(ToPage));
+
                 Label labelPage = PageContainer.CreateNode<Label>("page");
                 labelPage.Text = "page";
 
@@ -232,7 +231,7 @@ namespace EGFramework.UI
         }
         public void ToPage(int pageId)
         {
-            if (pageId > 1 && this.PageAdapter.CurrentPage < pageId)
+            if (pageId >= 1 && pageId <= this.PageAdapter.MaxPage)
             {
                 this.PageAdapter.CurrentPage = pageId;
                 OnPageChanged.Invoke();

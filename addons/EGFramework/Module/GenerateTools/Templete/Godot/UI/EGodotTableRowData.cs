@@ -32,7 +32,7 @@ namespace EGFramework.UI{
             Operate.AddChild(Delete);
             Modify.Connect("pressed", Callable.From(OnEdit));
             Delete.Connect("pressed", Callable.From(OnDelete.Invoke));
-            this.CustomMinimumSize = new Vector2(0,32);
+            this.CustomMinimumSize = new Vector2(0, 32);
         }
         public void OnEdit(){
             if(Data == null){
@@ -43,7 +43,11 @@ namespace EGFramework.UI{
 
         public virtual void OnDataEdit(Dictionary<string, object> e)
         {
-            this.Data = e;
+            foreach (var pair in e)
+            {
+                this.Data[pair.Key] = pair.Value;
+            }
+            // this.Data = e;
             this.RefreshData();
         }
 

@@ -57,8 +57,6 @@ namespace EGFramework.UI
             foreach (EGodotEditParam paramUI in ParamUIs)
             {
                 EditCache.Add(paramUI.GetKey(), paramUI.GetValue());
-                
-                GD.Print(paramUI.GetValue());
             }
             try
             {
