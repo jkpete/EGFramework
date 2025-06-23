@@ -18,8 +18,14 @@ namespace EGFramework.Examples.Test{
             DataStudent dataStudent = new DataStudent(null, 18);
             DataStudent dataStudent2 = new DataStudent("F", 20);
             List<DataStudent> dataStudents = new List<DataStudent>();
-            dataStudents.Add(dataStudent);
-            dataStudents.Add(dataStudent2);
+            for (int stu = 0; stu < 10; stu++)
+            {
+                dataStudents.Add(new DataStudent("stu"+stu, 18));
+            }
+            for (int stu = 0; stu < 10; stu++)
+            {
+                dataStudents.Add(dataStudent2);
+            }
             EGodotTable table = container.CreateNode<EGodotTable>("Teacher");
             table.InitData<DataStudent>(dataStudents);
 

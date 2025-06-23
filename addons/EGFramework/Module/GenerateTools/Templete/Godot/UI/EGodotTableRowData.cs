@@ -32,6 +32,7 @@ namespace EGFramework.UI{
             Operate.AddChild(Delete);
             Modify.Connect("pressed", Callable.From(OnEdit));
             Delete.Connect("pressed", Callable.From(OnDelete.Invoke));
+            this.CustomMinimumSize = new Vector2(0,32);
         }
         public void OnEdit(){
             if(Data == null){
