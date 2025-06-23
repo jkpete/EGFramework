@@ -116,7 +116,7 @@ namespace EGFramework.UI
             {
                 dataEndPointer = PageAdapter.DataLength;
             }
-
+            RowDataContainer.ClearChildren();
             for (int dataId = dataPointer; dataId < dataEndPointer; dataId++)
             {
                 EGodotTableRowData rowData = RowDataContainer.CreateNode<EGodotTableRowData>("row" + dataPointer);
