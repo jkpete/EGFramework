@@ -7,5 +7,7 @@ namespace EGFramework.UI
     {
         public IEGSaveData SaveData { set; get; }
         public Dictionary<string, string> TitleList { set; get; } = new Dictionary<string, string>();
+
+        
     }
 }

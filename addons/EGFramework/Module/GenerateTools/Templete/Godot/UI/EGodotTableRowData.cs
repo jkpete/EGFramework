@@ -31,12 +31,14 @@ namespace EGFramework.UI{
             Delete.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
             Operate.AddChild(Delete);
             Modify.Connect("pressed", Callable.From(OnEdit));
-            Delete.Connect("pressed", Callable.From(OnDelete.Invoke));
+            Delete.Connect("pressed", Callable.From(OnDeleteSelf));
             this.CustomMinimumSize = new Vector2(0, 32);
         }
-        public void OnEdit(){
-            if(Data == null){
-                return ;
+        public void OnEdit()
+        {
+            if (Data == null)
+            {
+                return;
             }
             OnModify.Invoke(Data);
         }
@@ -55,6 +57,23 @@ namespace EGFramework.UI{
         {
             base.RefreshData(data);
             Operate.ToEnd();
+        }
+        public void OnDeleteSelf()
+        {
+            this.EGConfirm("Delete this data? this operate cannot be canceled.", e =>
+            {
+                if (e)
+                {
+                    OnDelete.Invoke();
+                }
+            }, "Delete");
+        }
+
+        public override void _ExitTree()
+        {
+            Modify.Disconnect("pressed", Callable.From(OnEdit));
+            Delete.Disconnect("pressed", Callable.From(OnDeleteSelf));
+            base._ExitTree();
         }
     }
 }

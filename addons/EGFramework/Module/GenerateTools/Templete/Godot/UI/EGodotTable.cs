@@ -101,7 +101,7 @@ namespace EGFramework.UI
             InitPageData();
         }
 
-        public void InitPageData()
+        public virtual void InitPageData()
         {
             if (PageAdapter.CurrentPage <= 1)
             {
@@ -121,6 +121,15 @@ namespace EGFramework.UI
                 rowData.OnModify.Register(data =>
                 {
                     this.EGEditDialog(data, rowData.OnDataEdit, "Modify");
+                });
+                rowData.OnDelete.Register(() =>
+                {
+                    GD.Print("Delete : " + rowData.GetData()["Name"]);
+                    this.TableData.Remove(rowData.GetData());
+                    PageAdapter.DataLength--;
+                    PageAdapter.Reload(PageAdapter.DataLength, PageLimit);
+                    InitPageData();
+                    OnPageChanged.Invoke();
                 });
             }
         }
@@ -298,6 +307,7 @@ namespace EGFramework.UI
         {
             return this.CurrentPage == MaxPage;
         }
+
     }
     
 }

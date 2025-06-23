@@ -50,7 +50,7 @@ namespace EGFramework{
             }
             else
             {
-                nodeData = self.CreateNode<TNode>();
+                nodeData = self.GetTree().Root.CreateNode<TNode>();
                 EGArchitectureImplement.Interface.GetModule<EGSingletonNode>().NodeContainer.Register(nodeData);
             }
             nodeData.Name = typeof(TNode).Name;
@@ -65,7 +65,7 @@ namespace EGFramework{
             }
             else
             {
-                nodeData = self.CreateNode<TNode>();
+                nodeData = self.GetTree().Root.CreateNode<TNode>();
                 EGArchitectureImplement.Interface.GetModule<EGSingletonNode>().NodeContainer.Register(nodeData);
             }
             nodeData.Name = name;
