@@ -359,9 +359,9 @@ namespace EGFramework
                 throw new Exception("File not loaded, you should use LoadObjectFile(key) first.");
             }
         }
-        public void RemoveData<TData>(string path,string dataKey,int id){
+        public void RemoveData(string path,string dataKey,int id){
             if(DataBaseFiles.ContainsKey(path)){
-                DataBaseFiles[path].RemoveData<TData>(dataKey,id);
+                DataBaseFiles[path].RemoveData(dataKey,id);
             }else{
                 throw new Exception("File not loaded, you should use LoadDataFile(path) first.");
             }

@@ -26,7 +26,7 @@ namespace EGFramework
                 pageIndex = 1;
             }
             int startPointer = (pageIndex - 1) * pageSize;
-            IEnumerable<TData> result = Connection.Query<TData>("select * from "+dataKey+" limit "+startPointer+","+pageIndex);
+            IEnumerable<TData> result = Connection.Query<TData>("select * from "+dataKey+" limit "+startPointer+","+pageSize);
             return result;
         }
 
@@ -95,9 +95,10 @@ namespace EGFramework
             //EG.Print("count:" + count);
         }
 
-        public void RemoveData<TData>(string dataKey, object id)
+        public int RemoveData(string dataKey, object id)
         {
-            int count = Connection.Execute(@"delete from "+dataKey+" where ID = @ID",new {ID = id});
+            int count = Connection.Execute(@"delete from " + dataKey + " where id = @ID", new { ID = id });
+            return count;
             //EG.Print("count:" + count);
         }
 
@@ -108,20 +109,49 @@ namespace EGFramework
                 throw new ArgumentNullException(nameof(data));
             }
             Type DataType = typeof(TData);
-            EG.Print("----"+DataType.Name);
             var properties = DataType.GetProperties();
             string keyMap = "";
             foreach(PropertyInfo key in properties){
-                if(key.Name=="ID"){
+                if(key.Name=="ID" || key.Name == "id" || key.Name == "Id"){
                     continue;
                 }
                 keyMap += key.Name + " = @"+key.Name +",";
             }
             keyMap = keyMap.TrimEnd(',');
-            string sql = @"update "+DataType.Name+" set "+ keyMap +" where ID = " + id;
+            string sql = @"update "+dataKey+" set "+ keyMap +" where ID = " + id;
             EG.Print(sql);
             int count = Connection.Execute(sql,data);
             //EG.Print("count:" + count);
+        }
+
+        public void UpdateData(string dataKey, Dictionary<string, object> data, object id)
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+            string keyMap = "";
+            foreach (KeyValuePair<string, object> param in data) {
+                if (param.Key == "ID" || param.Key == "Id" || param.Key == "id"){
+                    continue;
+                }
+                if (param.Value is string)
+                {
+                    keyMap += param.Key + " = '"+param.Value +"',";
+                }
+                else
+                {
+                    keyMap += param.Key + " = "+param.Value +",";
+                }
+            }
+            keyMap = keyMap.TrimEnd(',');
+            if (id is string)
+            {
+                id = "'" + id + "'";
+            }
+            string sql = @"update "+dataKey+" set "+ keyMap +" where ID = " + id;
+            EG.Print(sql);
+            int count = Connection.Execute(sql,data);
         }
 
         public IEnumerable<string> GetKeys()
@@ -162,5 +192,6 @@ namespace EGFramework
         {
             return Connection;
         }
+
     }
 }

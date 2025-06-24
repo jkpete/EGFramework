@@ -279,27 +279,36 @@ namespace EGFramework
             this.WriteDataBlock(DefaultPath);
         }
 
-        public void RemoveData<TData>(string dataKey, object id)
+        public int RemoveData(string dataKey, object id)
         {
-            if(IsReadOnly){
+            if (IsReadOnly)
+            {
                 throw new Exception("This file is readonly! can't set any data to file.");
             }
             bool IsAdd = false;
             int dataID = 0;
-            if(id.GetType()==typeof(int)){
+            if (id.GetType() == typeof(int))
+            {
                 dataID = (int)id;
-            }else if(int.TryParse(id.ToString() ,out dataID)){
+            }
+            else if (int.TryParse(id.ToString(), out dataID))
+            {
                 throw new Exception("Id cannot be convert to int!");
             }
-            if(dataID>=CsvDataBlock.Count() || dataID < 0){
+            if (dataID >= CsvDataBlock.Count() || dataID < 0)
+            {
                 IsAdd = true;
             }
-            if(IsAdd){
-                return;
-            }else{
+            if (IsAdd)
+            {
+                return 0;
+            }
+            else
+            {
                 CsvDataBlock.RemoveAt(dataID);
             }
             this.WriteDataBlock(DefaultPath);
+            return 1;
         }
 
         public void UpdateData<TData>(string dataKey, TData data, object id)
@@ -332,6 +341,36 @@ namespace EGFramework
             this.WriteDataBlock(DefaultPath);
         }
 
+        
+        public void UpdateData(string dataKey, Dictionary<string, object> data, object id)
+        {
+            if(IsReadOnly){
+                throw new Exception("This file is readonly! can't set any data to file.");
+            }
+            bool IsAdd = false;
+            int dataID = 0;
+            if(id.GetType()==typeof(int)){
+                dataID = (int)id;
+            }else if(int.TryParse(id.ToString() ,out dataID)){
+                throw new Exception("Id cannot be convert to int!");
+            }
+            if(dataID>=CsvDataBlock.Count() || dataID < 0){
+                IsAdd = true;
+            }
+            string[] csvSet = new string[CsvDataHeader.Keys.Count()];
+            foreach(KeyValuePair<string,object> param in data){
+                if(CsvDataHeader.ContainsKey(param.Key)){
+                    csvSet[CsvDataHeader[param.Key]] = param.Value.ToString();
+                }
+            }
+            if(!IsAdd){
+                CsvDataBlock[dataID] = csvSet;
+            }else{
+                throw new Exception("Data not found!");
+            }
+            this.WriteDataBlock(DefaultPath);
+        }
+
         public IEnumerable<string> GetKeys()
         {
             return CsvDataHeader.Keys;
@@ -351,6 +390,8 @@ namespace EGFramework
         {
             return CsvDataBlock.Count();
         }
+
+
     }
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]

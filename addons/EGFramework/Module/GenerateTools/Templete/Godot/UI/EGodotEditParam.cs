@@ -18,6 +18,15 @@ namespace EGFramework.UI
         public override void Init(KeyValuePair<string, object> editValue)
         {
             base.Init(editValue);
+            if (editValue.Key == "id" || editValue.Key == "ID" || editValue.Key == "Id")
+            {
+                this.ParamReadOnly = new Label();
+                ParamReadOnly.Name = "ParamReadOnly";
+                ParamReadOnly.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+                ParamReadOnly.Text = editValue.Value.ToString();
+                this.AddChild(ParamReadOnly);
+                return;
+            }
             if (editValue.Value is string || editValue.Value is null)
             {
                 this.ParamEdit = new LineEdit();

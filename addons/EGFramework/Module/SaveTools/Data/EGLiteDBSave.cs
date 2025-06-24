@@ -83,12 +83,19 @@ namespace EGFramework
             collection.Insert(data);
         }
 
-        public void RemoveData<TData>(string dataKey,object id)
+        public int RemoveData(string dataKey, object id)
         {
-            LiteCollection<TData> collection = (LiteCollection<TData>)Database.GetCollection<TData>(dataKey);
-            if(collection.FindById((BsonValue)id)==null){
+            ILiteCollection<BsonDocument> collection = Database.GetCollection(dataKey);
+            if (collection.FindById((BsonValue)id) != null)
+            {
                 collection.Delete((BsonValue)id);
+                return 1;
             }
+            else
+            {
+                return 0;
+            }
+            
         }
 
         public void UpdateData<TData>(string dataKey, TData data, object id)
@@ -96,6 +103,17 @@ namespace EGFramework
             LiteCollection<TData> collection = (LiteCollection<TData>)Database.GetCollection<TData>(dataKey);
             collection.Update((BsonValue)id,data);
         }
+
+        public void UpdateData(string dataKey, Dictionary<string, object> data, object id)
+        {
+            ILiteCollection<BsonDocument> collection = Database.GetCollection(dataKey);
+            BsonDocument keyValuePairs = new BsonDocument();
+            foreach (var param in data) {
+                keyValuePairs.Add(param.Key, new BsonValue(param.Value));
+            }
+            collection.Update((BsonValue)id,keyValuePairs);
+        }
+
         public IEnumerable<string> GetKeys()
         {
             return Database.GetCollectionNames();
@@ -115,5 +133,6 @@ namespace EGFramework
         {
             return Database.GetCollection(dataKey).Count();
         }
+
     }
 }

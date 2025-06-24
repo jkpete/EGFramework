@@ -176,6 +176,8 @@ namespace EGFramework.UI
 
                 Label labelPage = PageContainer.CreateNode<Label>("page");
                 labelPage.Text = "page";
+                firstPage.Disabled = true;
+                lastPage.Disabled = true;
 
                 PageChangedRealease = this.OnPageChanged.Register(() =>
                 {
