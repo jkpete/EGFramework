@@ -14,7 +14,7 @@ namespace EGFramework{
         /// <param name="path">please add *.db suffix or your db file suffix</param>
         public override void InitSave(string path)
         {
-            if (!Directory.Exists(path))
+            if (!File.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }

@@ -6,28 +6,30 @@ using Godot;
 using LiteDB;
 using Renci.SshNet;
 
-namespace EGFramework.Examples.Test{
-    public partial class ViewSaveSystem : Node,IEGFramework
+namespace EGFramework.Examples.Test {
+    public partial class ViewSaveSystem : Node, IEGFramework
     {
         public string[][] DataList { get; set; }
         public string[][] DataList2 { get; set; }
         public override void _Ready()
         {
-
             Container container = this.GetNode<TabContainer>("TabContainer");
-            DataStudent dataStudent = new DataStudent(null, 18);
-            DataStudent dataStudent2 = new DataStudent("F", 20);
             List<DataStudent> dataStudents = new List<DataStudent>();
             for (int stu = 0; stu < 10; stu++)
             {
-                dataStudents.Add(new DataStudent("stu"+stu, 18));
+                dataStudents.Add(new DataStudent("stu" + stu, 18));
             }
-            for (int stu = 0; stu < 10; stu++)
+            for (int stu = 0; stu < 11; stu++)
             {
-                dataStudents.Add(dataStudent2);
+                dataStudents.Add(new DataStudent("A" + stu, 20 + stu));
             }
             EGodotTable table = container.CreateNode<EGodotTable>("Teacher");
             table.InitData<DataStudent>(dataStudents);
+
+            IEGSaveData SqliteTest = this.EGSave().LoadDataFile<EGSqliteSave>("SaveData/test.db");
+            EGodotSaveTable PersonTable = container.CreateNode<EGodotSaveTable>("Person");
+            PersonTable.InitSaveData<EGSqliteSave>(SqliteTest);
+            PersonTable.InitData<DataPerson>("person");
 
             // EGodotTableRowData rowData = container.CreateNode<EGodotTableRowData>("RowData");
             // rowData.Init(new Dictionary<string, object>() { { "Name", "Tom" }, { "Age", 18 } });
@@ -42,16 +44,23 @@ namespace EGFramework.Examples.Test{
 
         }
 
-        
+
     }
-    public struct DataStudent{
+    public struct DataStudent {
         public string Name { get; set; }
         public int Age;
         public int ID;
-        public DataStudent(string name,int age){
+        public DataStudent(string name, int age) {
             Name = name;
             Age = age;
             ID = 0;
         }
+    }
+    
+    public struct DataPerson{
+        public string id { get; set; }
+        public string namee { set; get; }
+        public string workPlace { set; get; }
+        public string policeNum { set; get; }
     }
 }

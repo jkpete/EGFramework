@@ -36,37 +36,52 @@ namespace EGFramework
             LoadObjectFile<EGJsonSave>("SaveData/DefaultJsonSave.json");
         }
         #region Load Data or Object and Unload
-        public void LoadDataFile<TSaveData>(string path) where TSaveData:IEGSaveData,IEGSave,new(){
+        public IEGSaveData LoadDataFile<TSaveData>(string path) where TSaveData : IEGSaveData, IEGSave, new()
+        {
             TSaveData saveData = new TSaveData();
             saveData.InitSave(path);
-            if(!DataBaseFiles.ContainsKey(path)){
-                DataBaseFiles.Add(path,saveData);
-            }else{
+            if (!DataBaseFiles.ContainsKey(path))
+            {
+                DataBaseFiles.Add(path, saveData);
+            }
+            else
+            {
                 DataBaseFiles[path] = saveData;
             }
+            return saveData;
         }
 
-        public void ReadData<TReadOnlyData>(string key,string data) where TReadOnlyData:IEGSaveDataReadOnly,IEGSaveReadOnly,new(){
+        public IEGSaveDataReadOnly ReadData<TReadOnlyData>(string key, string data) where TReadOnlyData : IEGSaveDataReadOnly, IEGSaveReadOnly, new()
+        {
             TReadOnlyData readOnlyData = new TReadOnlyData();
             readOnlyData.InitReadOnly(data);
-            if(!DataBaseReadOnly.ContainsKey(key)){
-                DataBaseReadOnly.Add(key,readOnlyData);
-            }else{
+            if (!DataBaseReadOnly.ContainsKey(key))
+            {
+                DataBaseReadOnly.Add(key, readOnlyData);
+            }
+            else
+            {
                 DataBaseReadOnly[key] = readOnlyData;
             }
+            return readOnlyData;
         }
 
-        public void ReadData<TReadOnlyData>(string key,byte[] data) where TReadOnlyData:IEGSaveDataReadOnly,IEGSaveReadOnly,new(){
+        public IEGSaveDataReadOnly ReadData<TReadOnlyData>(string key, byte[] data) where TReadOnlyData : IEGSaveDataReadOnly, IEGSaveReadOnly, new()
+        {
             TReadOnlyData readOnlyData = new TReadOnlyData();
             readOnlyData.InitReadOnly(data);
-            if(!DataBaseReadOnly.ContainsKey(key)){
-                DataBaseReadOnly.Add(key,readOnlyData);
-            }else{
+            if (!DataBaseReadOnly.ContainsKey(key))
+            {
+                DataBaseReadOnly.Add(key, readOnlyData);
+            }
+            else
+            {
                 DataBaseReadOnly[key] = readOnlyData;
             }
+            return readOnlyData;
         }
 
-        public void LoadObjectFile<TSaveObject>(string path) where TSaveObject:IEGSaveObject,IEGSave,new(){
+        public IEGSaveObject LoadObjectFile<TSaveObject>(string path) where TSaveObject:IEGSaveObject,IEGSave,new(){
             TSaveObject saveObject = new TSaveObject();
             saveObject.InitSave(path);
             if(!ObjectFiles.ContainsKey(path)){
@@ -74,10 +89,25 @@ namespace EGFramework
             }else{
                 ObjectFiles[path] = saveObject;
             }
-            
+            return saveObject;
         }
 
-        public void ReadObject<TReadOnlyObject>(string key,string data) where TReadOnlyObject:IEGSaveObjectReadOnly,IEGSaveReadOnly,new(){
+        public IEGSaveObjectReadOnly ReadObject<TReadOnlyObject>(string key, string data) where TReadOnlyObject : IEGSaveObjectReadOnly, IEGSaveReadOnly, new()
+        {
+            TReadOnlyObject readOnlyObject = new TReadOnlyObject();
+            readOnlyObject.InitReadOnly(data);
+            if (!ObjectReadOnly.ContainsKey(key))
+            {
+                ObjectReadOnly.Add(key, readOnlyObject);
+            }
+            else
+            {
+                ObjectReadOnly[key] = readOnlyObject;
+            }
+            return readOnlyObject;
+        }
+
+        public IEGSaveObjectReadOnly ReadObject<TReadOnlyObject>(string key,byte[] data) where TReadOnlyObject:IEGSaveObjectReadOnly,IEGSaveReadOnly,new(){
             TReadOnlyObject readOnlyObject = new TReadOnlyObject();
             readOnlyObject.InitReadOnly(data);
             if(!ObjectReadOnly.ContainsKey(key)){
@@ -85,17 +115,7 @@ namespace EGFramework
             }else{
                 ObjectReadOnly[key] = readOnlyObject;
             }
-        }
-
-        public void ReadObject<TReadOnlyObject>(string key,byte[] data) where TReadOnlyObject:IEGSaveObjectReadOnly,IEGSaveReadOnly,new(){
-            TReadOnlyObject readOnlyObject = new TReadOnlyObject();
-            readOnlyObject.InitReadOnly(data);
-            if(!ObjectReadOnly.ContainsKey(key)){
-                ObjectReadOnly.Add(key,readOnlyObject);
-            }else{
-                ObjectReadOnly[key] = readOnlyObject;
-            }
-            
+            return readOnlyObject;
         }
 
         public void Unload(string keyOrPath){

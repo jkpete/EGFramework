@@ -87,17 +87,6 @@ namespace EGFramework.UI
 
             this.TableData = rowDataList;
             ToFirstPage();
-            // int dataPointer = 0;
-            // foreach (Dictionary<string, object> row in rowDataList)
-            // {
-            //     EGodotTableRowData rowData = RowDataContainer.CreateNode<EGodotTableRowData>("row" + dataPointer);
-            //     rowData.Init(row);
-            //     rowData.OnModify.Register(data =>
-            //     {
-            //         this.EGEditDialog(data, rowData.OnDataEdit, "Modify");
-            //     });
-            //     dataPointer++;
-            // }
             InitPageData();
         }
 
@@ -133,6 +122,7 @@ namespace EGFramework.UI
                 });
             }
         }
+        
         public void InitPageMenu()
         {
             if (PageContainer == null)
@@ -151,22 +141,26 @@ namespace EGFramework.UI
                 Button firstPage = PageContainer.CreateNode<Button>("firstPage");
                 firstPage.Text = "<<";
                 firstPage.Connect("pressed", Callable.From(ToFirstPage));
+                firstPage.FocusMode = FocusModeEnum.None;
 
                 Button lastPage = PageContainer.CreateNode<Button>("lastPage");
                 lastPage.Text = "<";
                 lastPage.Connect("pressed", Callable.From(LastPage));
+                lastPage.FocusMode = FocusModeEnum.None;
 
                 Label currentPage = PageContainer.CreateNode<Label>("currenLabel");
                 currentPage.Text = PageAdapter.CurrentPage.ToString();
-                
+
 
                 Button nextPage = PageContainer.CreateNode<Button>("next");
                 nextPage.Text = ">";
                 nextPage.Connect("pressed", Callable.From(NextPage));
+                nextPage.FocusMode = FocusModeEnum.None;
 
                 Button endPage = PageContainer.CreateNode<Button>("firstPage");
                 endPage.Text = ">>";
                 endPage.Connect("pressed", Callable.From(ToEndPage));
+                endPage.FocusMode = FocusModeEnum.None;
 
                 Control empty2 = PageContainer.CreateNode<Control>("empty2");
                 empty2.CustomMinimumSize = new Vector2(32, 0);
