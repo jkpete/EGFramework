@@ -83,6 +83,16 @@ namespace EGFramework
             collection.Insert(data);
         }
 
+        public void AddData(string dataKey, Dictionary<string, object> data)
+        {
+            ILiteCollection<BsonDocument> collection = Database.GetCollection(dataKey);
+            BsonDocument keyValuePairs = new BsonDocument();
+            foreach (var param in data) {
+                keyValuePairs.Add(param.Key, new BsonValue(param.Value));
+            }
+            collection.Insert(keyValuePairs);
+        }
+
         public int RemoveData(string dataKey, object id)
         {
             ILiteCollection<BsonDocument> collection = Database.GetCollection(dataKey);
@@ -95,7 +105,7 @@ namespace EGFramework
             {
                 return 0;
             }
-            
+
         }
 
         public void UpdateData<TData>(string dataKey, TData data, object id)

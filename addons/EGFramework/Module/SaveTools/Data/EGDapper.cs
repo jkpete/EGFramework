@@ -94,6 +94,33 @@ namespace EGFramework
             int count = Connection.Execute(sql,data);
             //EG.Print("count:" + count);
         }
+        public void AddData(string dataKey,Dictionary<string, object> data)
+        {
+            if(data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+            string keySet = "";
+            string keySetParam = "";
+            foreach(KeyValuePair<string,object> param in data){
+                if (param.Key == "ID" || param.Key == "Id" || param.Key == "id"){
+                    continue;
+                }
+                keySet += param.Key + ",";
+                if (param.Value is string)
+                {
+                    keySetParam += "'" + param.Value + "',";
+                }
+                else
+                {
+                    keySetParam += param.Value + ",";
+                }
+            }
+            keySet = keySet.TrimEnd(',');
+            keySetParam = keySetParam.TrimEnd(',');
+            EG.Print("insert into "+dataKey+"("+keySet+") values("+keySetParam+")");
+            int count = Connection.Execute("insert into "+dataKey+"("+keySet+") values("+keySetParam+")");
+        }
 
         public int RemoveData(string dataKey, object id)
         {

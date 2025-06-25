@@ -31,6 +31,7 @@ namespace EGFramework.UI
             }
             this.Vertical = true;
             CurrentDataKey = key;
+            EmptyData = typeof(T).EGenerateEmptyDictiontaryByType();
             QueryPage.Register(() => QueryPageData<T>());
             InitFunctionMenu();
             InitTitle(typeof(T).EGenerateDictiontaryByType());
@@ -48,6 +49,12 @@ namespace EGFramework.UI
 
             TableData = SaveData.GetPage<T>(CurrentDataKey, PageAdapter.CurrentPage, PageAdapter.PageLimit).EGenerateDictionaryByGroup();
             GD.Print(TableData.Count());
+        }
+
+        public override void OnAddData(Dictionary<string, object> data)
+        {
+            // base.OnAddData(data);
+            SaveData.AddData(CurrentDataKey, data);
         }
 
         public void ModifyData(Dictionary<string, object> eData)

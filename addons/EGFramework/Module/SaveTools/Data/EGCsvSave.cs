@@ -279,6 +279,21 @@ namespace EGFramework
             this.WriteDataBlock(DefaultPath);
         }
 
+        public void AddData(string datakey, Dictionary<string, object> data)
+        {
+            if(IsReadOnly){
+                throw new Exception("This file is readonly! can't set any data to file.");
+            }
+            string[] csvSet = new string[CsvDataHeader.Keys.Count()];
+            foreach(KeyValuePair<string,object> param in data){
+                if(CsvDataHeader.ContainsKey(param.Key)){
+                    csvSet[CsvDataHeader[param.Key]] = param.Value.ToString();
+                }
+            }
+            CsvDataBlock.Add(csvSet);
+            this.WriteDataBlock(DefaultPath);
+        }
+
         public int RemoveData(string dataKey, object id)
         {
             if (IsReadOnly)
