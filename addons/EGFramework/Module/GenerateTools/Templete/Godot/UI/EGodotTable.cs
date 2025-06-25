@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -28,6 +29,10 @@ namespace EGFramework.UI
 
         protected List<Dictionary<string, object>> TableData { set; get; }
 
+        protected Dictionary<string,object> EmptyData { set; get; } 
+
+        protected EasyEvent<Dictionary<string, object>> AddData { set; get; } = new EasyEvent<Dictionary<string, object>>();
+
         /// <summary>
         /// The max data count for one page.
         /// </summary>
@@ -47,10 +52,26 @@ namespace EGFramework.UI
                 PageAdapter.Reload(count, PageLimit);
             }
             this.Vertical = true;
+            EmptyData = typeof(T).EGenerateEmptyDictiontaryByType();
             InitFunctionMenu();
             InitTitle(typeof(T).EGenerateDictiontaryByType());
             InitRowData(tableData.EGenerateDictionaryByGroup());
             InitPageMenu();
+        }
+
+        public virtual void OnAddData(Dictionary<string, object> data)
+        {
+            GD.Print("Add : " + data["Name"]);
+            string primaryKey = data.EGetDefaultPrimaryKey();
+            if (primaryKey != "")
+            {
+                data[primaryKey] = TableData.Count.ToString();
+            }
+            TableData.Add(new Dictionary<string, object>(data));
+            PageAdapter.DataLength++;
+            PageAdapter.Reload(PageAdapter.DataLength, PageLimit);
+            InitPageData();
+            OnPageChanged.Invoke();
         }
 
 
@@ -60,6 +81,16 @@ namespace EGFramework.UI
             {
                 FunctionContainer = this.CreateNode<BoxContainer>("FunctionContainer");
                 FunctionContainer.Vertical = false;
+
+                Button add = FunctionContainer.CreateNode<Button>("add");
+                add.Text = "Add";
+                add.Connect("pressed", Callable.From(()=>this.EGEditDialog(EmptyData, OnAddData, "Add")));
+                add.FocusMode = FocusModeEnum.None;
+
+                Button refresh = FunctionContainer.CreateNode<Button>("refresh");
+                refresh.Text = "Refresh";
+                refresh.Connect("pressed", Callable.From(InitPageData));
+                refresh.FocusMode = FocusModeEnum.None;
             }
         }
         public void InitTitle(Dictionary<string, object> titleData)
@@ -67,7 +98,7 @@ namespace EGFramework.UI
             if (Title == null)
             {
                 Title = this.CreateNode<EGodotRowData>("TitleContainer");
-                titleData.Add("Operate", "");
+                titleData.Add("Operate", "Operate");
                 Title.Init(titleData);
             }
             else

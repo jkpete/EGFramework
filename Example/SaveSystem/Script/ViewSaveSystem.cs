@@ -23,11 +23,11 @@ namespace EGFramework.Examples.Test {
             {
                 dataStudents.Add(new DataStudent("A" + stu, 20 + stu));
             }
-            EGodotTable table = container.CreateNode<EGodotTable>("Teacher");
+            EGodotTable table = container.CreateNode<EGodotTable>("Default");
             table.InitData<DataStudent>(dataStudents);
 
             IEGSaveData SqliteTest = this.EGSave().LoadDataFile<EGSqliteSave>("SaveData/test.db");
-            EGodotSaveTable PersonTable = container.CreateNode<EGodotSaveTable>("Person");
+            EGodotSaveTable PersonTable = container.CreateNode<EGodotSaveTable>("SQLite");
             PersonTable.InitSaveData<EGSqliteSave>(SqliteTest);
             PersonTable.InitData<DataPerson>("person");
 

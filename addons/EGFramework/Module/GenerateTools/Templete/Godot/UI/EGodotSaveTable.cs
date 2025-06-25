@@ -36,8 +36,8 @@ namespace EGFramework.UI
             InitTitle(typeof(T).EGenerateDictiontaryByType());
             InitRowData(null);
             InitPageMenu();
-            
         }
+        
 
         public void QueryPageData<T>() where T : new()
         {
