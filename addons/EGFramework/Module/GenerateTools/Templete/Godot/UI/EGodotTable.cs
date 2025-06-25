@@ -30,8 +30,12 @@ namespace EGFramework.UI
         protected List<Dictionary<string, object>> TableData { set; get; }
 
         protected Dictionary<string,object> EmptyData { set; get; } 
+        
+        protected Dictionary<string,object> TitleData { set; get; }
 
         protected EasyEvent<Dictionary<string, object>> AddData { set; get; } = new EasyEvent<Dictionary<string, object>>();
+
+        public Vector2 MinimumFunctionButtonSize = new Vector2(120,0);
 
         /// <summary>
         /// The max data count for one page.
@@ -53,8 +57,9 @@ namespace EGFramework.UI
             }
             this.Vertical = true;
             EmptyData = typeof(T).EGenerateEmptyDictiontaryByType();
+            TitleData = typeof(T).EGenerateDictiontaryByType();
             InitFunctionMenu();
-            InitTitle(typeof(T).EGenerateDictiontaryByType());
+            InitTitle(TitleData);
             InitRowData(tableData.EGenerateDictionaryByGroup());
             InitPageMenu();
         }
@@ -74,9 +79,20 @@ namespace EGFramework.UI
             OnPageChanged.Invoke();
         }
 
+        public virtual void OnOutputFile(string path)
+        {
+            
+        }
+        
+        public virtual void OnInputFile(string path)
+        {
+
+        }
+
 
         public virtual void InitFunctionMenu()
         {
+
             if (FunctionContainer == null)
             {
                 FunctionContainer = this.CreateNode<BoxContainer>("FunctionContainer");
@@ -84,16 +100,57 @@ namespace EGFramework.UI
 
                 Button add = FunctionContainer.CreateNode<Button>("add");
                 add.Text = "Add";
-                add.Connect("pressed", Callable.From(()=>this.EGEditDialog(EmptyData, OnAddData, "Add")));
+                add.Connect("pressed", Callable.From(() => this.EGEditDialog(EmptyData, OnAddData, "Add")));
                 add.FocusMode = FocusModeEnum.None;
+                add.CustomMinimumSize = MinimumFunctionButtonSize;
 
                 Button refresh = FunctionContainer.CreateNode<Button>("refresh");
                 refresh.Text = "Refresh";
                 refresh.Connect("pressed", Callable.From(InitPageData));
                 refresh.FocusMode = FocusModeEnum.None;
+                refresh.CustomMinimumSize = MinimumFunctionButtonSize;
+
+                Button output = FunctionContainer.CreateNode<Button>("output");
+                output.Text = "Output";
+                // output.Connect("pressed", Callable.From());
+                output.FocusMode = FocusModeEnum.None;
+                output.CustomMinimumSize = MinimumFunctionButtonSize;
+
+                Button input = FunctionContainer.CreateNode<Button>("input");
+                input.Text = "Input";
+                input.FocusMode = FocusModeEnum.None;
+                input.CustomMinimumSize = MinimumFunctionButtonSize;
+
+                OptionButton filedSelect = FunctionContainer.CreateNode<OptionButton>("filedSelect");
+                filedSelect.FocusMode = FocusModeEnum.None;
+                filedSelect.SizeFlagsHorizontal = SizeFlags.Expand | SizeFlags.ShrinkEnd;
+                filedSelect.CustomMinimumSize = MinimumFunctionButtonSize;
+                foreach (string titleParam in TitleData.Keys)
+                {
+                    filedSelect.AddItem(titleParam);
+                }
+
+
+                LineEdit searchEdit = FunctionContainer.CreateNode<LineEdit>("searchEdit");
+                searchEdit.PlaceholderText = "Please input search key";
+                searchEdit.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
+                searchEdit.CustomMinimumSize = new Vector2(MinimumFunctionButtonSize.X*2,MinimumFunctionButtonSize.Y);
+                
+                Button search = FunctionContainer.CreateNode<Button>("search");
+                search.Text = "Search";
+                search.FocusMode = FocusModeEnum.None;
+                search.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
+                search.CustomMinimumSize = MinimumFunctionButtonSize;
+
+                Button reset = FunctionContainer.CreateNode<Button>("reset");
+                reset.Text = "Reset";
+                reset.FocusMode = FocusModeEnum.None;
+                reset.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
+                reset.CustomMinimumSize = MinimumFunctionButtonSize;
             }
         }
-        public void InitTitle(Dictionary<string, object> titleData)
+
+        public virtual void InitTitle(Dictionary<string, object> titleData)
         {
             if (Title == null)
             {
