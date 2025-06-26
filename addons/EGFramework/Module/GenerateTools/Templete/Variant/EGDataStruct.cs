@@ -27,7 +27,15 @@ namespace EGFramework
             Value = value;
         }
     }
-    public interface IEGReadOnlyString{
+
+    public struct EGPathSelect
+    {
+        public string Path { set; get; }
+        public bool IsDir { set; get; }
+    }
+    
+    public interface IEGReadOnlyString
+    {
         public string GetString();
     }
     public struct EGReadOnlyString : IEGReadOnlyString{

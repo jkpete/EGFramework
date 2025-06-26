@@ -13,6 +13,7 @@ namespace EGFramework.UI
         public Label ParamReadOnly { get; set; }
         public SpinBox ParamSpinBox { get; set; }
         public HSlider ParamSlider { get; set; }
+        public Button ParamOperate { get; set; }
         private Type ValueType { set; get; }
 
         public override void Init(KeyValuePair<string, object> editValue)
@@ -111,6 +112,20 @@ namespace EGFramework.UI
                 ParamSlider.Step = rangeParam.Step;
                 ParamSlider.Value = rangeParam.Value;
                 this.AddChild(ParamSlider);
+            }
+            else if (editValue.Value is EGPathSelect)
+            {
+                EGPathSelect pathSelect = (EGPathSelect)editValue.Value;
+                this.ParamReadOnly = new Label();
+                ParamReadOnly.Name = "ParamReadOnly";
+                ParamReadOnly.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+                ParamReadOnly.Text = pathSelect.Path;
+                this.AddChild(ParamReadOnly);
+                this.ParamOperate = new Button();
+                ParamOperate.Name = "Select file";
+                ParamOperate.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+                // ParamOperate.Pressed +=
+                this.AddChild(ParamOperate);
             }
         }
 

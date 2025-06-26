@@ -21,26 +21,28 @@ namespace EGFramework.UI
             confirmDialog.Init(callback);
         }
 
-        // public static void EGFileSingleSelect(this Node self, string filePath, Action<string> selectPath, string title = "FileSelect")
-        // {
-        //     FileDialog fileDialog = self.SingletoneNode<FileDialog>("FileDialog");
-        //     fileDialog.Title = title;
-        //     fileDialog.Size = new Vector2I(480, 320);
-        //     fileDialog.FileMode = FileDialog.FileModeEnum.OpenFile;
-        //     fileDialog.RootSubfolder = filePath;
-        //     fileDialog.PopupCentered();
-        //     fileDialog.Connect("file_selected", Callable.From<string>(selectPath));
-        // }
-        
-        // public static void EGDocumentSelect(this Node self, string filePath, Action<string> selectPath, string title = "FileSelect")
-        // {
-        //     FileDialog fileDialog = self.SingletoneNode<FileDialog>("FileDialog");
-        //     fileDialog.Title = title;
-        //     fileDialog.Size = new Vector2I(480, 320);
-        //     fileDialog.FileMode = FileDialog.FileModeEnum.OpenDir;
-        //     fileDialog.RootSubfolder = filePath;
-        //     fileDialog.PopupCentered();
-        //     fileDialog.Connect("file_selected", Callable.From<string>(selectPath));
-        // }
+        public static void EGFileOpen(this Node self, string filePath, Action<string> selectPath, string title = "Open a file")
+        {
+            EGodotFileDialog fileDialog = self.SingletoneNode<EGodotFileDialog>("FileDialog");
+            fileDialog.Title = title;
+            fileDialog.RootSubfolder = filePath;
+            fileDialog.InitFileSelect(selectPath);
+        }
+
+        public static void EGFileSave(this Node self, string filePath, Action<string> selectPath, string title = "Save a file")
+        {
+            EGodotFileDialog fileDialog = self.SingletoneNode<EGodotFileDialog>("FileDialog");
+            fileDialog.Title = title;
+            fileDialog.RootSubfolder = filePath;
+            fileDialog.InitSaveFileSelect(selectPath);
+        }
+
+        public static void EGDocumentOpen(this Node self, string filePath, Action<string> selectPath, string title = "FileSelect")
+        {
+            EGodotFileDialog fileDialog = self.SingletoneNode<EGodotFileDialog>("FileDialog");
+            fileDialog.Title = title;
+            fileDialog.RootSubfolder = filePath;
+            fileDialog.InitDirSelect(selectPath);
+        }
     }
 }
