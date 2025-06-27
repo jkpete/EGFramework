@@ -26,6 +26,7 @@ namespace EGFramework.UI
             EGodotFileDialog fileDialog = self.SingletoneNode<EGodotFileDialog>("FileDialog");
             fileDialog.Title = title;
             fileDialog.RootSubfolder = filePath;
+            fileDialog.PopupCentered();
             fileDialog.InitFileSelect(selectPath);
         }
 
@@ -34,6 +35,7 @@ namespace EGFramework.UI
             EGodotFileDialog fileDialog = self.SingletoneNode<EGodotFileDialog>("FileDialog");
             fileDialog.Title = title;
             fileDialog.RootSubfolder = filePath;
+            fileDialog.PopupCentered();
             fileDialog.InitSaveFileSelect(selectPath);
         }
 
@@ -42,6 +44,7 @@ namespace EGFramework.UI
             EGodotFileDialog fileDialog = self.SingletoneNode<EGodotFileDialog>("FileDialog");
             fileDialog.Title = title;
             fileDialog.RootSubfolder = filePath;
+            fileDialog.PopupCentered();
             fileDialog.InitDirSelect(selectPath);
         }
     }

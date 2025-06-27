@@ -29,9 +29,9 @@ namespace EGFramework.UI
 
         protected List<Dictionary<string, object>> TableData { set; get; }
 
-        protected Dictionary<string,object> EmptyData { set; get; } 
-        
-        protected Dictionary<string,object> TitleData { set; get; }
+        protected Dictionary<string,object> EmptyData { set; get; }
+
+        protected Dictionary<string, object> TitleData { set; get; } = new Dictionary<string, object>();
 
         protected EasyEvent<Dictionary<string, object>> AddData { set; get; } = new EasyEvent<Dictionary<string, object>>();
 

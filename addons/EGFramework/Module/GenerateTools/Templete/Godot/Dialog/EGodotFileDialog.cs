@@ -27,7 +27,6 @@ namespace EGFramework.UI
             OnFileSelect.Register(callback);
             Init();
             this.FileMode = FileModeEnum.OpenFile;
-            this.PopupCentered();
         }
 
         public void InitDirSelect(Action<string> callback)
@@ -35,7 +34,6 @@ namespace EGFramework.UI
             OnDirSelect.Register(callback);
             this.FileMode = FileModeEnum.OpenDir;
             Init();
-            this.PopupCentered();
         }
 
         public void InitFilesSelect(Action<string[]> callback)
@@ -43,7 +41,6 @@ namespace EGFramework.UI
             OnFilesSelect.Register(callback);
             this.FileMode = FileModeEnum.OpenFiles;
             Init();
-            this.PopupCentered();
         }
 
         public void InitAnySelect(Action<string> singleSelectCallback, Action<string[]> multiSelectCallback)
@@ -53,7 +50,6 @@ namespace EGFramework.UI
             OnFilesSelect.Register(multiSelectCallback);
             this.FileMode = FileModeEnum.OpenAny;
             Init();
-            this.PopupCentered();
         }
 
         public void InitSaveFileSelect(Action<string> callback)
@@ -61,7 +57,6 @@ namespace EGFramework.UI
             OnFileSelect.Register(callback);
             this.FileMode = FileModeEnum.SaveFile;
             Init();
-            this.PopupCentered();
         }
 
         

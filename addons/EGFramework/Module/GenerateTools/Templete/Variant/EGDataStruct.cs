@@ -32,6 +32,10 @@ namespace EGFramework
     {
         public string Path { set; get; }
         public bool IsDir { set; get; }
+        public override string ToString()
+        {
+            return Path;
+        }
     }
     
     public interface IEGReadOnlyString

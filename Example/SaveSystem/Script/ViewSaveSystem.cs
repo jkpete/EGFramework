@@ -46,14 +46,18 @@ namespace EGFramework.Examples.Test {
 
 
     }
-    public struct DataStudent {
+    public struct DataStudent
+    {
         public string Name { get; set; }
         public int Age;
         public int ID;
-        public DataStudent(string name, int age) {
+        public EGPathSelect Path { set; get; }
+        public DataStudent(string name, int age)
+        {
             Name = name;
             Age = age;
             ID = 0;
+            Path = new EGPathSelect();
         }
     }
     
