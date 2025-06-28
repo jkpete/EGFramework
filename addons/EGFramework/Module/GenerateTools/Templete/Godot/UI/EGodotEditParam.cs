@@ -122,11 +122,15 @@ namespace EGFramework.UI
                 ParamReadOnly.Text = pathSelect.Path;
                 this.AddChild(ParamReadOnly);
                 this.ParamOperate = new Button();
-                ParamOperate.Name = "SelectBtn"; 
+                ParamOperate.Name = "SelectBtn";
                 ParamOperate.Text = "Select file";
                 ParamOperate.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-                ParamOperate.Pressed += () => {
-                    this.EGFileOpen("res://", str => { ParamReadOnly.Text = str; }); 
+                ParamOperate.Pressed += () =>
+                {
+                    this.EGFileOpen("res://", str =>
+                    {
+                        ParamReadOnly.Text = str;
+                    });
                 };
                 // ParamOperate.Pressed +=
                 this.AddChild(ParamOperate);
