@@ -35,7 +35,6 @@ namespace EGFramework{
             window.PopupCentered();
             this.CurrentWindow = window;
             CurrentWindow.VisibilityChanged += OnPopUpUnitVisibleChanged;
-            GD.Print(WindowCache.Count);
             PopUpFlag = false;
         }
 
@@ -43,19 +42,16 @@ namespace EGFramework{
         {
             if (CurrentWindow != null && !CurrentWindow.Visible && !PopUpFlag)
             {
-                GD.Print("-----");
                 CurrentWindow.VisibilityChanged -= OnPopUpUnitVisibleChanged;
                 if (this.WindowCache.Count > 0)
                 {
-                    CurrentWindow.Hide();
                     Window lastWindow = WindowCache.Pop();
                     CurrentWindow = lastWindow;
-                    CurrentWindow.PopupCentered();
+                    Callable.From(() => CurrentWindow.PopupCentered()).CallDeferred();
                     CurrentWindow.VisibilityChanged += OnPopUpUnitVisibleChanged;
                 }
                 else
                 {
-                    CurrentWindow.Hide();
                     CurrentWindow = null;
                 }
             }

@@ -95,9 +95,9 @@ namespace EGFramework.UI
     {
         public static EGodotEditDialog EGEditDialog(this Node self, Dictionary<string, object> data, Action<Dictionary<string, object>> onDataEdit, string title = "Edit")
         {
-            EGodotEditDialog editDialog = self.SingletoneNode<EGodotEditDialog>("Edit");
+            EGodotEditDialog editDialog = self.PopupNode<EGodotEditDialog>("Edit");
             editDialog.InitDialog(data, onDataEdit, title);
-            editDialog.PopupCentered();
+            // editDialog.PopupCentered();
             return editDialog;
         }
     }

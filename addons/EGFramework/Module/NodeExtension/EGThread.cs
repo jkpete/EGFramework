@@ -44,17 +44,24 @@ namespace EGFramework{
     }
     public static class EGThreadExtension
     {
-        public static void ExecuteInMainThread(this Node self, Action action){
+        public static void ExecuteInMainThread(this Node self, Action action)
+        {
             //action.Invoke();
             self.NodeModule<EGThread>().ExecuteInMainThread(action);
         }
 
-        public static void ExecuteAfterSecond(this Node self, Action action,double delay){
-            self.NodeModule<EGThread>().ExecuteAfterSecond(action,delay);
+        public static void ExecuteAfterSecond(this Node self, Action action, double delay)
+        {
+            self.NodeModule<EGThread>().ExecuteAfterSecond(action, delay);
         }
 
-        public static void EGEnabledThread(this Node self){
+        public static void EGEnabledThread(this Node self)
+        {
             self.NodeModule<EGThread>();
+        }
+        public static void ExecuteInEndOfFrame(this object self, Action action)
+        {
+            Callable.From(action).CallDeferred();
         }
     }
 }
