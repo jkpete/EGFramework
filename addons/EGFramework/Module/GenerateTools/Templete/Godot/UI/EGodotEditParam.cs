@@ -11,6 +11,7 @@ namespace EGFramework.UI
         public CheckButton ParamCheck { get; set; }
         public List<CheckBox> ParamCheckList { get; set; }
         public Label ParamReadOnly { get; set; }
+        public Label ParamPathSelect { get; set; }
         public SpinBox ParamSpinBox { get; set; }
         public HSlider ParamSlider { get; set; }
         public Button ParamOperate { get; set; }
@@ -116,11 +117,11 @@ namespace EGFramework.UI
             else if (editValue.Value is EGPathSelect)
             {
                 EGPathSelect pathSelect = (EGPathSelect)editValue.Value;
-                this.ParamReadOnly = new Label();
-                ParamReadOnly.Name = "ParamReadOnly";
-                ParamReadOnly.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-                ParamReadOnly.Text = pathSelect.Path;
-                this.AddChild(ParamReadOnly);
+                this.ParamPathSelect = new Label();
+                ParamPathSelect.Name = "ParamReadOnly";
+                ParamPathSelect.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+                ParamPathSelect.Text = pathSelect.Path;
+                this.AddChild(ParamPathSelect);
                 this.ParamOperate = new Button();
                 ParamOperate.Name = "SelectBtn";
                 ParamOperate.Text = "Select file";
@@ -129,7 +130,7 @@ namespace EGFramework.UI
                 {
                     this.EGFileOpen("res://", str =>
                     {
-                        ParamReadOnly.Text = str;
+                        ParamPathSelect.Text = str;
                     });
                 };
                 // ParamOperate.Pressed +=
@@ -166,7 +167,7 @@ namespace EGFramework.UI
                 {
                     return (int)ParamSpinBox.Value;
                 }
-                else if(ValueType == typeof(float))
+                else if (ValueType == typeof(float))
                 {
                     return (float)ParamSpinBox.Value;
                 }
@@ -175,6 +176,10 @@ namespace EGFramework.UI
             else if (ParamSlider != null)
             {
                 return ParamSlider.Value;
+            }
+            else if (ParamPathSelect != null)
+            {
+                return new EGPathSelect(){Path = ParamPathSelect.Text};
             }
             return null;
         }

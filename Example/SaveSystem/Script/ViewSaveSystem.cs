@@ -37,12 +37,6 @@ namespace EGFramework.Examples.Test {
             // rowData2.Init(new Dictionary<string, object>() { { "Name", "Z" }, { "Age", 1 } });
             // EGodotEditParam editParam = container.CreateNode<EGodotEditParam>("editParam");
             // editParam.Init(new KeyValuePair<string, object>("数量",1));
-            this.ExecuteAfterSecond(() =>
-            {
-
-                this.EGConfirm("fixed?", isconfirm => { GD.Print(isconfirm); });
-                this.EGAlert("-----~!");
-            }, 1.0f);
         }
 
         public override void _ExitTree()
