@@ -39,9 +39,10 @@ namespace EGFramework.Examples.Test {
             // editParam.Init(new KeyValuePair<string, object>("数量",1));
             this.ExecuteAfterSecond(() =>
             {
-                this.EGAlert("-----~!");
+
                 this.EGConfirm("fixed?", isconfirm => { GD.Print(isconfirm); });
-            },1.0f);
+                this.EGAlert("-----~!");
+            }, 1.0f);
         }
 
         public override void _ExitTree()

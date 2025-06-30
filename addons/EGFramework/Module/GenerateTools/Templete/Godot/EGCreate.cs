@@ -13,24 +13,50 @@ namespace EGFramework{
     public class EGSingletonNode : IEGFramework, IModule
     {
         public IOCContainer NodeContainer = new IOCContainer();
-        public Queue<Window> WindowCache = new Queue<Window>();
+        public Stack<Window> WindowCache = new Stack<Window>();
         public Window CurrentWindow { set; get; }
+
+        private bool PopUpFlag { set; get; }
         public void Init()
         {
 
         }
 
-        public void ReturnToLastWindow()
+        public void PopupNode(Window window)
         {
-            if (CurrentWindow != null && !CurrentWindow.Visible)
+            PopUpFlag = true;
+            if (CurrentWindow != null)
+            {
+                this.CurrentWindow.Hide();
+                CurrentWindow.VisibilityChanged -= OnPopUpUnitVisibleChanged;
+                WindowCache.Push(CurrentWindow);
+            }
+
+            window.PopupCentered();
+            this.CurrentWindow = window;
+            CurrentWindow.VisibilityChanged += OnPopUpUnitVisibleChanged;
+            GD.Print(WindowCache.Count);
+            PopUpFlag = false;
+        }
+
+        public void OnPopUpUnitVisibleChanged()
+        {
+            if (CurrentWindow != null && !CurrentWindow.Visible && !PopUpFlag)
             {
                 GD.Print("-----");
+                CurrentWindow.VisibilityChanged -= OnPopUpUnitVisibleChanged;
                 if (this.WindowCache.Count > 0)
                 {
-                    this.CurrentWindow.VisibilityChanged -= ReturnToLastWindow;
-                    this.CurrentWindow.Hide();
-                    this.CurrentWindow = this.WindowCache.Dequeue();
-                    this.CurrentWindow?.PopupCentered();
+                    CurrentWindow.Hide();
+                    Window lastWindow = WindowCache.Pop();
+                    CurrentWindow = lastWindow;
+                    CurrentWindow.PopupCentered();
+                    CurrentWindow.VisibilityChanged += OnPopUpUnitVisibleChanged;
+                }
+                else
+                {
+                    CurrentWindow.Hide();
+                    CurrentWindow = null;
                 }
             }
         }
@@ -89,24 +115,8 @@ namespace EGFramework{
                 nodeData = self.GetTree().Root.CreateNode<TWindowNode>();
                 singletonNode.NodeContainer.Register(nodeData);
             }
-            singletonNode.WindowCache.Enqueue(nodeData);
+            singletonNode.PopupNode(nodeData);
             nodeData.Name = name;
-            // nodeData.CloseRequested += () =>
-            // {
-            //     if (!nodeData.Visible)
-            //     {
-            //         GD.Print("-----");
-            //         if (singletonNode.WindowCache.Count > 0)
-            //         {
-            //             singletonNode.CurrentWindow = singletonNode.WindowCache.Dequeue();
-            //             singletonNode.CurrentWindow?.PopupCentered();
-            //         }
-            //     }
-            // };
-            singletonNode.CurrentWindow?.Hide();
-            nodeData.PopupCentered();
-            singletonNode.CurrentWindow = nodeData;
-            // nodeData.VisibilityChanged += singletonNode.ReturnToLastWindow;
             return nodeData;
         }
 
