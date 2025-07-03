@@ -8,7 +8,7 @@ using Dapper;
 //ORM Save tools. First support SQLite and MySQL,In future we will support other Database who implement DBConnection.
 namespace EGFramework
 {
-    public abstract class EGDapper : IEGSave, IEGSaveData, IEGCanGetDBConnection
+    public abstract class EGDapper : IEGSave, IEGSaveData, IEGCanGetDBConnection,IEGDataBase
     {
         public DbConnection Connection { get; set; }
         public string ExceptionMsg;
@@ -220,5 +220,21 @@ namespace EGFramework
             return Connection;
         }
 
+        public void CreateTable<TData>(string dataKey)
+        {
+            // throw new System.NotImplementedException();
+            if (this.ContainsKey(dataKey))
+            {
+                //Drop table if has.
+                Connection.Execute(@"DROP TABLE IF EXISTS "+dataKey+"");
+            }
+            string createSql = typeof(TData).ToCreateTableSQL(dataKey);
+            int count = Connection.Execute(createSql);
+        }
+
+        public void CreateTable(string dataKey,Dictionary<string, object> tableParam)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

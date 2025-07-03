@@ -10,32 +10,39 @@ namespace EGFramework
 {
     #region SaveInit
 
-    public interface IEGSave{
+    public interface IEGSave {
         void InitSave(string path);
     }
-    public interface IEGSaveReadOnly{
+    public interface IEGSaveReadOnly {
         void InitReadOnly(string data);
         void InitReadOnly(byte[] data);
     }
 
-    public interface IEGSaveAsync{
+    public interface IEGSaveAsync {
         Task InitSaveFileAsync(string path);
     }
-    public interface IEGSaveReadOnlyAsync{
+    public interface IEGSaveReadOnlyAsync {
         Task InitReadOnlyAsync(string data);
         Task InitReadOnlyAsync(byte[] data);
     }
 
     #endregion
-    
+
     #region DBConnection
-    public interface IEGCanGetDBConnection{
+    public interface IEGCanGetDBConnection
+    {
         DbConnection GetConnection();
+    }
+    public interface IEGDataBase : IEGCanGetDBConnection
+    {
+        void CreateTable<TData>(string dataKey);
+        void CreateTable(string dataKey,Dictionary<string, object> tableParam);
     }
     #endregion
 
     #region Object
-    public interface IEGSaveObjectReadOnly{
+    public interface IEGSaveObjectReadOnly
+    {
         TObject GetObject<TObject>(string objectKey) where TObject : new();
         IEnumerable<string> GetKeys();
         bool ContainsKey(string objectKey);
