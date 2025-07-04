@@ -8,7 +8,7 @@ using Dapper;
 //ORM Save tools. First support SQLite and MySQL,In future we will support other Database who implement DBConnection.
 namespace EGFramework
 {
-    public abstract class EGDapper : IEGSave, IEGSaveData, IEGCanGetDBConnection,IEGDataBase
+    public abstract class EGDapper : IEGSave, IEGSaveData, IEGCanGetDBConnection, IEGDataBase
     {
         public DbConnection Connection { get; set; }
         public string ExceptionMsg;
@@ -16,42 +16,48 @@ namespace EGFramework
         public abstract void InitSave(string conn);
         public IEnumerable<TData> GetAll<TData>(string dataKey) where TData : new()
         {
-            IEnumerable<TData> result = Connection.Query<TData>("select * from "+dataKey);
+            IEnumerable<TData> result = Connection.Query<TData>("select * from " + dataKey);
             return result;
         }
 
         public IEnumerable<TData> GetPage<TData>(string dataKey, int pageIndex, int pageSize) where TData : new()
         {
-            if(pageIndex <= 0){
+            if (pageIndex <= 0)
+            {
                 pageIndex = 1;
             }
             int startPointer = (pageIndex - 1) * pageSize;
-            IEnumerable<TData> result = Connection.Query<TData>("select * from "+dataKey+" limit "+startPointer+","+pageSize);
+            IEnumerable<TData> result = Connection.Query<TData>("select * from " + dataKey + " limit " + startPointer + "," + pageSize);
             return result;
         }
 
         public TData GetData<TData>(string dataKey, object id) where TData : new()
         {
-            TData result = Connection.QuerySingle<TData>("select * from "+dataKey+" where ID = @ID",new {ID = id});
+            TData result = Connection.QuerySingle<TData>("select * from " + dataKey + " where ID = @ID", new { ID = id });
             return result;
         }
 
         public IEnumerable<TData> FindData<TData>(string dataKey, Expression<Func<TData, bool>> expression) where TData : new()
         {
-            IEnumerable<TData> sourceList = Connection.Query<TData>("select * from "+dataKey);
+            IEnumerable<TData> sourceList = Connection.Query<TData>("select * from " + dataKey);
             return sourceList.Where(expression.Compile());
         }
 
         public void SetData<TData>(string dataKey, TData data, object id)
         {
-            if(data == null)
+            if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
-            }else{
-                if(this.ContainsData(dataKey,id)){
-                    UpdateData(dataKey,data,id);
-                }else{
-                    AddData(dataKey,data);
+            }
+            else
+            {
+                if (this.ContainsData(dataKey, id))
+                {
+                    UpdateData(dataKey, data, id);
+                }
+                else
+                {
+                    AddData(dataKey, data);
                 }
                 //EG.Print("data:" + data);
             }
@@ -59,7 +65,7 @@ namespace EGFramework
 
         public void AddData<TData>(string dataKey, TData data)
         {
-            if(data == null)
+            if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
@@ -68,13 +74,14 @@ namespace EGFramework
             var properties = DataType.GetProperties();
             string keySet = "";
             string keySetParam = "";
-            foreach(PropertyInfo key in properties){
+            foreach (PropertyInfo key in properties)
+            {
                 keySet += key.Name + ",";
-                keySetParam += "@" +  key.Name + ",";
+                keySetParam += "@" + key.Name + ",";
             }
             keySet = keySet.TrimEnd(',');
             keySetParam = keySetParam.TrimEnd(',');
-            int count = Connection.Execute(@"insert "+dataKey+"("+keySet+") values("+keySetParam+")",data);
+            int count = Connection.Execute(@"insert " + dataKey + "(" + keySet + ") values(" + keySetParam + ")", data);
             //EG.Print("count:" + count);
         }
 
@@ -84,26 +91,29 @@ namespace EGFramework
             var properties = DataType.GetProperties();
             string keySet = "";
             string keySetParam = "";
-            foreach(PropertyInfo key in properties){
+            foreach (PropertyInfo key in properties)
+            {
                 keySet += key.Name + ",";
-                keySetParam += "@" +  key.Name + ",";
+                keySetParam += "@" + key.Name + ",";
             }
             keySet = keySet.TrimEnd(',');
             keySetParam = keySetParam.TrimEnd(',');
-            string sql = @"insert "+dataKey+"("+keySet+") values("+keySetParam+")";
-            int count = Connection.Execute(sql,data);
+            string sql = @"insert " + dataKey + "(" + keySet + ") values(" + keySetParam + ")";
+            int count = Connection.Execute(sql, data);
             //EG.Print("count:" + count);
         }
-        public void AddData(string dataKey,Dictionary<string, object> data)
+        public void AddData(string dataKey, Dictionary<string, object> data)
         {
-            if(data == null)
+            if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
             string keySet = "";
             string keySetParam = "";
-            foreach(KeyValuePair<string,object> param in data){
-                if (param.Key == "ID" || param.Key == "Id" || param.Key == "id"){
+            foreach (KeyValuePair<string, object> param in data)
+            {
+                if (param.Key == "ID" || param.Key == "Id" || param.Key == "id")
+                {
                     continue;
                 }
                 keySet += param.Key + ",";
@@ -118,8 +128,8 @@ namespace EGFramework
             }
             keySet = keySet.TrimEnd(',');
             keySetParam = keySetParam.TrimEnd(',');
-            EG.Print("insert into "+dataKey+"("+keySet+") values("+keySetParam+")");
-            int count = Connection.Execute("insert into "+dataKey+"("+keySet+") values("+keySetParam+")");
+            EG.Print("insert into " + dataKey + "(" + keySet + ") values(" + keySetParam + ")");
+            int count = Connection.Execute("insert into " + dataKey + "(" + keySet + ") values(" + keySetParam + ")");
         }
 
         public int RemoveData(string dataKey, object id)
@@ -131,23 +141,25 @@ namespace EGFramework
 
         public void UpdateData<TData>(string dataKey, TData data, object id)
         {
-            if(data == null)
+            if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
             Type DataType = typeof(TData);
             var properties = DataType.GetProperties();
             string keyMap = "";
-            foreach(PropertyInfo key in properties){
-                if(key.Name=="ID" || key.Name == "id" || key.Name == "Id"){
+            foreach (PropertyInfo key in properties)
+            {
+                if (key.Name == "ID" || key.Name == "id" || key.Name == "Id")
+                {
                     continue;
                 }
-                keyMap += key.Name + " = @"+key.Name +",";
+                keyMap += key.Name + " = @" + key.Name + ",";
             }
             keyMap = keyMap.TrimEnd(',');
-            string sql = @"update "+dataKey+" set "+ keyMap +" where ID = " + id;
+            string sql = @"update " + dataKey + " set " + keyMap + " where ID = " + id;
             EG.Print(sql);
-            int count = Connection.Execute(sql,data);
+            int count = Connection.Execute(sql, data);
             //EG.Print("count:" + count);
         }
 
@@ -158,17 +170,19 @@ namespace EGFramework
                 throw new ArgumentNullException(nameof(data));
             }
             string keyMap = "";
-            foreach (KeyValuePair<string, object> param in data) {
-                if (param.Key == "ID" || param.Key == "Id" || param.Key == "id"){
+            foreach (KeyValuePair<string, object> param in data)
+            {
+                if (param.Key == "ID" || param.Key == "Id" || param.Key == "id")
+                {
                     continue;
                 }
                 if (param.Value is string)
                 {
-                    keyMap += param.Key + " = '"+param.Value +"',";
+                    keyMap += param.Key + " = '" + param.Value + "',";
                 }
                 else
                 {
-                    keyMap += param.Key + " = "+param.Value +",";
+                    keyMap += param.Key + " = " + param.Value + ",";
                 }
             }
             keyMap = keyMap.TrimEnd(',');
@@ -176,9 +190,9 @@ namespace EGFramework
             {
                 id = "'" + id + "'";
             }
-            string sql = @"update "+dataKey+" set "+ keyMap +" where ID = " + id;
+            string sql = @"update " + dataKey + " set " + keyMap + " where ID = " + id;
             EG.Print(sql);
-            int count = Connection.Execute(sql,data);
+            int count = Connection.Execute(sql, data);
         }
 
         public IEnumerable<string> GetKeys()
@@ -196,10 +210,13 @@ namespace EGFramework
         {
             try
             {
-                var result = Connection.QuerySingle("select * from "+dataKey+" where ID = @ID",new {ID = id});
-                if(result == null){
+                var result = Connection.QuerySingle("select * from " + dataKey + " where ID = @ID", new { ID = id });
+                if (result == null)
+                {
                     return false;
-                }else{
+                }
+                else
+                {
                     return true;
                 }
             }
@@ -225,16 +242,35 @@ namespace EGFramework
             // throw new System.NotImplementedException();
             if (this.ContainsKey(dataKey))
             {
-                //Drop table if has.
-                Connection.Execute(@"DROP TABLE IF EXISTS "+dataKey+"");
+                EG.Print("Table " + dataKey + " has been created!");
+                return;
             }
             string createSql = typeof(TData).ToCreateTableSQL(dataKey);
             int count = Connection.Execute(createSql);
         }
 
-        public void CreateTable(string dataKey,Dictionary<string, object> tableParam)
+        public void CreateTable(string dataKey, Dictionary<string, object> tableParam)
         {
-            throw new NotImplementedException();
+            if (this.ContainsKey(dataKey))
+            {
+                EG.Print("Table " + dataKey + " has been created!");
+                return;
+            }
+            Dictionary<string, Type> tableType = new Dictionary<string, Type>();
+            foreach (KeyValuePair<string, object> pair in tableParam)
+            {
+                tableType.Add(pair.Key, pair.Value.GetType());
+            }
+            string createSql = tableType.ToCreateTableSQL(dataKey);
+            int count = Connection.Execute(createSql);
+        }
+
+        public void DropTable(string dataKey)
+        {
+            if (this.ContainsKey(dataKey))
+            {
+                Connection.Execute(@"DROP TABLE IF EXISTS "+dataKey+"");
+            }
         }
     }
 }

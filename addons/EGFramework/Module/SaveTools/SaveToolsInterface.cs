@@ -36,7 +36,8 @@ namespace EGFramework
     public interface IEGDataBase : IEGCanGetDBConnection
     {
         void CreateTable<TData>(string dataKey);
-        void CreateTable(string dataKey,Dictionary<string, object> tableParam);
+        void CreateTable(string dataKey, Dictionary<string, object> tableParam);
+        void DropTable(string dataKey);
     }
     #endregion
 

@@ -36,7 +36,7 @@ namespace EGFramework
             LoadObjectFile<EGJsonSave>("SaveData/DefaultJsonSave.json");
         }
         #region Load Data or Object and Unload
-        public IEGSaveData LoadDataFile<TSaveData>(string path) where TSaveData : IEGSaveData, IEGSave, new()
+        public TSaveData LoadDataFile<TSaveData>(string path) where TSaveData : IEGSaveData, IEGSave, new()
         {
             TSaveData saveData = new TSaveData();
             saveData.InitSave(path);
@@ -51,7 +51,7 @@ namespace EGFramework
             return saveData;
         }
 
-        public IEGSaveDataReadOnly ReadData<TReadOnlyData>(string key, string data) where TReadOnlyData : IEGSaveDataReadOnly, IEGSaveReadOnly, new()
+        public TReadOnlyData ReadData<TReadOnlyData>(string key, string data) where TReadOnlyData : IEGSaveDataReadOnly, IEGSaveReadOnly, new()
         {
             TReadOnlyData readOnlyData = new TReadOnlyData();
             readOnlyData.InitReadOnly(data);
@@ -66,7 +66,7 @@ namespace EGFramework
             return readOnlyData;
         }
 
-        public IEGSaveDataReadOnly ReadData<TReadOnlyData>(string key, byte[] data) where TReadOnlyData : IEGSaveDataReadOnly, IEGSaveReadOnly, new()
+        public TReadOnlyData ReadData<TReadOnlyData>(string key, byte[] data) where TReadOnlyData : IEGSaveDataReadOnly, IEGSaveReadOnly, new()
         {
             TReadOnlyData readOnlyData = new TReadOnlyData();
             readOnlyData.InitReadOnly(data);
@@ -81,7 +81,7 @@ namespace EGFramework
             return readOnlyData;
         }
 
-        public IEGSaveObject LoadObjectFile<TSaveObject>(string path) where TSaveObject:IEGSaveObject,IEGSave,new(){
+        public TSaveObject LoadObjectFile<TSaveObject>(string path) where TSaveObject:IEGSaveObject,IEGSave,new(){
             TSaveObject saveObject = new TSaveObject();
             saveObject.InitSave(path);
             if(!ObjectFiles.ContainsKey(path)){
@@ -92,7 +92,7 @@ namespace EGFramework
             return saveObject;
         }
 
-        public IEGSaveObjectReadOnly ReadObject<TReadOnlyObject>(string key, string data) where TReadOnlyObject : IEGSaveObjectReadOnly, IEGSaveReadOnly, new()
+        public TReadOnlyObject ReadObject<TReadOnlyObject>(string key, string data) where TReadOnlyObject : IEGSaveObjectReadOnly, IEGSaveReadOnly, new()
         {
             TReadOnlyObject readOnlyObject = new TReadOnlyObject();
             readOnlyObject.InitReadOnly(data);
@@ -107,7 +107,7 @@ namespace EGFramework
             return readOnlyObject;
         }
 
-        public IEGSaveObjectReadOnly ReadObject<TReadOnlyObject>(string key,byte[] data) where TReadOnlyObject:IEGSaveObjectReadOnly,IEGSaveReadOnly,new(){
+        public TReadOnlyObject ReadObject<TReadOnlyObject>(string key,byte[] data) where TReadOnlyObject:IEGSaveObjectReadOnly,IEGSaveReadOnly,new(){
             TReadOnlyObject readOnlyObject = new TReadOnlyObject();
             readOnlyObject.InitReadOnly(data);
             if(!ObjectReadOnly.ContainsKey(key)){
