@@ -8,7 +8,7 @@ using Dapper;
 //ORM Save tools. First support SQLite and MySQL,In future we will support other Database who implement DBConnection.
 namespace EGFramework
 {
-    public abstract class EGDapper : IEGSave, IEGSaveData, IEGCanGetDBConnection, IEGDataBase
+    public abstract class EGDapper : IEGSave, IEGSaveData, IEGDataBase
     {
         public DbConnection Connection { get; set; }
         public string ExceptionMsg;
