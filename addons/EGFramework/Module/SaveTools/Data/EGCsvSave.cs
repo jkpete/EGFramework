@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Reflection;
+using System.Configuration;
 
 namespace EGFramework
 {
@@ -48,6 +49,14 @@ namespace EGFramework
             DefaultPath = path;
             try
             {
+                if (!File.Exists(path))
+                {
+                    FileStream newCsvFile = File.Create(path);
+                    CsvDataBlock = new List<string[]>();
+                    newCsvFile.Close();
+                    newCsvFile.Dispose();
+                    return;
+                }
                 FileStream fileStream = new FileStream(path,FileMode.Open);
                 byte[] buffer = new byte[fileStream.Length];
                 fileStream.Read(buffer, 0, (int)fileStream.Length);
@@ -294,6 +303,36 @@ namespace EGFramework
             this.WriteDataBlock(DefaultPath);
         }
 
+        public void AddGroup(string datakey, List<Dictionary<string, object>> dataGroup)
+        {
+            if (IsReadOnly)
+            {
+                throw new Exception("This file is readonly! can't set any data to file.");
+            }
+            foreach (Dictionary<string, object> data in dataGroup)
+            {
+                if (CsvDataHeader.Count == 0)
+                {
+                    int id = 0;
+                    foreach (string key in data.Keys)
+                    {
+                        CsvDataHeader.Add(key, id);
+                        id++;
+                    }
+                }
+                string[] csvSet = new string[CsvDataHeader.Keys.Count()];
+                foreach (KeyValuePair<string, object> param in data)
+                {
+                    if (CsvDataHeader.ContainsKey(param.Key))
+                    {
+                        csvSet[CsvDataHeader[param.Key]] = param.Value.ToString();
+                    }
+                }
+                CsvDataBlock.Add(csvSet);
+            }
+            this.WriteDataBlock(DefaultPath);
+        }
+
         public int RemoveData(string dataKey, object id)
         {
             if (IsReadOnly)
@@ -405,6 +444,7 @@ namespace EGFramework
         {
             return CsvDataBlock.Count();
         }
+
 
 
     }

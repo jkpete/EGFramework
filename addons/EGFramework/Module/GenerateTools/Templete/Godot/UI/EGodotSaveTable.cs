@@ -33,6 +33,7 @@ namespace EGFramework.UI
             CurrentDataKey = key;
             EmptyData = typeof(T).EGenerateEmptyDictiontaryByType();
             QueryPage.Register(() => QueryPageData<T>());
+            TableName = typeof(T).Name;
             InitFunctionMenu();
             InitTitle(typeof(T).EGenerateDictiontaryByType());
             InitRowData(null);

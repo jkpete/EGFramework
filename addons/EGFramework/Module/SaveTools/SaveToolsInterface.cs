@@ -10,7 +10,8 @@ namespace EGFramework
 {
     #region SaveInit
 
-    public interface IEGSave {
+    public interface IEGSave
+    {
         void InitSave(string path);
     }
     public interface IEGSaveReadOnly {
@@ -86,6 +87,7 @@ namespace EGFramework
         void AddData<TData>(string dataKey,TData data);
         void AddData<TData>(string dataKey,IEnumerable<TData> data);
         void AddData(string datakey, Dictionary<string, object> data);
+        void AddGroup(string datakey, List<Dictionary<string, object>> dataGroup);
         int RemoveData(string dataKey,object id);
         void UpdateData(string dataKey, Dictionary<string, object> data, object id);
         void UpdateData<TData>(string dataKey,TData data,object id);

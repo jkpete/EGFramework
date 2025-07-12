@@ -19,6 +19,7 @@ namespace EGFramework.UI
                 this.DirSelected += OnDirSelect.Invoke;
                 this.FilesSelected += OnFilesSelect.Invoke;
                 this.Size = new Vector2I(480, 320);
+                this.Access = AccessEnum.Filesystem;
                 IsInit = true;
             }
         }

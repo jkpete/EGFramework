@@ -132,6 +132,14 @@ namespace EGFramework
             int count = Connection.Execute("insert into " + dataKey + "(" + keySet + ") values(" + keySetParam + ")");
         }
 
+        public void AddGroup(string datakey, List<Dictionary<string, object>> dataGroup)
+        {
+            foreach (Dictionary<string, object> data in dataGroup)
+            {
+                this.AddData(datakey, data);
+            }
+        }
+
         public int RemoveData(string dataKey, object id)
         {
             int count = Connection.Execute(@"delete from " + dataKey + " where id = @ID", new { ID = id });
@@ -272,5 +280,7 @@ namespace EGFramework
                 Connection.Execute(@"DROP TABLE IF EXISTS "+dataKey+"");
             }
         }
+
+
     }
 }

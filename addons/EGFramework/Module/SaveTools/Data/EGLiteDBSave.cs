@@ -93,6 +93,14 @@ namespace EGFramework
             collection.Insert(keyValuePairs);
         }
 
+        public void AddGroup(string datakey, List<Dictionary<string, object>> dataGroup)
+        {
+            foreach (Dictionary<string, object> data in dataGroup)
+            {
+                this.AddData(datakey, data);
+            }
+        }
+
         public int RemoveData(string dataKey, object id)
         {
             ILiteCollection<BsonDocument> collection = Database.GetCollection(dataKey);

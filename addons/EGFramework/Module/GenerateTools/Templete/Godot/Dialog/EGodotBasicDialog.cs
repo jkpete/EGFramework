@@ -31,7 +31,7 @@ namespace EGFramework.UI
         {
             EGodotFileDialog fileDialog = self.PopupNode<EGodotFileDialog>("FileDialog");
             fileDialog.Title = title;
-            fileDialog.RootSubfolder = filePath;
+            fileDialog.CurrentFile = filePath;
             fileDialog.InitSaveFileSelect(selectPath);
         }
 

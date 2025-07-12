@@ -26,7 +26,7 @@ namespace EGFramework.Examples.Test {
             EGodotTable table = container.CreateNode<EGodotTable>("Default");
             table.InitData<DataStudent>(dataStudents);
 
-            IEGSaveData SqliteTest = this.EGSave().LoadDataFile<EGSqliteSave>("SaveData/test.db");
+            EGSqliteSave SqliteTest = this.EGSave().Load<EGSqliteSave>("SaveData/test.db");
             EGodotSaveTable PersonTable = container.CreateNode<EGodotSaveTable>("SQLite");
             PersonTable.InitSaveData<EGSqliteSave>(SqliteTest);
             PersonTable.InitData<DataPerson>("person");

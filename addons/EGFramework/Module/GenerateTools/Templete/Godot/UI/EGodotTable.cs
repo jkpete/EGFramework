@@ -37,6 +37,8 @@ namespace EGFramework.UI
 
         public Vector2 MinimumFunctionButtonSize = new Vector2(120,0);
 
+        public string TableName { set; get; } = "-";
+
         /// <summary>
         /// The max data count for one page.
         /// </summary>
@@ -58,6 +60,7 @@ namespace EGFramework.UI
             this.Vertical = true;
             EmptyData = typeof(T).EGenerateEmptyDictiontaryByType();
             TitleData = typeof(T).EGenerateDictiontaryByType();
+            TableName = typeof(T).Name;
             InitFunctionMenu();
             InitTitle(TitleData);
             InitRowData(tableData.EGenerateDictionaryByGroup());
@@ -81,7 +84,11 @@ namespace EGFramework.UI
 
         public virtual void OnOutputFile(string path)
         {
-            
+            GD.Print("File has been Saved at " + path);
+            EGCsvSave eGCsvSave = new EGCsvSave();
+            eGCsvSave.InitSave(path);
+            eGCsvSave.AddGroup("",TableData);
+            OS.ShellOpen(path);
         }
         
         public virtual void OnInputFile(string path)
@@ -112,7 +119,7 @@ namespace EGFramework.UI
 
                 Button output = FunctionContainer.CreateNode<Button>("output");
                 output.Text = "Output";
-                // output.Connect("pressed", Callable.From());
+                output.Connect("pressed", Callable.From(()=>this.EGFileSave(TableName+".csv",OnOutputFile)));
                 output.FocusMode = FocusModeEnum.None;
                 output.CustomMinimumSize = MinimumFunctionButtonSize;
 

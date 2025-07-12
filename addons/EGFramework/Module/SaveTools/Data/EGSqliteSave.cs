@@ -30,7 +30,7 @@ namespace EGFramework{
             Connection = new SqliteConnection("Data Source="+dataBaseName+";Mode=ReadWriteCreate;");            // Open the connection:
             try
             {
-                Connection.Open();
+                // Connection.Open();
                 this.Conn = dataBaseName;
                 IsInit = true;
             }
