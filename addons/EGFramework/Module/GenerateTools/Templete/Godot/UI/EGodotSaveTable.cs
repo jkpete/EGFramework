@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EGFramework.UI
 {
@@ -9,6 +10,8 @@ namespace EGFramework.UI
         public string CurrentDataKey { set; get; }
 
         public EasyEvent QueryPage { set; get; } = new EasyEvent();
+
+        public EasyEvent SearchKey { set; get; } = new EasyEvent();
 
         public void InitSaveData<TSaveData>(IEGSaveData eGSaveData) where TSaveData : IEGSaveData
         {
@@ -30,6 +33,7 @@ namespace EGFramework.UI
             CurrentDataKey = key;
             EmptyData = typeof(T).EGenerateEmptyDictiontaryByType();
             QueryPage.Register(() => QueryPageData<T>());
+            SearchKey.Register(() => SearchDataByKeyword<T>());
             TableName = typeof(T).Name;
             TitleData = typeof(T).EGenerateDictiontaryByType();
             InitFunctionMenu();
@@ -47,6 +51,13 @@ namespace EGFramework.UI
             }
 
             TableData = SaveData.GetPage<T>(CurrentDataKey, PageAdapter.CurrentPage, PageAdapter.PageLimit).EGenerateDictionaryByGroup();
+        }
+
+        public void SearchDataByKeyword<T>() where T : new()
+        {
+            string fieldName = FieldSelect.Text;
+            string keyWords = SearchEdit.Text;
+            TableData = SaveData.FindData<T>(CurrentDataKey, fieldName, keyWords).EGenerateDictionaryByGroup();
         }
 
         public override void OnAddData(Dictionary<string, object> data)
@@ -102,6 +113,7 @@ namespace EGFramework.UI
                     OnPageChanged.Invoke();
                 });
             }
+            ResetSearch();
             //base.InitPageData();
         }
 
@@ -110,26 +122,35 @@ namespace EGFramework.UI
             RowDataContainer.ClearChildren();
             string fieldName = FieldSelect.Text;
             string keyWords = SearchEdit.Text;
-            // List<Dictionary<string, object>> SearchData = TableData.ESearchByKeyword(fieldName, keyWords);
-            // int dataPointer = 0;
-            // foreach (Dictionary<string, object> searchrow in SearchData)
-            // {
-            //     EGodotTableRowData rowData = RowDataContainer.CreateNode<EGodotTableRowData>("row" + dataPointer);
-            //     dataPointer++;
-            //     rowData.Init(searchrow);
-            //     rowData.OnModify.Register(data =>
-            //     {
-            //         this.EGEditDialog(data, rowData.OnDataEdit, "Modify");
-            //     });
-            //     rowData.OnDelete.Register(() =>
-            //     {
-            //         this.TableData.Remove(rowData.GetData());
-            //         PageAdapter.DataLength--;
-            //         PageAdapter.Reload(PageAdapter.DataLength, PageLimit);
-            //         InitPageData();
-            //         OnPageChanged.Invoke();
-            //     });
-            // }
+            SearchKey.Invoke();
+            int dataPointer = 0;
+            foreach (Dictionary<string, object> data in TableData)
+            {
+                EGodotTableRowData rowData = RowDataContainer.CreateNode<EGodotTableRowData>("row" + dataPointer);
+                dataPointer++;
+                rowData.Init(data);
+                rowData.OnModify.Register(eData =>
+                {
+                    this.EGEditDialog(eData, ModifyData, "Modify");
+                });
+                rowData.OnDelete.Register(() =>
+                {
+                    string primaryKey = "";
+                    if (rowData.GetData().ContainsKey("ID")) primaryKey = "ID";
+                    if (rowData.GetData().ContainsKey("id")) primaryKey = "id";
+                    if (rowData.GetData().ContainsKey("Id")) primaryKey = "Id";
+                    if (primaryKey == "")
+                    {
+                        this.EGAlert("Parmary key 'id' not defined!", "Error");
+                        return;
+                    }
+                    int remove_count = SaveData.RemoveData(CurrentDataKey, rowData.GetData()[primaryKey]);
+                    PageAdapter.DataLength -= remove_count;
+                    PageAdapter.Reload(PageAdapter.DataLength, PageLimit);
+                    InitPageData();
+                    OnPageChanged.Invoke();
+                });
+            }
         }
     }
 }

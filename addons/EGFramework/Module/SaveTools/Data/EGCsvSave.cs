@@ -253,16 +253,58 @@ namespace EGFramework
             }
             return sourceList.Where(expression.Compile());
         }
+        
+        public IEnumerable<TData> FindData<TData>(string dataKey, string columnName, string keyWords) where TData : new()
+        {
+            // throw new NotImplementedException();
+            List<TData> DataList = new List<TData>();
+            PropertyInfo[] properties = typeof(TData).GetProperties();
+            if (!CsvDataHeader.ContainsKey(columnName))
+            {
+                EG.Print("Column not found!");
+                return null;
+            }
+            for (int dataID = 0; dataID < CsvDataBlock.Count(); dataID++)
+            {
+                TData data = new TData();
+                string compareStr = CsvDataBlock[dataID][CsvDataHeader[columnName]];
+                if (!compareStr.Contains(keyWords))
+                {
+                    continue;
+                }
+                foreach (PropertyInfo property in properties)
+                {
+                    CsvParamAttribute csvParam = property.GetCustomAttribute<CsvParamAttribute>();
+                    if (csvParam != null && CsvDataHeader.ContainsKey(csvParam._name))
+                    {
+                        string valueStr = CsvDataBlock[dataID][CsvDataHeader[csvParam._name]];
+                        if (property.PropertyType == typeof(string))
+                        {
+                            property.SetValue(data, valueStr);
+                        }
+                        else
+                        {
+                            property.SetValue(data, Convert.ChangeType(valueStr, property.PropertyType));
+                        }
+                    }
+                }
+                DataList.Add(data);
+            }
+            return DataList;
+        }
 
         public void AddData<TData>(string dataKey, TData data)
         {
-            if(IsReadOnly){
+            if (IsReadOnly)
+            {
                 throw new Exception("This file is readonly! can't set any data to file.");
             }
             string[] csvSet = new string[CsvDataHeader.Keys.Count()];
-            foreach(PropertyInfo property in data.GetType().GetProperties()){
+            foreach (PropertyInfo property in data.GetType().GetProperties())
+            {
                 CsvParamAttribute csvParam = property.GetCustomAttribute<CsvParamAttribute>();
-                if(csvParam != null && CsvDataHeader.ContainsKey(csvParam._name)){
+                if (csvParam != null && CsvDataHeader.ContainsKey(csvParam._name))
+                {
                     csvSet[CsvDataHeader[csvParam._name]] = property.GetValue(data).ToString();
                 }
             }
@@ -444,8 +486,6 @@ namespace EGFramework
         {
             return CsvDataBlock.Count();
         }
-
-
 
     }
 

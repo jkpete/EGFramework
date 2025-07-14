@@ -71,6 +71,12 @@ namespace EGFramework
             return collection.Find(expression);
         }
 
+        public IEnumerable<TData> FindData<TData>(string dataKey, string columnName, string keyWords) where TData : new()
+        {
+            LiteCollection<TData> collection = (LiteCollection<TData>)Database.GetCollection<TData>(dataKey);
+            return collection.Find(Query.EQ(columnName,new BsonValue(keyWords)));
+        }
+
         public void AddData<TData>(string dataKey, TData data)
         {
             LiteCollection<TData> collection = (LiteCollection<TData>)Database.GetCollection<TData>(dataKey);

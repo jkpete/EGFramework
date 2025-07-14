@@ -28,9 +28,7 @@ namespace EGFramework.UI
         protected IUnRegister PageChangedRealease { set; get; }
 
         protected List<Dictionary<string, object>> TableData { set; get; }
-
-        protected Dictionary<string,object> EmptyData { set; get; }
-
+        protected Dictionary<string, object> EmptyData { set; get; }
         protected Dictionary<string, object> TitleData { set; get; } = new Dictionary<string, object>();
 
         protected EasyEvent<Dictionary<string, object>> AddData { set; get; } = new EasyEvent<Dictionary<string, object>>();
@@ -218,6 +216,7 @@ namespace EGFramework.UI
                     OnPageChanged.Invoke();
                 });
             }
+            ResetSearch();
         }
         
         public void InitPageMenu()

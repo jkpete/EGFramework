@@ -43,6 +43,12 @@ namespace EGFramework
             return sourceList.Where(expression.Compile());
         }
 
+        public IEnumerable<TData> FindData<TData>(string dataKey, string columnName, string keyWords) where TData : new()
+        {
+            IEnumerable<TData> sourceList = Connection.Query<TData>("select * from " + dataKey + " where " + columnName + " like " + "'%"+keyWords+"%'");
+            return sourceList;
+        }
+
         public void SetData<TData>(string dataKey, TData data, object id)
         {
             if (data == null)
