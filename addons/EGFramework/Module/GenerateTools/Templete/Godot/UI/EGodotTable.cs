@@ -96,10 +96,10 @@ namespace EGFramework.UI
 
         }
 
-
+        protected OptionButton FieldSelect { set; get; }
+        protected LineEdit SearchEdit { set; get; }
         public virtual void InitFunctionMenu()
         {
-
             if (FunctionContainer == null)
             {
                 FunctionContainer = this.CreateNode<BoxContainer>("FunctionContainer");
@@ -119,7 +119,7 @@ namespace EGFramework.UI
 
                 Button output = FunctionContainer.CreateNode<Button>("output");
                 output.Text = "Output";
-                output.Connect("pressed", Callable.From(()=>this.EGFileSave(TableName+".csv",OnOutputFile)));
+                output.Connect("pressed", Callable.From(() => this.EGFileSave(TableName + ".csv", OnOutputFile)));
                 output.FocusMode = FocusModeEnum.None;
                 output.CustomMinimumSize = MinimumFunctionButtonSize;
 
@@ -128,32 +128,34 @@ namespace EGFramework.UI
                 input.FocusMode = FocusModeEnum.None;
                 input.CustomMinimumSize = MinimumFunctionButtonSize;
 
-                OptionButton filedSelect = FunctionContainer.CreateNode<OptionButton>("filedSelect");
-                filedSelect.FocusMode = FocusModeEnum.None;
-                filedSelect.SizeFlagsHorizontal = SizeFlags.Expand | SizeFlags.ShrinkEnd;
-                filedSelect.CustomMinimumSize = MinimumFunctionButtonSize;
+                FieldSelect = FunctionContainer.CreateNode<OptionButton>("fieldSelect");
+                FieldSelect.FocusMode = FocusModeEnum.None;
+                FieldSelect.SizeFlagsHorizontal = SizeFlags.Expand | SizeFlags.ShrinkEnd;
+                FieldSelect.CustomMinimumSize = MinimumFunctionButtonSize;
                 foreach (string titleParam in TitleData.Keys)
                 {
-                    filedSelect.AddItem(titleParam);
+                    FieldSelect.AddItem(titleParam);
                 }
 
 
-                LineEdit searchEdit = FunctionContainer.CreateNode<LineEdit>("searchEdit");
-                searchEdit.PlaceholderText = "Please input search key";
-                searchEdit.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
-                searchEdit.CustomMinimumSize = new Vector2(MinimumFunctionButtonSize.X*2,MinimumFunctionButtonSize.Y);
-                
+                SearchEdit = FunctionContainer.CreateNode<LineEdit>("searchEdit");
+                SearchEdit.PlaceholderText = "Please input search key";
+                SearchEdit.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
+                SearchEdit.CustomMinimumSize = new Vector2(MinimumFunctionButtonSize.X * 2, MinimumFunctionButtonSize.Y);
+
                 Button search = FunctionContainer.CreateNode<Button>("search");
                 search.Text = "Search";
                 search.FocusMode = FocusModeEnum.None;
                 search.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
                 search.CustomMinimumSize = MinimumFunctionButtonSize;
+                search.Connect("pressed", Callable.From(Search));
 
                 Button reset = FunctionContainer.CreateNode<Button>("reset");
                 reset.Text = "Reset";
                 reset.FocusMode = FocusModeEnum.None;
                 reset.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
                 reset.CustomMinimumSize = MinimumFunctionButtonSize;
+                reset.Connect("pressed", Callable.From(ResetSearch));
             }
         }
 
@@ -335,6 +337,58 @@ namespace EGFramework.UI
             {
                 this.PageAdapter.CurrentPage = pageId;
                 OnPageChanged.Invoke();
+            }
+        }
+
+        public void Search()
+        {
+            if (SearchEdit.Text == "" && FieldSelect.Text == "")
+            {
+                this.EGAlert("Please input key word in search edit and select a field.", "Message not enough!");
+            }
+            else
+            {
+                IsSearched = true;
+                PageContainer.Visible = false;
+                ExecuteSearch();
+            }
+        }
+
+        public void ResetSearch()
+        {
+            if (IsSearched)
+            {
+                IsSearched = false;
+                PageContainer.Visible = true;
+                InitPageData();
+            }
+        }
+
+        public virtual void ExecuteSearch()
+        {
+            RowDataContainer.ClearChildren();
+            string fieldName = FieldSelect.Text;
+            string keyWords = SearchEdit.Text;
+            List<Dictionary<string, object>> SearchData = TableData.ESearchByKeyword(fieldName, keyWords);
+            int dataPointer = 0;
+            foreach (Dictionary<string, object> searchrow in SearchData)
+            {
+                EGodotTableRowData rowData = RowDataContainer.CreateNode<EGodotTableRowData>("row" + dataPointer);
+                dataPointer++;
+                rowData.Init(searchrow);
+                rowData.OnModify.Register(data =>
+                {
+                    this.EGEditDialog(data, rowData.OnDataEdit, "Modify");
+                });
+                rowData.OnDelete.Register(() =>
+                {
+                    GD.Print("Delete : " + rowData.GetData()["Name"]);
+                    this.TableData.Remove(rowData.GetData());
+                    PageAdapter.DataLength--;
+                    PageAdapter.Reload(PageAdapter.DataLength, PageLimit);
+                    InitPageData();
+                    OnPageChanged.Invoke();
+                });
             }
         }
         public override void _ExitTree()

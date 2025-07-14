@@ -31,12 +31,13 @@ namespace EGFramework.UI
             EmptyData = typeof(T).EGenerateEmptyDictiontaryByType();
             QueryPage.Register(() => QueryPageData<T>());
             TableName = typeof(T).Name;
+            TitleData = typeof(T).EGenerateDictiontaryByType();
             InitFunctionMenu();
-            InitTitle(typeof(T).EGenerateDictiontaryByType());
+            InitTitle(TitleData);
             InitRowData(null);
             InitPageMenu();
         }
-        
+
 
         public void QueryPageData<T>() where T : new()
         {
@@ -91,7 +92,7 @@ namespace EGFramework.UI
                     if (rowData.GetData().ContainsKey("Id")) primaryKey = "Id";
                     if (primaryKey == "")
                     {
-                        this.EGAlert("Parmary key 'id' not defined!","Error");
+                        this.EGAlert("Parmary key 'id' not defined!", "Error");
                         return;
                     }
                     int remove_count = SaveData.RemoveData(CurrentDataKey, rowData.GetData()[primaryKey]);
@@ -102,6 +103,33 @@ namespace EGFramework.UI
                 });
             }
             //base.InitPageData();
+        }
+
+        public override void ExecuteSearch()
+        {
+            RowDataContainer.ClearChildren();
+            string fieldName = FieldSelect.Text;
+            string keyWords = SearchEdit.Text;
+            // List<Dictionary<string, object>> SearchData = TableData.ESearchByKeyword(fieldName, keyWords);
+            // int dataPointer = 0;
+            // foreach (Dictionary<string, object> searchrow in SearchData)
+            // {
+            //     EGodotTableRowData rowData = RowDataContainer.CreateNode<EGodotTableRowData>("row" + dataPointer);
+            //     dataPointer++;
+            //     rowData.Init(searchrow);
+            //     rowData.OnModify.Register(data =>
+            //     {
+            //         this.EGEditDialog(data, rowData.OnDataEdit, "Modify");
+            //     });
+            //     rowData.OnDelete.Register(() =>
+            //     {
+            //         this.TableData.Remove(rowData.GetData());
+            //         PageAdapter.DataLength--;
+            //         PageAdapter.Reload(PageAdapter.DataLength, PageLimit);
+            //         InitPageData();
+            //         OnPageChanged.Invoke();
+            //     });
+            // }
         }
     }
 }

@@ -107,5 +107,21 @@ namespace EGFramework{
             }
             return "";
         }
+
+        public static List<Dictionary<string, object>> ESearchByKeyword(this List<Dictionary<string, object>> data, string fieldName, string keyWords)
+        {
+            List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
+            foreach (Dictionary<string, object> tablerow in data)
+            {
+                if (tablerow.ContainsKey(fieldName))
+                {
+                    if (tablerow[fieldName].ToString().Contains(keyWords))
+                    {
+                        result.Add(tablerow);
+                    }
+                }
+            }
+            return result;
+        }
     }
 }
