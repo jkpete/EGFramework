@@ -27,6 +27,12 @@ namespace EGFramework.Examples.Test {
             table.InitData<DataStudent>(dataStudents);
 
             EGSqliteSave SqliteTest = this.EGSave().Load<EGSqliteSave>("SaveData/test.db");
+            // IEnumerable<string> dataBaseKey = SqliteTest.GetKeys();
+            // GD.Print(dataBaseKey);
+            // foreach (string data in dataBaseKey)
+            // {
+            //     GD.Print(data);
+            // }
             EGodotSaveTable PersonTable = container.CreateNode<EGodotSaveTable>("SQLite");
             PersonTable.InitSaveData<EGSqliteSave>(SqliteTest);
             PersonTable.InitData<DataPerson>("person");

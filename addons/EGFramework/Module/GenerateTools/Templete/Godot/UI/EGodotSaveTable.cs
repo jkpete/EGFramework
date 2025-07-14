@@ -1,7 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using Godot;
-using MySqlX.XDevAPI.Relational;
 
 namespace EGFramework.UI
 {
@@ -49,7 +46,6 @@ namespace EGFramework.UI
             }
 
             TableData = SaveData.GetPage<T>(CurrentDataKey, PageAdapter.CurrentPage, PageAdapter.PageLimit).EGenerateDictionaryByGroup();
-            GD.Print(TableData.Count());
         }
 
         public override void OnAddData(Dictionary<string, object> data)

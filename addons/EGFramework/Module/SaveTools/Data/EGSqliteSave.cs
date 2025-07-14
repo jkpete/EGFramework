@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using Dapper;
 using Microsoft.Data.Sqlite;
 
 namespace EGFramework{
@@ -27,7 +29,7 @@ namespace EGFramework{
         /// <param name="dataBaseName">name is the file path.such as SaveData.db</param>
         public void InitDatabase(string dataBaseName)
         {
-            Connection = new SqliteConnection("Data Source="+dataBaseName+";Mode=ReadWriteCreate;");            // Open the connection:
+            Connection = new SqliteConnection("Data Source=" + dataBaseName + ";Mode=ReadWriteCreate;");            // Open the connection:
             try
             {
                 // Connection.Open();
@@ -38,6 +40,11 @@ namespace EGFramework{
             {
                 ExceptionMsg = ex.ToString();
             }
+        }
+        public override IEnumerable<string> GetKeys()
+        {
+            IEnumerable<string> result = Connection.Query<string>("SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%'");
+            return result;
         }
     }
 }

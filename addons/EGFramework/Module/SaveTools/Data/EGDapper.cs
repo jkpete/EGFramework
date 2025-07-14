@@ -203,7 +203,7 @@ namespace EGFramework
             int count = Connection.Execute(sql, data);
         }
 
-        public IEnumerable<string> GetKeys()
+        public virtual IEnumerable<string> GetKeys()
         {
             IEnumerable<string> result = Connection.Query<string>("show tables");
             return result;
