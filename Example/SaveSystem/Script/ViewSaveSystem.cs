@@ -11,9 +11,36 @@ namespace EGFramework.Examples.Test {
     {
         public string[][] DataList { get; set; }
         public string[][] DataList2 { get; set; }
+        Container container{ set; get; }
         public override void _Ready()
         {
-            Container container = this.GetNode<TabContainer>("TabContainer");
+            container = this.GetNode<TabContainer>("TabContainer");
+            Tree newTree = container.CreateNode<Tree>("treeTest");
+            TreeItem root = newTree.CreateItem();
+            TreeItem child1 = newTree.CreateItem(root);
+            TreeItem child2 = newTree.CreateItem(root);
+            TreeItem subchild1 = newTree.CreateItem(child1);
+            subchild1.SetText(0, "Subchild1");
+            child1.SetText(0, "child1");
+            child2.SetText(0, "child2");
+            Image image = Image.LoadFromFile("icon.svg");
+            ImageTexture texture = ImageTexture.CreateFromImage(image);
+
+            child2.AddButton(0, texture);
+            child2.SetButtonColor(0, 0, Colors.AliceBlue);
+            child2.SetIcon(0, texture);
+            child2.SetCellMode(0, TreeItem.TreeCellMode.String);
+            subchild1.SetIndeterminate(0, false);
+            child1.SetEditable(0,true);
+        }
+
+        public override void _ExitTree()
+        {
+
+        }
+
+        public void TestTable()
+        {
             List<DataStudent> dataStudents = new List<DataStudent>();
             for (int stu = 0; stu < 10; stu++)
             {
@@ -44,12 +71,6 @@ namespace EGFramework.Examples.Test {
             // EGodotEditParam editParam = container.CreateNode<EGodotEditParam>("editParam");
             // editParam.Init(new KeyValuePair<string, object>("数量",1));
         }
-
-        public override void _ExitTree()
-        {
-
-        }
-
 
     }
     public struct DataStudent
