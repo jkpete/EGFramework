@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using EGFramework.UI;
 using Godot;
 using LiteDB;
+using Newtonsoft.Json;
 using Renci.SshNet;
 
 namespace EGFramework.Examples.Test {
@@ -14,24 +16,7 @@ namespace EGFramework.Examples.Test {
         Container container{ set; get; }
         public override void _Ready()
         {
-            container = this.GetNode<TabContainer>("TabContainer");
-            Tree newTree = container.CreateNode<Tree>("treeTest");
-            TreeItem root = newTree.CreateItem();
-            TreeItem child1 = newTree.CreateItem(root);
-            TreeItem child2 = newTree.CreateItem(root);
-            TreeItem subchild1 = newTree.CreateItem(child1);
-            subchild1.SetText(0, "Subchild1");
-            child1.SetText(0, "child1");
-            child2.SetText(0, "child2");
-            Image image = Image.LoadFromFile("icon.svg");
-            ImageTexture texture = ImageTexture.CreateFromImage(image);
-
-            child2.AddButton(0, texture);
-            child2.SetButtonColor(0, 0, Colors.AliceBlue);
-            child2.SetIcon(0, texture);
-            child2.SetCellMode(0, TreeItem.TreeCellMode.String);
-            subchild1.SetIndeterminate(0, false);
-            child1.SetEditable(0,true);
+            TestTree();
         }
 
         public override void _ExitTree()
@@ -39,8 +24,55 @@ namespace EGFramework.Examples.Test {
 
         }
 
+        public void TestJson()
+        {
+            string json = @"{
+                'CPU': 'Intel',
+                'PSU': '500W',
+                'Drives': [
+                    'DVD read/writer'
+                    /*(broken)*/,
+                    '500 gigabyte hard drive',
+                    '200 gigabyte hard drive'
+                ],
+                'My' : {
+                    'AA':'BB',
+                    'Date': new Date(123456789)
+                }
+            }";
+
+            JsonTextReader reader = new JsonTextReader(new StringReader(json));
+            while (reader.Read())
+            {
+                if (reader.Value != null)
+                {
+                    GD.Print("Token: {"+reader.TokenType+"}, Value: {"+ reader.Value+"}");
+                }
+                else
+                {
+                    GD.Print("Token: {"+ reader.TokenType+"}");
+                }
+            }
+        }
+
+        public void TestTree()
+        {
+            string json = @"{
+                'CPU': 'Intel',
+                'PSU': '500W',
+                'My' : {
+                    'AA':'BB',
+                    'Date': 111
+                }
+            }";
+            container = this.GetNode<TabContainer>("TabContainer");
+            EGodotTree eGodotTree = container.CreateNode<EGodotTree>("TestTree");
+            eGodotTree.InitByJson(json);
+        }
+
         public void TestTable()
         {
+            container = this.GetNode<TabContainer>("TabContainer");
             List<DataStudent> dataStudents = new List<DataStudent>();
             for (int stu = 0; stu < 10; stu++)
             {
