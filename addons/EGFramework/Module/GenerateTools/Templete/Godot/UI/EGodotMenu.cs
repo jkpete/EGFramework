@@ -5,14 +5,21 @@ namespace EGFramework.UI
 {
     public partial class EGodotMenu : Control, IEGFramework
     {
-        public IOCContainer PageContainer { set; get; }
+        public Dictionary<string, Control> PageContainer { set; get; } = new Dictionary<string, Control>();
 
-        public void RegisterPage<T>(T page) where T : Control
+        public void RegisterPage<T>(string name,T page) where T : Control
         {
-            PageContainer.Register(page);
+            if (PageContainer.ContainsKey(name))
+            {
+                PageContainer[name] = page;
+            }
+            else
+            {
+                PageContainer.Add(name,page);
+            }
         }
 
-        public void OpenPage<T>(T page) where T : Control
+        public void OpenPage<T>(string name,T page) where T : Control
         {
             page.Visible = true;
             
