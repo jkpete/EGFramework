@@ -17,6 +17,7 @@ namespace EGFramework.Examples.Test {
         public override void _Ready()
         {
             TestTree();
+            TestTable();
         }
 
         public override void _ExitTree()
@@ -85,31 +86,18 @@ namespace EGFramework.Examples.Test {
             EGodotTable table = container.CreateNode<EGodotTable>("Default");
             table.InitData<DataStudent>(dataStudents);
 
-            EGSqliteSave SqliteTest = this.EGSave().Load<EGSqliteSave>("SaveData/test.db");
-            // IEnumerable<string> dataBaseKey = SqliteTest.GetKeys();
-            // GD.Print(dataBaseKey);
-            // foreach (string data in dataBaseKey)
-            // {
-            //     GD.Print(data);
-            // }
-            EGodotSaveTable PersonTable = container.CreateNode<EGodotSaveTable>("SQLite");
-            PersonTable.InitSaveData<EGSqliteSave>(SqliteTest);
-            PersonTable.InitData<DataPerson>("person");
-
-            // EGodotTableRowData rowData = container.CreateNode<EGodotTableRowData>("RowData");
-            // rowData.Init(new Dictionary<string, object>() { { "Name", "Tom" }, { "Age", 18 } });
-            // EGodotRowData rowData2 = container.CreateNode<EGodotRowData>("RowData2");
-            // rowData2.Init(new Dictionary<string, object>() { { "Name", "Z" }, { "Age", 1 } });
-            // EGodotEditParam editParam = container.CreateNode<EGodotEditParam>("editParam");
-            // editParam.Init(new KeyValuePair<string, object>("数量",1));
+            // EGSqliteSave SqliteTest = this.EGSave().Load<EGSqliteSave>("SaveData/test.db");
+            // EGodotSaveTable PersonTable = container.CreateNode<EGodotSaveTable>("SQLite");
+            // PersonTable.InitSaveData<EGSqliteSave>(SqliteTest);
+            // PersonTable.InitData<DataPerson>("person");
         }
 
     }
     public struct DataStudent
     {
+        public int ID;
         public string Name { get; set; }
         public int Age;
-        public int ID;
         public EGPathSelect Path { set; get; }
         public DataStudent(string name, int age)
         {
