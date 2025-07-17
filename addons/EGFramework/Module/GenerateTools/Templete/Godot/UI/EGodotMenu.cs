@@ -7,7 +7,7 @@ namespace EGFramework.UI
     {
         public Dictionary<string, Control> PageContainer { set; get; } = new Dictionary<string, Control>();
 
-        public void RegisterPage<T>(string name,T page) where T : Control
+        public void RegisterPage<T>(string name, T page) where T : Control
         {
             if (PageContainer.ContainsKey(name))
             {
@@ -15,15 +15,15 @@ namespace EGFramework.UI
             }
             else
             {
-                PageContainer.Add(name,page);
+                PageContainer.Add(name, page);
             }
         }
 
-        public void OpenPage<T>(string name,T page) where T : Control
+        public void OpenPage<T>(string name, T page) where T : Control
         {
             page.Visible = true;
-            
         }
+        
     }
     
 }

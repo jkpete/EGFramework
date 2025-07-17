@@ -13,15 +13,115 @@
 >
 > 目前该框架可能还有很多欠缺与不足，最终目的是做一个方便可靠好用的通讯&存储&资源生成&界面生成框架、用户无需过多学习、开箱即用。
 
-# 关于Godot引擎（摘自[Godot Engine (4.x) 简体中文文档](https://docs.godotengine.org/zh-cn/4.x/about/introduction.html)）
+## 关于Godot引擎（摘自[Godot Engine (4.x) 简体中文文档](https://docs.godotengine.org/zh-cn/4.x/about/introduction.html)）
 
 > Godot 引擎是一款功能丰富的跨平台游戏引擎，可以通过统一的界面创建 2D 和 3D 
 > 游戏。它提供了一套全面的通用工具，因此用户可以专注于制作游戏，而无需重新发明轮子。游戏可以一键导出到多个平台，包括主流的桌面平台（Linux、macOS、Windows）、移动平台（Android、iOS）、基于
->  Web 的平台以及主机平台。
-> 
+> Web 的平台以及主机平台。
+>
 > Godot 在 [宽松的 MIT 许可证](https://docs.godotengine.org/zh-cn/4.x/about/complying_with_licenses.html#doc-complying-with-licenses) 下完全自由且开源，没有附加条件、没有抽成、什么都没有。用户的游戏乃至引擎的每一行代码，都归用户自己所有。Godot 的开发完全独立且由社区驱动，允许用户为满足需求重塑引擎。它受到不以盈利为目标的 [Godot 基金会](https://godot.foundation/)支持。
 
 ---
+
+EGFramework - 功能一览
+
+```mermaid
+mindmap
+	root((EGFramework))
+		★Tools
+			SaveTools
+			GenerateTools
+			ProtocolTools
+		Extension
+			CRC
+			Convert
+			DateTime
+			Encoding
+			SQL
+			IP
+		CommandSequence
+			EGCQRS
+		IOCManage
+			EGObject
+		EventManage
+			EGEvent
+			EasyEvent
+```
+
+---
+
+EGFramework - SaveTools
+
+```mermaid
+mindmap
+	root((SaveTools))
+            Data
+                CSV
+                LiteDB
+                Dapper
+                    MySql
+                    Sqlite
+
+            File
+                FTP
+                SFTP
+                LocalFileSystem
+                WebDav - Not Complete
+            Object
+                Json
+                Redis
+                Byte - Not Complete
+```
+
+---
+
+EGFramework - ProtocolTools
+
+```mermaid
+mindmap
+	root((ProtocolTools))
+		EGMessage
+		ProtocolSchedule
+		Internet
+			TCPClient
+			TCPServer
+			UDP
+			MQTT
+			SSH
+			WebsocketClient
+			WebsocketServer - Only Godot
+		SerialPort
+		Other
+			FileStream
+			Process
+				Soft
+				CommandLine
+```
+
+EGFramework-GenerateTools
+
+```mermaid
+mindmap
+	root((Generate-Tools))
+		Dialog
+			Basic
+			Confirm
+			Edit
+			File
+		UI
+			EditParam
+			Table
+			Menu
+			Tree
+		Inteface
+		Variant
+			Tree
+			Range
+			Select
+			Path
+			ReadOnly
+		
+```
 
 
 
@@ -100,67 +200,11 @@ public partial class EGTest : Node,IEGFramework{
 
 更多可参考Example。
 
-## 2.2 发送与监听消息
+# 三、目录
 
+## [ProtocolTools](./Manual/ProtocolTools.md)
 
+## [SaveTools](./Manual/SaveTools.md)
 
-## 2.3 使用本地存储
+## [GenerateTools](./Manual/GenerateTools.md)
 
-
-
-# 三、EGFramework-API
-
-目前已有的EGFramework功能组件。标记是目前已编写完成，未标记是未编写完成或未测试。
-
-- [x] ProtocolTools&ProtocolExtension
-- [x] SaveTools
-- [x] OtherTools
-- [x] Extension
-- [x] NodeExtension（仅Godot下可用）
-- [ ] GenerateTools
-- [ ] UITools
-
-### 3.1 消息篇（EGMessage-ProtocolTools）
-
----
-
-#### 通讯支持
-
-- [x] TCPClient
-- [x] TCPServer
-- [x] UDP（Listen&Send）
-- [x] SerialPort
-- [x] Ssh
-- [x] WebSocketClient
-- [x] Bacnet
-- [x] MQTT
-- [ ] HttpClient
-- [ ] HttpServer
-
-#### 异步处理支持
-
-- [x] FileStream
-- [x] Process
-
-### 3.2 存储篇（EGMessage-ProtocolTools）
-
-#### 键值对象存储支持
-
-- [x] Json
-- [x] Redis
-- [ ] Byte
-
-#### 数据存储支持
-
-- [x] Csv
-- [x] LiteDB
-- [x] MySQL（Dapper）
-- [x] Sqlite（Dapper）
-- [x] Dapper
-
-#### 文件存储支持
-
-- [x] FTP
-- [x] LocalFile
-- [ ] Sftp
-- [ ] WebDav
