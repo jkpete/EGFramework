@@ -18,6 +18,7 @@ namespace EGFramework.Examples.Test {
         {
             TestTree();
             TestTable();
+            TestJson();
         }
 
         public override void _ExitTree()
@@ -41,19 +42,21 @@ namespace EGFramework.Examples.Test {
                     'Date': new Date(123456789)
                 }
             }";
+            EGJsonSave jsonManage = this.EGSave().Read<EGJsonSave>("Example", json);
+            GD.Print(jsonManage.GetObject<string>("CPU"));
 
-            JsonTextReader reader = new JsonTextReader(new StringReader(json));
-            while (reader.Read())
-            {
-                if (reader.Value != null)
-                {
-                    GD.Print("Token: {"+reader.TokenType+"}, Value: {"+ reader.Value+"}");
-                }
-                else
-                {
-                    GD.Print("Token: {"+ reader.TokenType+"}");
-                }
-            }
+            // JsonTextReader reader = new JsonTextReader(new StringReader(json));
+            // while (reader.Read())
+            // {
+            //     if (reader.Value != null)
+            //     {
+            //         GD.Print("Token: {"+reader.TokenType+"}, Value: {"+ reader.Value+"}");
+            //     }
+            //     else
+            //     {
+            //         GD.Print("Token: {"+ reader.TokenType+"}");
+            //     }
+            // }
         }
 
         public void TestTree()

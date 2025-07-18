@@ -18,10 +18,9 @@ namespace EGFramework{
         }
         public IArchitecture GetArchitecture()
         {
-            throw new System.NotImplementedException();
+            return EGArchitectureImplement.Interface;
         }
 
-        
     }
 
      public static class GodotPathExtension{

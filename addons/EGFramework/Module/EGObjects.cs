@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace EGFramework
 {
-    public interface IEGObject
+    public interface IEGObjects
     {
         void RegisterObject<T>(T object_);
         T GetObject<T>() where T : class,new();
 		
     }
-    public class EGObject : EGModule,IEGObject
+    public class EGObjects : EGModule,IEGObjects
     {
         private IOCContainer ObjectContainer = new IOCContainer();
         public override void Init()
@@ -40,25 +40,25 @@ namespace EGFramework
     {
         public static T EGGetObject<T>(this IEGFramework self) where T : class,new()
         {
-            return EGArchitectureImplement.Interface.GetModule<EGObject>().GetObject<T>();
+            return EGArchitectureImplement.Interface.GetModule<EGObjects>().GetObject<T>();
         }
     }
     public static class CanRegisterObjectExtension
     {
         public static void EGRegisterObject<T>(this IArchitecture self,T object_) where T : class,new()
         {
-            self.GetModule<EGObject>().RegisterObject(object_);
+            self.GetModule<EGObjects>().RegisterObject(object_);
         }
         public static void EGRegisterObject<T>(this IEGFramework self,T object_) where T : class,new()
         {
-            EGArchitectureImplement.Interface.GetModule<EGObject>().RegisterObject(object_);
+            EGArchitectureImplement.Interface.GetModule<EGObjects>().RegisterObject(object_);
         }
     }
 
     public static class CanContainsObjectExtension{
         public static bool EGContainsObject<T>(this IEGFramework self)
         {
-            return EGArchitectureImplement.Interface.GetModule<EGObject>().ContainsObject<T>();
+            return EGArchitectureImplement.Interface.GetModule<EGObjects>().ContainsObject<T>();
         }
     }
 

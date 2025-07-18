@@ -48,80 +48,9 @@ mindmap
 			EasyEvent
 ```
 
----
 
-EGFramework - SaveTools
 
-```mermaid
-mindmap
-	root((SaveTools))
-            Data
-                CSV
-                LiteDB
-                Dapper
-                    MySql
-                    Sqlite
 
-            File
-                FTP
-                SFTP
-                LocalFileSystem
-                WebDav - Not Complete
-            Object
-                Json
-                Redis
-                Byte - Not Complete
-```
-
----
-
-EGFramework - ProtocolTools
-
-```mermaid
-mindmap
-	root((ProtocolTools))
-		EGMessage
-		ProtocolSchedule
-		Internet
-			TCPClient
-			TCPServer
-			UDP
-			MQTT
-			SSH
-			WebsocketClient
-			WebsocketServer - Only Godot
-		SerialPort
-		Other
-			FileStream
-			Process
-				Soft
-				CommandLine
-```
-
-EGFramework-GenerateTools
-
-```mermaid
-mindmap
-	root((Generate-Tools))
-		Dialog
-			Basic
-			Confirm
-			Edit
-			File
-		UI
-			EditParam
-			Table
-			Menu
-			Tree
-		Inteface
-		Variant
-			Tree
-			Range
-			Select
-			Path
-			ReadOnly
-		
-```
 
 
 

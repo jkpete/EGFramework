@@ -17,20 +17,21 @@ namespace EGFramework
         void SetBytes(byte[] byteData);
     }
     [Obsolete("This class is not comlpete, please not use it!")]
-    public class EGByteObjectSave : IEGSave,IEGSaveObject
+    public class EGByteObjectSave : IEGSave, IEGSaveObject
     {
         public Encoding StringEncoding { set; get; } = Encoding.ASCII;
         private string DefaultPath { set; get; }
         private uint PointerLength { get; set; }
         private uint[] Pointer { get; set; }
-        private Dictionary<uint,byte[]> Data { get; set; }
+        private Dictionary<uint, byte[]> Data { get; set; }
         private byte[] _Data;
 
-        public void ReadDataBlock(string path){
+        public void ReadDataBlock(string path)
+        {
             DefaultPath = path;
             try
             {
-                FileStream fileStream = new FileStream(path,FileMode.OpenOrCreate);
+                FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate);
                 byte[] buffer = new byte[fileStream.Length];
                 fileStream.Read(buffer, 0, (int)fileStream.Length);
                 fileStream.Close();
@@ -43,11 +44,12 @@ namespace EGFramework
                 throw;
             }
         }
-        public void WriteDataBlock(string path){
+        public void WriteDataBlock(string path)
+        {
             try
             {
                 FileStream fileStream = File.Create(path);
-                fileStream.Write(_Data,0,_Data.Length);
+                fileStream.Write(_Data, 0, _Data.Length);
                 fileStream.Close();
                 fileStream.Dispose();
             }
@@ -69,26 +71,20 @@ namespace EGFramework
         /// <param name="objectKey"></param>
         /// <param name="obj"></param>
         /// <typeparam name="TObject"></typeparam>
-        public void SetObject<TObject>(string objectKey , TObject obj)
+        public void SetObject<TObject>(string objectKey, TObject obj)
         {
-            if(typeof(TObject).GetInterfaces().Contains(typeof(IEGByteObject))){
+            if (typeof(TObject).GetInterfaces().Contains(typeof(IEGByteObject)))
+            {
                 _Data = ((IEGByteObject)obj).GetBytes();
-            }else{
+            }
+            else
+            {
                 throw new Exception("This byte class cannot be serialized! you should implement IRequest first!");
             }
             WriteDataBlock(DefaultPath);
         }
 
-        public TObject GetObject<TObject>(string objectKey) where TObject : new()
-        {
-            if(typeof(TObject).GetInterfaces().Contains(typeof(IEGByteObject))){
-                TObject result = new TObject();
-                ((IEGByteObject)result).SetBytes(_Data);
-                return result;
-            }else{
-                throw new Exception("This byte class cannot be serialized! you should implement IRequest first!");
-            }
-        }
+
 
         public void RemoveObject<TObject>(string objectKey)
         {
@@ -114,6 +110,19 @@ namespace EGFramework
         {
             throw new NotImplementedException();
         }
+
+        public TObject GetObject<TObject>(string objectKey)
+        {
+            throw new NotImplementedException();
+            // if(typeof(TObject).GetInterfaces().Contains(typeof(IEGByteObject))){
+            //     TObject result = new TObject();
+            //     ((IEGByteObject)result).SetBytes(_Data);
+            //     return result;
+            // }else{
+            //     throw new Exception("This byte class cannot be serialized! you should implement IRequest first!");
+            // }
+        }
+
     }
 
     public interface IEGByteInit{

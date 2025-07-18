@@ -2,51 +2,103 @@
 
 ---
 
-注：下述`数据`无特殊声明默认指代：对象的集合。
+注：SaveTools 目前因为接口反复修改的关系，Load方法增加对象的返回值以提供更多的操作方法。下面Not Complete表示该部分功能并未开发完毕。
 
-SaveTools使用了两种数据格式，一种是表式存储，一种是对象存储，统一使用key-value方式存储数据，通过唯一key值锁定对应的数据。如果是只读数据，则需指定唯一标识key，读写数据，这个key值则为文件路径（唯一）。
+```mermaid
+mindmap
+	root((SaveTools))
+            Data
+                CSV
+                LiteDB
+                Dapper
+                    MySql
+                    Sqlite
 
-在使用该库时，一定要保证该数据被加载。可以重复读取数据文件，如果外部进行了修改，新读取的数据会覆盖掉原来的数据。使用流程：加载数据->读写数据或者其他操作
-
-需要在对应Godot的Node类下实现接口 `IEGFramework`
-
-下面演示一个打开Res文件夹的示例：
-
-```csharp
-public partial class EGSaveTest : Node,IEGFramework{
-    public override void _Ready()
-    {
-        base._Ready();
-        this.EGSave().OpenResPath();
-    }
-}
+            File
+                FTP
+                SFTP
+                LocalFileSystem
+                WebDav - Not Complete
+            Object
+                Json
+                Redis
+                Byte - Not Complete
 ```
 
-数据工具类开发状态如下：
+## 支持的数据类型
 
-只读&非只读数据：
+- `Object` 对象类型的存储类型，通过key-value的方式获取对应的对象，常见的例子有Json，Redis等等。
+- `Data`  数据类型的存储类型，同样通过key-Table的方式获取对应的数据表，通常为各种类型的数据库，比如MySql，Sqlite，LiteDB，CSV表格文件等等。
+- `File` 文件类型的存储类型，提供对应的下载，上传接口以及各类文件系统管理接口，通常为各种文件共享服务，比如FTP，WebDav，本地文件系统等等。
 
-- [x] CSV
+
+
+## 加载存储管理对象（可读可写）
+
+Load为可读写存储对象的加载，通常是用Path，或者数据库地址来进行实例化。
+
+以SQLite数据库为例
+
+```csharp
+ EGSqliteSave SqliteTest = this.EGSave().Load<EGSqliteSave>("SaveData/test.db");
+```
+
+具体使用方法详见API - IEGSaveData部分。
+
+## 读取存储管理对象（只读）
+
+Read为只读存储对象的加载，通常以字符&字节流的方式来获取，由于是只读数据，仅包含相关数据的搜索，获取功能。
+
+以Json为例
+
+```csharp
+string json = @"{
+                'CPU': 'Intel',
+                'PSU': '500W',
+                'Drives': [
+                    'DVD read/writer'
+                    /*(broken)*/,
+                    '500 gigabyte hard drive',
+                    '200 gigabyte hard drive'
+                ],
+                'My' : {
+                    'AA':'BB',
+                    'Date': new Date(123456789)
+                }
+            }";
+EGJsonSave jsonManage = this.EGSave().Read<EGJsonSave>("Example", json);
+GD.Print(jsonManage.GetObject<string>("CPU"));
+```
+
+## 开发计划（随版本更新）
+
+Object：
 
 - [x] Json
 
-- [ ] XML
+- [x] Redis
+
+- [ ] Byte
 
 - [ ] etc...
 
-非只读数据：
+Data：
 
 - [x] LiteDB
-
-- [x] Byte
-
-- [ ] Sqlite
-
-- [ ] Other DataBase
-
+- [x] Dapper
+- [x] Sqlite
+- [x] MySql
+- [x] Csv
 - [ ] etc...
 
-# API参考
+File：
+
+- [x] LocalFile
+- [x] Ftp
+- [x] SFtp
+- [ ] WebDav
+
+
 
 ---
 

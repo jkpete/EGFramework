@@ -8,12 +8,41 @@ Protocol Tools允许您在任何通讯物理层发送信息、接受服务器返
 
 目前工具以发布+订阅的方式处理消息，后续会增加问答的方式处理消息。
 
+
+
 本指南中，您将学到以下内容
 
 - 如何在互联网&串口通讯&文件读写&进程吞吐中，发送您的请求，获取您的响应消息。
 - 如何自定义消息类，发送您的消息，处理远端响应的消息。
 - 自定义插拔式的开启或关闭消息处理功能。
 - Protocol Tools的消息解耦原理
+
+
+
+Protocol Tools 的结构如下
+
+```mermaid
+mindmap
+	root((ProtocolTools))
+		EGMessage
+		ProtocolSchedule
+		Internet
+			TCPClient
+			TCPServer
+			UDP
+			MQTT
+			SSH
+			WebsocketClient
+			WebsocketServer - Only Godot
+		SerialPort
+		Other
+			FileStream
+			Process
+				Soft
+				CommandLine
+```
+
+
 
 ---
 

@@ -45,7 +45,7 @@ namespace EGFramework
     #region Object
     public interface IEGSaveObjectReadOnly
     {
-        TObject GetObject<TObject>(string objectKey) where TObject : new();
+        TObject GetObject<TObject>(string objectKey);
         IEnumerable<string> GetKeys();
         bool ContainsKey(string objectKey);
     }

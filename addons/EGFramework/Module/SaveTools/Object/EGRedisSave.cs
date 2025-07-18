@@ -61,7 +61,7 @@ namespace EGFramework{
             Database.SetAdd(objectKey, JsonConvert.SerializeObject(obj));
         }
 
-        public TObject GetObject<TObject>(string objectKey) where TObject : new()
+        public TObject GetObject<TObject>(string objectKey)
         {
             try
             {

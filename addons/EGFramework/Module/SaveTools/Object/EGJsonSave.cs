@@ -71,7 +71,7 @@ namespace EGFramework
         /// <summary>
         /// Get data from file, if your data is not in file, then throw an exception.
         /// </summary>
-        public TObject GetObject<TObject>(string objectKey) where TObject : new()
+        public TObject GetObject<TObject>(string objectKey)
         {
             if(!SaveObject.ContainsKey(objectKey)){
                 throw new Exception("Key not found!");
