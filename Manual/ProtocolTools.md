@@ -251,3 +251,162 @@ public struct DataStudent{
     }
 ```
 
+# 补充一点私货
+
+如果您对Protocol Tools的底层运行有兴趣，可以看看这部分。如有不足之处，欢迎提供相关改进建议。
+
+## 7.关于运行原理
+
+本部分内容可能比较抽象，比较难以用文字表达，故设计了下列若干图来展示具体的内容部分。
+
+### 消息发送机制 
+
+对应函数EGSendMessage
+
+---
+
+注：
+
+1. IProtocolSend表示实现了该发送消息接口的工具类。
+2. RequestMsgEvent表示中途构建的消息结构体，结构体的发送内容必须包含：发送内容（实现IRequest，参考上述定义您的请求部分。）、发送对象、协议类型。
+3. RequestCache为延时发送的队列，实现延时出队的功能。
+4. OnRequest为EasyEvent<RequestMsgEvent>类型的消息结构体委托，用于推送给所有注册发送功能的具体通讯对象。
+
+---
+
+```mermaid
+flowchart LR
+	1([开始])--IRequest,sender,ProtocolType-->EGSendMessage--
+	new ResponseMsgEvent-->OnRequest
+	IProtocolSend--EGRegisterSendAction-->OnRequest
+	OnRequest--定时触发-->I(IProtocolSend)-->发送消息-->2([结束])
+```
+
+
+
+消息结构体构建
+
+```mermaid
+block-beta
+    columns 6
+    
+    doc["RequestMsgEvent"]:6
+    IRequest["IRequest"]:2
+    sender["sender"]:2
+    protocolType["protocolType"]:2
+    string["string"]:1
+    bytes["bytes"]:1
+    bytes space:2 tcp
+    tcp["tcp&udp"]:1
+    etc["..."]:1
+```
+
+
+
+消息发送序列图
+
+```mermaid
+sequenceDiagram
+    participant EGSendMessage
+    participant RequestCache
+    participant OnRequest
+    participant IProtocolSend
+    autonumber
+    
+    IProtocolSend->>OnRequest:Regist(SendAction)
+    EGSendMessage->>OnRequest: (No Delay)RequestMsgEvent
+    OnRequest->>IProtocolSend: Invoke(RequestMsgEvent)
+    EGSendMessage->>+RequestCache: (Delay)Enqueue(RequestMsgEvent)
+    loop Every 0.1s
+        RequestCache->>RequestCache: TimerElapsed（delay--Default0.1s）
+    	RequestCache->>-OnRequest: Dequeue(RequestMsgEvent)
+    end
+    OnRequest->>IProtocolSend: Invoke(RequestMsgEvent)
+```
+
+### 消息接收机制
+
+对应EG(On&Off)Message，EGRegisterMessageEvent
+
+
+
+```mermaid
+flowchart TD
+	start([开始])-->SourceData
+subgraph ExecuteResponse
+	SourceData--trysetData(string,bytes)-->IResponse
+	IResponse--Construct-->ResponseMsgEvent
+end
+	ResponseMsgEvent-->OnResponse
+	EGRegisterMessageEvent-->OnResponse
+	OnResponse--Invoke-->MessageEvent-->over([结束])
+	IProtocolReceived--GetReceivedMsg-->EGProtocolSchedule
+	EGProtocolSchedule--CheckedProcess(Execute EveryFrame)-->SourceData
+	EGProtocolSchedule<-->EGProtocolScheduleGodot
+```
+
+
+
+消息结构体构建 
+
+ResponseMsgEvent
+
+```mermaid
+block-beta
+    columns 6
+    
+    doc["ResponseMsgEvent"]:6
+    IResponse["IResponse"]:2
+    sender["sender"]:2
+    protocolType["protocolType"]:2
+    TrySetData["TrySetData(string,byte)"]:2
+    TrySetData space:2 tcp
+    tcp["tcp&udp"]:1
+    etc["..."]:1
+```
+
+ResponseMsg
+
+```mermaid
+block-beta
+    columns 6
+    
+    doc["ResponseMsg"]:6
+    stringData["stringData"]:1
+    byteData["byteData"]:1
+    sender["sender"]:2
+    protocolType["protocolType"]:2
+```
+
+消息接收序列图
+
+注：ReceiveResponse实际为EGOnMessage&EGOffMessage注册的委托
+
+```mermaid
+sequenceDiagram
+    participant IProtocolReceived
+    participant EGProtocolSchedule
+    participant EGOnMessage
+    participant OnDataReceived
+    participant ReceiveResponse
+    participant OnResponse
+    participant EGRegisterMessageEvent
+    autonumber
+    
+    EGOnMessage->>+ReceiveResponse:Type
+    ReceiveResponse->>-OnDataReceived:Register
+    EGRegisterMessageEvent->>+OnResponse:Register
+    OnResponse->>-OnResponse:TypeCheck
+    loop Every frame
+    EGProtocolSchedule->>+IProtocolReceived:GetReceivedMsg(ResponseMsg)
+    IProtocolReceived-->>IProtocolReceived:DataReceiveProcess
+    IProtocolReceived->>-EGProtocolSchedule:ResponseMsg
+    end
+    EGProtocolSchedule->>OnDataReceived:ResponseMsg
+    OnDataReceived->>+ReceiveResponse:IResponse,sender,protocolType
+    ReceiveResponse->>ReceiveResponse:CheckIsSet
+    ReceiveResponse->>-OnResponse:if(Set)-Invoke(ResponseMsgEvent)
+    OnResponse->>EGRegisterMessageEvent:Execute
+
+```
+
