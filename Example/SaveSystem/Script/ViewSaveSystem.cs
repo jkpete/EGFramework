@@ -16,14 +16,28 @@ namespace EGFramework.Examples.Test {
         Container container{ set; get; }
         public override void _Ready()
         {
-            TestTree();
-            TestTable();
-            TestJson();
+            // TestTree();
+            // TestTable();
+            // TestJson();
+            TestDialog();
         }
 
         public override void _ExitTree()
         {
 
+        }
+
+        public void TestDialog()
+        {
+            DataStudent dataStudent = new DataStudent();
+            dataStudent.EGenerateDictiontaryByObject();
+            this.ExecuteAfterSecond(() =>
+            {
+                this.EGEditDialog(new DataStudent().EGenerateDictiontaryByObject(), e =>
+                {
+                    GD.Print("Name:" + e["Name"] + "Age:" + e["Age"]);
+                }, "Edit");
+            },0.2f);
         }
 
         public void TestJson()

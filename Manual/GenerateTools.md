@@ -97,3 +97,23 @@ public void TestTree()
 ```
 
 ![GenerateTools_001](Img/GenerateTools_003.JPG)
+
+## 🚪弹出一个可编辑弹窗
+
+使用上述定义过的DataStudent，我们创建一个可编辑弹窗，并且在弹窗编辑完成后打印编辑后的内容。由于Godot子节点先加载，父节点后加载的机制，需要等待父节点实例化之后才能调用弹窗功能，我们使用一个延时方法（参考NodeExtension-EGThread部分），延时弹出该弹窗。
+
+```csharp
+public void TestDialog()
+{
+    DataStudent dataStudent = new DataStudent();
+    dataStudent.EGenerateDictiontaryByObject();
+    this.ExecuteAfterSecond(() =>
+    {
+        this.EGEditDialog(new DataStudent().EGenerateDictiontaryByObject(), e =>
+        {
+            GD.Print("Name:" + e["Name"] + "Age:" + e["Age"]);
+        }, "Edit");
+    },0.2f);
+}
+```
+
