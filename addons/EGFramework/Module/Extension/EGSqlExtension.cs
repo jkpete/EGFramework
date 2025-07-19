@@ -123,7 +123,7 @@ namespace EGFramework
             }
             keySet = keySet.TrimEnd(',');
             string createSql = @"CREATE TABLE " + tableName + " (" +
-            "`ID` INTEGER PRIMARY KEY AUTOINCREMENT, " + keySet
+            "`ID` INTEGER PRIMARY KEY AUTO_INCREMENT, " + keySet
             + ");";
             return createSql;
         }

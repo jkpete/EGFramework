@@ -19,12 +19,20 @@ namespace EGFramework.Examples.Test {
             // TestTree();
             // TestTable();
             // TestJson();
-            TestDialog();
+            // TestDialog();
+            TestMySQL();
         }
 
         public override void _ExitTree()
         {
 
+        }
+
+        public void TestMySQL()
+        {
+            EGMysqlSave mysqlSave = this.EGSave().Load<EGMysqlSave>("server=" + "localhost" + ";port=" + "3306" + ";uid=" + "root" + ";pwd=" + "root" + ";database=" + "Test3" + ";");
+            // mysqlSave.CreateTable<DataStudent>("DataStudent");
+            // mysqlSave.AddData("DataStudent",new DataStudent("Bob",12));
         }
 
         public void TestDialog()
@@ -37,7 +45,7 @@ namespace EGFramework.Examples.Test {
                 {
                     GD.Print("Name:" + e["Name"] + "Age:" + e["Age"]);
                 }, "Edit");
-            },0.2f);
+            }, 0.2f);
         }
 
         public void TestJson()
