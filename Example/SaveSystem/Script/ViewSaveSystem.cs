@@ -31,7 +31,7 @@ namespace EGFramework.Examples.Test {
         public void TestMySQL()
         {
             EGDapper mysqlSave = this.EGSave().Load<EGMysqlSave>("server=" + "localhost" + ";port=" + "3306" + ";uid=" + "root" + ";pwd=" + "root" + ";database=" + "Test3" + ";");
-            bool isExist = mysqlSave.ContainsKey("DataStudent");
+            bool isExist = mysqlSave.ContainsData("DataStudent",3);
             GD.Print(isExist);
             // mysqlSave.CreateTable<DataStudent>("DataStudent");
             // DataStudent stuData = new DataStudent("Bob", 12);
@@ -47,12 +47,15 @@ namespace EGFramework.Examples.Test {
             // mysqlSave.AddData<DataStu>("DataStudent",stuList);
             // mysqlSave.RemoveData("DataStudent",2);
             // IEnumerable<DataStu> findStudent = mysqlSave.FindData<DataStu>("DataStudent", e => e.Name == "CC");
-            IEnumerable<DataStu> findStudent = mysqlSave.FindData<DataStu>("DataStudent","Name","CC");
-            GD.Print(findStudent.Count() +" data has been find!");
-            foreach (DataStu stu in findStudent)
-            {
-                GD.Print(stu.Path);
-            }
+            // IEnumerable<DataStu> findStudent = mysqlSave.FindData<DataStu>("DataStudent","Name","CC");
+            // GD.Print(findStudent.Count() +" data has been find!");
+            // int count = 0;
+            // foreach (DataStu stu in findStudent)
+            // {
+            //     DataStu NewData = new DataStu("CC_" + count, stu.Age, stu.Path);
+            //     mysqlSave.UpdateData("DataStudent", NewData, stu.ID);
+            //     count++;
+            // }
         }
 
         public void TestDialog()

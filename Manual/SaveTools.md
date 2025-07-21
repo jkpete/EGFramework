@@ -135,6 +135,13 @@ bool isExist = mysqlSave.ContainsKey("DataStudent");
 GD.Print(isExist);
 ```
 
+### 查询对应ID的条目是否存在
+
+```csharp
+bool isExist = mysqlSave.ContainsData("DataStudent",3);
+GD.Print(isExist);
+```
+
 ### 初始化表
 
 如果包含复合对象的，比如其它类对象的声明（例如上面的 EGPathSelect），此选项创建的字段为varchar(255)，同String。
@@ -209,7 +216,19 @@ foreach (DataStu stu in findStudent)
 
 ### 修改数据
 
+查找所有Name字段包含CC的数据，并给名称增加编号。
 
+```csharp
+IEnumerable<DataStu> findStudent = mysqlSave.FindData<DataStu>("DataStudent","Name","CC");
+GD.Print(findStudent.Count() +" data has been find!");
+int count = 0;
+foreach (DataStu stu in findStudent)
+{
+    DataStu NewData = new DataStu("CC_" + count, stu.Age, stu.Path);
+    mysqlSave.UpdateData("DataStudent", NewData, stu.ID);
+    count++;
+}
+```
 
 
 
@@ -251,10 +270,6 @@ File：
 
 
 ## 简易背包
-
-
-
-## 数据库增删改查
 
 
 
