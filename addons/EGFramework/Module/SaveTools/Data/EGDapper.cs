@@ -78,19 +78,57 @@ namespace EGFramework
             // throw new System.NotImplementedException();
             Type DataType = typeof(TData);
             var properties = DataType.GetProperties();
+            var fields = DataType.GetFields();
             string keySet = "";
             string keySetParam = "";
             foreach (PropertyInfo key in properties)
             {
-                keySet += key.Name + ",";
-                keySetParam += "@" + key.Name + ",";
+                if (key.Name == "ID" || key.Name == "Id" || key.Name == "id")
+                {
+                    continue;
+                }
+                if (DataType.IsPrimitive)
+                {
+                    keySet += key.Name + ",";
+                    keySetParam += "@" + key.Name + ",";
+                }
+                else
+                {
+                    keySet += key.Name + ",";
+                    keySetParam += "'" + key.GetValue(data).ToString() + "',";
+                }
             }
+
+            foreach (FieldInfo key in fields)
+            {
+                if (key.Name == "ID" || key.Name == "Id" || key.Name == "id")
+                {
+                    continue;
+                }
+                if (DataType.IsPrimitive)
+                {
+                    keySet += key.Name + ",";
+                    keySetParam += "@" + key.Name + ",";
+                }
+                else
+                {
+                    keySet += key.Name + ",";
+                    keySetParam += "'" + key.GetValue(data).ToString() + "',";
+                }
+            }
+            
             keySet = keySet.TrimEnd(',');
             keySetParam = keySetParam.TrimEnd(',');
             int count = Connection.Execute(@"insert " + dataKey + "(" + keySet + ") values(" + keySetParam + ")", data);
             //EG.Print("count:" + count);
         }
-
+        
+        /// <summary>
+        /// TData Must be all member to type of properties. such as 'public string Name { set; get; }'. Properties cannot be except string, primitive
+        /// </summary>
+        /// <param name="dataKey"></param>
+        /// <param name="data"></param>
+        /// <typeparam name="TData"></typeparam>
         public void AddData<TData>(string dataKey, IEnumerable<TData> data)
         {
             Type DataType = typeof(TData);
@@ -99,12 +137,18 @@ namespace EGFramework
             string keySetParam = "";
             foreach (PropertyInfo key in properties)
             {
+                if (key.Name == "ID" || key.Name == "Id" || key.Name == "id")
+                {
+                    continue;
+                }
                 keySet += key.Name + ",";
                 keySetParam += "@" + key.Name + ",";
             }
+
             keySet = keySet.TrimEnd(',');
             keySetParam = keySetParam.TrimEnd(',');
             string sql = @"insert " + dataKey + "(" + keySet + ") values(" + keySetParam + ")";
+            EG.Print("sql:" + sql);
             int count = Connection.Execute(sql, data);
             //EG.Print("count:" + count);
         }

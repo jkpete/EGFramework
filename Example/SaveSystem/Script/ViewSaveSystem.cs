@@ -30,9 +30,29 @@ namespace EGFramework.Examples.Test {
 
         public void TestMySQL()
         {
-            EGMysqlSave mysqlSave = this.EGSave().Load<EGMysqlSave>("server=" + "localhost" + ";port=" + "3306" + ";uid=" + "root" + ";pwd=" + "root" + ";database=" + "Test3" + ";");
+            EGDapper mysqlSave = this.EGSave().Load<EGMysqlSave>("server=" + "localhost" + ";port=" + "3306" + ";uid=" + "root" + ";pwd=" + "root" + ";database=" + "Test3" + ";");
+            bool isExist = mysqlSave.ContainsKey("DataStudent");
+            GD.Print(isExist);
             // mysqlSave.CreateTable<DataStudent>("DataStudent");
-            // mysqlSave.AddData("DataStudent",new DataStudent("Bob",12));
+            // DataStudent stuData = new DataStudent("Bob", 12);
+            // stuData.Path = new EGPathSelect(){Path = "AA"};
+            // mysqlSave.AddData("DataStudent",stuData);
+            // DataStu stu1 = new DataStu("Anti", 20,"London");
+            // mysqlSave.AddData("DataStudent",stu1);
+            // DataStu stu2 = new DataStu("CC", 23,"NewYork"){Age = 19};
+            // DataStu stu3 = new DataStu("Rocket", 24,"Paris"){Age = 26};
+            // List<DataStu> stuList = new List<DataStu>();
+            // stuList.Add(stu2);
+            // stuList.Add(stu3);
+            // mysqlSave.AddData<DataStu>("DataStudent",stuList);
+            // mysqlSave.RemoveData("DataStudent",2);
+            // IEnumerable<DataStu> findStudent = mysqlSave.FindData<DataStu>("DataStudent", e => e.Name == "CC");
+            IEnumerable<DataStu> findStudent = mysqlSave.FindData<DataStu>("DataStudent","Name","CC");
+            GD.Print(findStudent.Count() +" data has been find!");
+            foreach (DataStu stu in findStudent)
+            {
+                GD.Print(stu.Path);
+            }
         }
 
         public void TestDialog()
@@ -132,8 +152,24 @@ namespace EGFramework.Examples.Test {
             Path = new EGPathSelect();
         }
     }
+
+    public struct DataStu
+    {
+        public int ID;
+        public string Name { get; set; }
+        public int Age { set; get; }
+        public string Path { set; get; }
+        public DataStu(string name, int age,string path)
+        {
+            Name = name;
+            Age = age;
+            ID = 0;
+            Path = path;
+        }
+    }
     
-    public struct DataPerson{
+    public struct DataPerson
+    {
         public string id { get; set; }
         public string namee { set; get; }
         public string workPlace { set; get; }

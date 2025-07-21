@@ -37,6 +37,18 @@ namespace EGFramework
         {
             return Path;
         }
+        public EGPathSelect() { Path = ""; IsDir = false; }
+
+        public EGPathSelect(string path)
+        {
+            this.Path = path;
+            this.IsDir = false;
+        }
+        public EGPathSelect(string path, bool isDir)
+        {
+            this.Path = path;
+            this.IsDir = isDir;
+        }
     }
 
     public interface IEGReadOnlyString
