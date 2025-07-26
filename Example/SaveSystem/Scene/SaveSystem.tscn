@@ -28,3 +28,8 @@ anchor_right = 1.0
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Window" type="Window" parent="."]
+mode = 3
+initial_position = 3
+current_screen = 1

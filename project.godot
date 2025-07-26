@@ -20,6 +20,8 @@ config/icon="res://EGFramework.svg"
 
 window/size/viewport_width=1600
 window/size/viewport_height=900
+window/size/mode=3
+window/subwindows/embed_subwindows=false
 
 [dotnet]
 
