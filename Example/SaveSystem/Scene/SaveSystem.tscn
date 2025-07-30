@@ -33,3 +33,4 @@ grow_vertical = 2
 mode = 3
 initial_position = 3
 current_screen = 1
+visible = false

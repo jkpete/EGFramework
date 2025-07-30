@@ -20,7 +20,7 @@ namespace EGFramework.Examples.Test {
             // TestTable();
             // TestJson();
             // TestDialog();
-            TestMySQL();
+            // TestMySQL();
         }
 
         public override void _ExitTree()
@@ -31,7 +31,7 @@ namespace EGFramework.Examples.Test {
         public void TestMySQL()
         {
             EGDapper mysqlSave = this.EGSave().Load<EGMysqlSave>("server=" + "localhost" + ";port=" + "3306" + ";uid=" + "root" + ";pwd=" + "root" + ";database=" + "Test3" + ";");
-            bool isExist = mysqlSave.ContainsData("DataStudent",3);
+            bool isExist = mysqlSave.ContainsData("DataStudent", 3);
             GD.Print(isExist);
             // mysqlSave.CreateTable<DataStudent>("DataStudent");
             // DataStudent stuData = new DataStudent("Bob", 12);
