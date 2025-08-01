@@ -107,8 +107,7 @@ namespace EGFramework
             }
             return sqlCommand;
         }
-
-        public static string ToCreateTableSQL(this Type type, string tableName)
+        public static string ToCreateTableSQL(this Type type, string tableName,string idType = "INTEGER PRIMARY KEY AUTO_INCREMENT")
         {
             var properties = type.GetProperties();
             FieldInfo[] fields = type.GetFields();
@@ -123,12 +122,12 @@ namespace EGFramework
             }
             keySet = keySet.TrimEnd(',');
             string createSql = @"CREATE TABLE " + tableName + " (" +
-            "`ID` INTEGER PRIMARY KEY AUTO_INCREMENT, " + keySet
+            "`ID` "+idType+", " + keySet
             + ");";
             return createSql;
         }
         
-        public static string ToCreateTableSQL(this Dictionary<string,Type> tableParam,string tableName)
+        public static string ToCreateTableSQL(this Dictionary<string,Type> tableParam,string tableName,string idType = "INTEGER PRIMARY KEY AUTO_INCREMENT")
         {
 
             string keySet = "";
@@ -137,7 +136,7 @@ namespace EGFramework
             }
             keySet = keySet.TrimEnd(',');
             string createSql = @"CREATE TABLE "+tableName+" ("+
-            "`ID` INTEGER PRIMARY KEY AUTOINCREMENT, "+keySet
+            "`ID` "+idType+", "+keySet
             +");";
             return createSql;
         }

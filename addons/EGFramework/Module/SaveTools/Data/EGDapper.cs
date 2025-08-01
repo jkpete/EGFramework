@@ -11,6 +11,7 @@ namespace EGFramework
     public abstract class EGDapper : IEGSave, IEGSaveData, IEGDataBase
     {
         public DbConnection Connection { get; set; }
+        public string PrimaryType = "INTEGER PRIMARY KEY AUTO_INCREMENT";
         public string ExceptionMsg;
 
         public abstract void InitSave(string conn);
@@ -303,7 +304,7 @@ namespace EGFramework
                 EG.Print("Table " + dataKey + " has been created!");
                 return;
             }
-            string createSql = typeof(TData).ToCreateTableSQL(dataKey);
+            string createSql = typeof(TData).ToCreateTableSQL(dataKey,PrimaryType);
             int count = Connection.Execute(createSql);
         }
 
@@ -319,7 +320,7 @@ namespace EGFramework
             {
                 tableType.Add(pair.Key, pair.Value.GetType());
             }
-            string createSql = tableType.ToCreateTableSQL(dataKey);
+            string createSql = tableType.ToCreateTableSQL(dataKey,PrimaryType);
             int count = Connection.Execute(createSql);
         }
 
