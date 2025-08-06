@@ -33,7 +33,7 @@ namespace EGFramework.UI
 
         protected EasyEvent<Dictionary<string, object>> AddData { set; get; } = new EasyEvent<Dictionary<string, object>>();
 
-        public Vector2 MinimumFunctionButtonSize = new Vector2(120,0);
+        public Vector2 MinimumFunctionButtonSize = new Vector2(120, 0);
 
         public string TableName { set; get; } = "-";
 
@@ -85,10 +85,10 @@ namespace EGFramework.UI
             GD.Print("File has been Saved at " + path);
             EGCsvSave eGCsvSave = new EGCsvSave();
             eGCsvSave.InitSave(path);
-            eGCsvSave.AddGroup("",TableData);
+            eGCsvSave.AddGroup("", TableData);
             OS.ShellOpen(path);
         }
-        
+
         public virtual void OnInputFile(string path)
         {
 
@@ -137,7 +137,7 @@ namespace EGFramework.UI
 
 
                 SearchEdit = FunctionContainer.CreateNode<LineEdit>("searchEdit");
-                SearchEdit.PlaceholderText = "Please input search key";
+                SearchEdit.PlaceholderText = "PlaceholderSearch";
                 SearchEdit.SizeFlagsHorizontal = SizeFlags.ShrinkEnd;
                 SearchEdit.CustomMinimumSize = new Vector2(MinimumFunctionButtonSize.X * 2, MinimumFunctionButtonSize.Y);
 
@@ -218,7 +218,7 @@ namespace EGFramework.UI
             }
             ResetSearch();
         }
-        
+
         public void InitPageMenu()
         {
             if (PageContainer == null)
@@ -229,7 +229,7 @@ namespace EGFramework.UI
 
 
                 Label labelCount = PageContainer.CreateNode<Label>("to");
-                labelCount.Text = "Data count : " + PageAdapter.DataLength;
+                labelCount.Text = Tr("Data") + " " + Tr("Count") +" : " + PageAdapter.DataLength + " "+Tr("Page")+" : " + PageAdapter.CurrentPage;
 
                 Control empty1 = PageContainer.CreateNode<Control>("empty1");
                 empty1.CustomMinimumSize = new Vector2(32, 0);
@@ -271,13 +271,13 @@ namespace EGFramework.UI
                 inputPage.Connect("value_changed", Callable.From<int>(ToPage));
 
                 Label labelPage = PageContainer.CreateNode<Label>("page");
-                labelPage.Text = "page";
+                labelPage.Text = "Page";
                 firstPage.Disabled = true;
                 lastPage.Disabled = true;
 
                 PageChangedRealease = this.OnPageChanged.Register(() =>
                 {
-                    labelCount.Text = "Data count : " + PageAdapter.DataLength + " Page : " + PageAdapter.CurrentPage;
+                    labelCount.Text = Tr("Data") + " " + Tr("Count") +" : " + PageAdapter.DataLength + " "+Tr("Page")+" : " + PageAdapter.CurrentPage;
                     currentPage.Text = PageAdapter.CurrentPage.ToString();
                     if (PageAdapter.IsFirstPage())
                     {
@@ -453,5 +453,13 @@ namespace EGFramework.UI
         }
 
     }
-    
+
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+    public class EGTitleAttribute : Attribute
+    { 
+        public string _name { set; get; }
+        public EGTitleAttribute(string name){
+            this._name = name;
+        }
+    }
 }

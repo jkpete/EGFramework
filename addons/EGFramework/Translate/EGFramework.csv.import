@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dkmbeivkbutkr"
+
+[deps]
+
+files=["res://addons/EGFramework/Translate/EGFramework.en.translation", "res://addons/EGFramework/Translate/EGFramework.zh.translation", "res://addons/EGFramework/Translate/EGFramework.jp.translation"]
+
+source_file="res://addons/EGFramework/Translate/EGFramework.csv"
+dest_files=["res://addons/EGFramework/Translate/EGFramework.en.translation", "res://addons/EGFramework/Translate/EGFramework.zh.translation", "res://addons/EGFramework/Translate/EGFramework.jp.translation"]
+
+[params]
+
+compress=true
+delimiter=0

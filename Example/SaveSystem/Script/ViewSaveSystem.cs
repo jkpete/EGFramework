@@ -17,10 +17,12 @@ namespace EGFramework.Examples.Test {
         public override void _Ready()
         {
             // TestTree();
-            // TestTable();
+            // TranslationServer.SetLocale("jp");
+            TestTable();
             // TestJson();
             // TestDialog();
             // TestMySQL();
+            // EG.Print(OS.GetLocaleLanguage());
         }
 
         public override void _ExitTree()
@@ -134,10 +136,10 @@ namespace EGFramework.Examples.Test {
             EGodotTable table = container.CreateNode<EGodotTable>("Default");
             table.InitData<DataStudent>(dataStudents);
 
-            // EGSqliteSave SqliteTest = this.EGSave().Load<EGSqliteSave>("SaveData/test.db");
-            // EGodotSaveTable PersonTable = container.CreateNode<EGodotSaveTable>("SQLite");
-            // PersonTable.InitSaveData<EGSqliteSave>(SqliteTest);
-            // PersonTable.InitData<DataPerson>("person");
+            EGSqliteSave SqliteTest = this.EGSave().Load<EGSqliteSave>("SaveData/test.db");
+            EGodotSaveTable PersonTable = container.CreateNode<EGodotSaveTable>("SQLite");
+            PersonTable.InitSaveData<EGSqliteSave>(SqliteTest);
+            PersonTable.InitData<DataPerson>("person");
         }
 
     }

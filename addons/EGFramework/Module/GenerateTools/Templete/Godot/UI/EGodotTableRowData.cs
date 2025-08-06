@@ -60,7 +60,7 @@ namespace EGFramework.UI{
         }
         public void OnDeleteSelf()
         {
-            this.EGConfirm("Delete this data? this operate cannot be canceled.", e =>
+            this.EGConfirm("DeleteConfirmation", e =>
             {
                 if (e)
                 {

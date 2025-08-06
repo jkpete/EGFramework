@@ -1,0 +1,22 @@
+keys,en,zh,jp
+Add,Add,添加,追加する
+Refresh,Refresh,刷新,刷新
+Output,Output,导出,エクスポート
+Input,Input,导入,インポート
+Search,Search,查找,検索する
+PlaceholderSearch,Please input keyword,请输入关键词,キーワードを入力してください
+Reset,Reset,重置,リセット
+To,To,到,へ
+Page,Page,页,ページ
+Data,Data,数据,データ
+Modify,Modify,更改,修正する
+Delete,Delete,删除,削除する
+Count,Count,数量,カウント
+DeleteConfirmation,Delete this data? this operate cannot be canceled.,确认删除数据？此项操作不可被撤销。,このデータを削除しますか？この操作はキャンセルできません。
+OK,OK,确认,はい
+Cancel,Cancel,取消,キャンセル
+ID,ID,ID,ID
+Name,Name, 名称,ネーム
+Age,Age, 年龄,エイジ
+Path,Path, 路径,パス
+Operate,Operate,操作,操作する

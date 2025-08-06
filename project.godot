@@ -87,6 +87,10 @@ jump={
 ]
 }
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://addons/EGFramework/Translate/EGFramework.en.translation", "res://addons/EGFramework/Translate/EGFramework.jp.translation", "res://addons/EGFramework/Translate/EGFramework.zh.translation")
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
