@@ -67,6 +67,18 @@ namespace EGFramework.UI
                 }
                 this.ParamOption.Selected = this.ParamOption.GetItemIndex(((EGSelectParam)editValue.Value).SelectID);
             }
+            else if (editValue.Value is Enum)
+            {
+                this.ParamOption = new OptionButton();
+                ParamOption.Name = "ParamOption";
+                ParamOption.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+                this.AddChild(ParamOption);
+                foreach (KeyValuePair<int, string> selectOptions in editValue.Value.GetType().EGenerateMappingByEnum())
+                {
+                    this.ParamOption.AddItem(selectOptions.Value, selectOptions.Key);
+                }
+                this.ParamOption.Selected = this.ParamOption.GetItemIndex((int)editValue.Value);
+            }
             else if (editValue.Value is int)
             {
                 this.ParamSpinBox = new SpinBox();
@@ -128,7 +140,7 @@ namespace EGFramework.UI
                 ParamOperate.SizeFlagsHorizontal = SizeFlags.ExpandFill;
                 ParamOperate.Pressed += () =>
                 {
-                    this.EGFileOpen("res://", str =>
+                    this.EGFileOpen("", str =>
                     {
                         ParamPathSelect.Text = str;
                     });

@@ -8,18 +8,27 @@ using LiteDB;
 using Newtonsoft.Json;
 using Renci.SshNet;
 
-namespace EGFramework.Examples.Test {
+namespace EGFramework.Examples.Test
+{
     public partial class ViewSaveSystem : Node, IEGFramework
     {
         public string[][] DataList { get; set; }
         public string[][] DataList2 { get; set; }
-        Container container{ set; get; }
+        Container container { set; get; }
         public override void _Ready()
         {
             // TestTree();
             // TranslationServer.SetLocale("jp");
-            TestTable();
+            // GD.Print(Tr("Data")+"+___+");
+            // TestTable();
             // TestJson();
+            this.CallDeferred("TestDialog");
+            // SchoolType school = SchoolType.London;
+            // school.EGenerateMappingByEnum();
+            // foreach (KeyValuePair<int, string> selectOptions in school.EGenerateMappingByEnum())
+            // {
+            //     GD.Print(selectOptions.Key+"---"+selectOptions.Value);
+            // }
             // TestDialog();
             // TestMySQL();
             // EG.Print(OS.GetLocaleLanguage());
@@ -62,15 +71,11 @@ namespace EGFramework.Examples.Test {
 
         public void TestDialog()
         {
-            DataStudent dataStudent = new DataStudent();
-            dataStudent.EGenerateDictiontaryByObject();
-            this.ExecuteAfterSecond(() =>
+            DataStudent dataStudent = new DataStudent("ZG",10);
+            this.EGEditDialog(dataStudent.EGenerateDictiontaryByObject(), e =>
             {
-                this.EGEditDialog(new DataStudent().EGenerateDictiontaryByObject(), e =>
-                {
-                    GD.Print("Name:" + e["Name"] + "Age:" + e["Age"]);
-                }, "Edit");
-            }, 0.2f);
+                GD.Print("Name:" + e["Name"] + "Age:" + e["Age"]+"School:" + e["School"] + "Path:" + e["Path"]);
+            }, "Edit");
         }
 
         public void TestJson()
@@ -149,11 +154,13 @@ namespace EGFramework.Examples.Test {
         public string Name { get; set; }
         public int Age;
         public EGPathSelect Path { set; get; }
+        public SchoolType School { set; get; }
         public DataStudent(string name, int age)
         {
             Name = name;
             Age = age;
             ID = 0;
+            School = SchoolType.MIT;
             Path = new EGPathSelect();
         }
     }
@@ -164,7 +171,7 @@ namespace EGFramework.Examples.Test {
         public string Name { get; set; }
         public int Age { set; get; }
         public string Path { set; get; }
-        public DataStu(string name, int age,string path)
+        public DataStu(string name, int age, string path)
         {
             Name = name;
             Age = age;
@@ -172,12 +179,20 @@ namespace EGFramework.Examples.Test {
             Path = path;
         }
     }
-    
+
     public struct DataPerson
     {
         public string id { get; set; }
         public string namee { set; get; }
         public string workPlace { set; get; }
         public string policeNum { set; get; }
+    }
+
+    public enum SchoolType
+    {
+        Tsinghua = 0,
+        MIT = 1,
+        London = 2,
+        Data = 3
     }
 }

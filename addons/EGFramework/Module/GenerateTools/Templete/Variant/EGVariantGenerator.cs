@@ -123,5 +123,18 @@ namespace EGFramework{
             }
             return result;
         }
+
+        public static Dictionary<int, string> EGenerateMappingByEnum(this Type self)
+        {
+            Dictionary<int, string> result = new Dictionary<int, string>();
+            foreach (var value in Enum.GetValues(self))
+            {
+                if (!result.ContainsKey((int)value))
+                {
+                    result.Add((int)value, value.ToString());
+                }
+            }
+            return result;
+        }
     }
 }

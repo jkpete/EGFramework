@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Godot;
 namespace EGFramework.UI
 {
@@ -23,7 +24,7 @@ namespace EGFramework.UI
         {
             EGodotFileDialog fileDialog = self.PopupNode<EGodotFileDialog>("FileDialog");
             fileDialog.Title = title;
-            fileDialog.RootSubfolder = filePath;
+            fileDialog.RootSubfolder = Path.GetDirectoryName(filePath);
             fileDialog.InitFileSelect(selectPath);
         }
 

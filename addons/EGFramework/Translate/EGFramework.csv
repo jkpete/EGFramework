@@ -5,6 +5,8 @@ Output,Output,导出,エクスポート
 Input,Input,导入,インポート
 Search,Search,查找,検索する
 PlaceholderSearch,Please input keyword,请输入关键词,キーワードを入力してください
+MissingMessage,Please input key word in search edit and select a field,请在搜索编辑中输入关键字并选择一个字段,検索編集にキーワードを入力し、フィールドを選んでください
+MessageNotEnough,Message not enough,消息不足,メッセージが足りません
 Reset,Reset,重置,リセット
 To,To,到,へ
 Page,Page,页,ページ

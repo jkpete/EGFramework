@@ -33,7 +33,7 @@ namespace EGFramework.UI
 
         protected EasyEvent<Dictionary<string, object>> AddData { set; get; } = new EasyEvent<Dictionary<string, object>>();
 
-        public Vector2 MinimumFunctionButtonSize = new Vector2(120, 0);
+        public Vector2 MinimumFunctionButtonSize = new Vector2(60, 0);
 
         public string TableName { set; get; } = "-";
 
@@ -341,9 +341,9 @@ namespace EGFramework.UI
 
         public void Search()
         {
-            if (SearchEdit.Text == "" && FieldSelect.Text == "")
+            if (SearchEdit.Text == "" || FieldSelect.Text == "")
             {
-                this.EGAlert("Please input key word in search edit and select a field.", "Message not enough!");
+                this.EGAlert("MissingMessage", "MessageNotEnough");
             }
             else
             {
@@ -454,12 +454,4 @@ namespace EGFramework.UI
 
     }
 
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-    public class EGTitleAttribute : Attribute
-    { 
-        public string _name { set; get; }
-        public EGTitleAttribute(string name){
-            this._name = name;
-        }
-    }
 }
