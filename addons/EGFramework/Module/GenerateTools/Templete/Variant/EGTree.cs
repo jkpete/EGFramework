@@ -4,12 +4,13 @@ using Newtonsoft.Json;
 
 namespace EGFramework
 {
-        public interface IEGTree
+    public interface IEGTree
     {
         public string Name { set; get; }
         public IEGTree GetParent();
         public void SetParent(IEGTree tree);
         public IEnumerable<IEGTree> GetChilds();
+        public IEGTree GetChild(string key);
         public void AppendTree(IEGTree tree);
         
     }
@@ -25,7 +26,7 @@ namespace EGFramework
         public bool BoolValue { set; get; }
 
         public IEGTree Parent { set; get; }
-        public List<IEGTree> Childs { set; get; } = new List<IEGTree>();
+        public Dictionary<string,IEGTree> Childs { set; get; } = new Dictionary<string,IEGTree>();
 
         public EGTree()
         {
@@ -38,13 +39,31 @@ namespace EGFramework
 
         public void AppendTree(IEGTree tree)
         {
-            tree.SetParent(this);
-            Childs.Add(tree);
+            if (!Childs.ContainsKey(tree.Name))
+            {
+                tree.SetParent(this);
+                Childs.Add(tree.Name,tree);
+            }
+        }
+        
+        public void AppendTree(string treeName)
+        {
+            if (!Childs.ContainsKey(treeName))
+            {
+                EGTree newTree = new EGTree(treeName);
+                newTree.SetParent(this);
+                Childs.Add(treeName, newTree);
+            }
+        }
+
+        public bool Contains(string name)
+        {
+            return Childs.ContainsKey(name);
         }
 
         public virtual IEnumerable<IEGTree> GetChilds()
         {
-            return Childs;
+            return Childs.Values;
         }
 
         public virtual IEGTree GetParent()
@@ -55,6 +74,18 @@ namespace EGFramework
         public void SetParent(IEGTree tree)
         {
             this.Parent = tree;
+        }
+
+        public IEGTree GetChild(string key)
+        {
+            if (Childs.ContainsKey(key))
+            {
+                return Childs[key];
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 
