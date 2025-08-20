@@ -81,10 +81,16 @@ namespace EGFramework.Examples.Test
 
         public void TestEdit()
         {
-            DataStudent dataStudent = new DataStudent("ZG",10);
+            DataStudent dataStudent = new DataStudent("ZG", 10);
             container = this.GetNode<TabContainer>("TabContainer");
             EGodotEditList editList = container.CreateNode<EGodotEditList>();
             editList.InitList(dataStudent.EGenerateDictiontaryByObject(), e =>
+            {
+                GD.Print("Name:" + e["Name"] + "Age:" + e["Age"] + "School:" + e["School"] + "Path:" + e["Path"]);
+            }, "Edit");
+            DataStu dataStu = new DataStu("F", 1, "DE");
+            EGodotEditList editList2 = container.CreateNode<EGodotEditList>();
+            editList2.InitList(dataStu.EGenerateDictiontaryByObject(), e =>
             {
                 GD.Print("Name:" + e["Name"] + "Age:" + e["Age"] + "School:" + e["School"] + "Path:" + e["Path"]);
             }, "Edit");

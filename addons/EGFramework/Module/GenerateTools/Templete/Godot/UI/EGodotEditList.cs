@@ -90,8 +90,8 @@ namespace EGFramework.UI
             try
             {
                 OnEdit.Invoke(EditCache);
-                OnDataEdit.UnRegister();
-                this.Visible = false;
+                // OnDataEdit.UnRegister();
+                // this.Visible = false;
             }
             catch (NullReferenceException)
             {
