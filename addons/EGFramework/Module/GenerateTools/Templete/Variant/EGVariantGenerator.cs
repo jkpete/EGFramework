@@ -21,21 +21,6 @@ namespace EGFramework{
             }
             return result;
         }
-        public static Dictionary<string, object> EGenerateEmptyDictiontaryByType(this Type self)
-        {
-            PropertyInfo[] propertyNames = self.GetProperties();
-            FieldInfo[] fieldNames = self.GetFields();
-            Dictionary<string, object> result = new Dictionary<string, object>();
-            foreach (PropertyInfo pName in propertyNames)
-            {
-                result.Add(pName.Name, "");
-            }
-            foreach (FieldInfo fName in fieldNames)
-            {
-                result.Add(fName.Name, "");
-            }
-            return result;
-        }
         public static Dictionary<string, Type> EGenerateTypeDictiontaryByType(this Type self)
         {
             PropertyInfo[] propertyNames = self.GetProperties();

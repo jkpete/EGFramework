@@ -56,7 +56,7 @@ namespace EGFramework.UI
                 PageAdapter.Reload(count, PageLimit);
             }
             this.Vertical = true;
-            EmptyData = typeof(T).EGenerateEmptyDictiontaryByType();
+            EmptyData = new T().EGenerateDictiontaryByObject();
             TitleData = typeof(T).EGenerateDictiontaryByType();
             TableName = typeof(T).Name;
             InitFunctionMenu();

@@ -31,7 +31,7 @@ namespace EGFramework.UI
             }
             this.Vertical = true;
             CurrentDataKey = key;
-            EmptyData = typeof(T).EGenerateEmptyDictiontaryByType();
+            EmptyData = new T().EGenerateDictiontaryByObject();
             QueryPage.Register(() => QueryPageData<T>());
             SearchKey.Register(() => SearchDataByKeyword<T>());
             TableName = typeof(T).Name;
