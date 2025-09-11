@@ -171,6 +171,7 @@ text = "报文显示格式"
 [node name="Button6" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList2"]
 layout_mode = 2
 size_flags_horizontal = 3
+text = "虚拟设备"
 
 [node name="FunctionList1" type="HBoxContainer" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer"]
 layout_mode = 2
@@ -199,10 +200,12 @@ text = "协议设置"
 [node name="Button5" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList1"]
 layout_mode = 2
 size_flags_horizontal = 3
+text = "校验设置"
 
 [node name="Button6" type="Button" parent="PanelContainer/VSplitContainer/SettingGroup/VSplitContainer/FunctionList1"]
 layout_mode = 2
 size_flags_horizontal = 3
+text = "数据解析设置"
 
 [node name="SendArea" type="VSplitContainer" parent="PanelContainer/VSplitContainer/SettingGroup"]
 layout_mode = 2
