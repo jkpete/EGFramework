@@ -32,7 +32,7 @@ namespace EGFramework.UI
                 Title.Name = "Title";
                 Title.HorizontalAlignment = HorizontalAlignment.Center;
                 this.AddChild(Title);
-                this.Name = "EditList";
+                // this.Name = "EditList";
                 this.ErrorTips = new Label();
                 ErrorTips.Name = "ErrorTips";
                 this.AddChild(ErrorTips);

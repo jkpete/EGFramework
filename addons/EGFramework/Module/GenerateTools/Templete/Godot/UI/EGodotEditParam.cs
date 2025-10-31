@@ -95,22 +95,23 @@ namespace EGFramework.UI
                 this.ParamSpinBox = new SpinBox();
                 ParamSpinBox.Name = "ParamSpinBox";
                 ParamSpinBox.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-                ParamSpinBox.MaxValue = float.MaxValue;
-                ParamSpinBox.MinValue = float.MinValue;
-                ParamSpinBox.Value = (float)editValue.Value;
+                ParamSpinBox.MaxValue = int.MaxValue;
+                ParamSpinBox.MinValue = int.MinValue;
                 ParamSpinBox.Step = 0.01f;
+                ParamSpinBox.Value = (float)editValue.Value;
                 this.AddChild(ParamSpinBox);
                 ValueType = typeof(float);
             }
             else if (editValue.Value is double)
             {
+                EG.Print("double"+(double)editValue.Value);
                 this.ParamSpinBox = new SpinBox();
                 ParamSpinBox.Name = "ParamSpinBox";
                 ParamSpinBox.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-                ParamSpinBox.MaxValue = double.MaxValue;
-                ParamSpinBox.MinValue = double.MinValue;
-                ParamSpinBox.Value = (double)editValue.Value;
+                ParamSpinBox.MaxValue = int.MaxValue;
+                ParamSpinBox.MinValue = int.MinValue;
                 ParamSpinBox.Step = 0.0001f;
+                ParamSpinBox.Value = (double)editValue.Value;
                 this.AddChild(ParamSpinBox);
                 ValueType = typeof(double);
             }
