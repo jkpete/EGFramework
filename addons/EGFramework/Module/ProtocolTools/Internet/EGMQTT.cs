@@ -25,30 +25,60 @@ namespace EGFramework{
 
         public EasyEvent<string> OnMqttConnect { set; get; } = new EasyEvent<string>();
 
+        public string UserName { set; get; } = "";
+        public string Password { set; get; } = "";
+
 
         public void Init()
         {
-            this.EGRegisterSendAction(request=>{
-                if(request.protocolType == ProtocolType.MQTTClient){
-                    if(request.req.ToProtocolData() != null && request.req.ToProtocolData() != ""){
-                        this.SendStringData(request.sender.GetStrFrontSymbol('|'),request.sender.GetStrBehindSymbol('|'),request.req.ToProtocolData());
+            this.EGRegisterSendAction(request =>
+            {
+                if (request.protocolType == ProtocolType.MQTTClient)
+                {
+                    if (request.req.ToProtocolData() != null && request.req.ToProtocolData() != "")
+                    {
+                        this.SendStringData(request.sender.GetStrFrontSymbol('|'), request.sender.GetStrBehindSymbol('|'), request.req.ToProtocolData());
                     }
-                    if(request.req.ToProtocolByteData() != null && request.req.ToProtocolByteData().Length > 0){
-                        this.SendByteData(request.sender.GetStrFrontSymbol('|'),request.sender.GetStrBehindSymbol('|'),request.req.ToProtocolByteData());
+                    if (request.req.ToProtocolByteData() != null && request.req.ToProtocolByteData().Length > 0)
+                    {
+                        this.SendByteData(request.sender.GetStrFrontSymbol('|'), request.sender.GetStrBehindSymbol('|'), request.req.ToProtocolByteData());
                     }
                 }
             });
+        }
+        
+        public void ConnectMqttServerWithCredentials(string serverURL,string username,string password)
+        {
+            this.SetCredentials(username, password);
+            this.ConnectMQTTServer(serverURL);
         }
 
         public async void ConnectMQTTServer(string serverURL){
             if(!MqttDevices.ContainsKey(serverURL)){
                 IMqttClient mqttClient = MqttFactory.CreateMqttClient();
-                var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer(serverURL).Build();
+                EG.Print(serverURL.GetHostByIp() +":"+ serverURL.GetPortByIp());
+                var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer(serverURL.GetHostByIp(),serverURL.GetPortByIp())
+                    .WithProtocolVersion(MQTTnet.Formatter.MqttProtocolVersion.V500)
+                    .WithKeepAlivePeriod(TimeSpan.FromSeconds(60))
+                    .WithCleanSession()
+                    .WithTlsOptions(new MqttClientTlsOptions(){UseTls = false})
+                    .Build();
+                if(UserName != "")
+                {
+                    mqttClientOptions = new MqttClientOptionsBuilder().WithClientId("egframework_client")
+                    .WithCredentials(UserName, Password)
+                    .WithTcpServer(serverURL.GetHostByIp(), serverURL.GetPortByIp())
+                    .WithProtocolVersion(MQTTnet.Formatter.MqttProtocolVersion.V500)
+                    .WithKeepAlivePeriod(TimeSpan.FromSeconds(60))
+                    .WithCleanSession()
+                    .WithTlsOptions(new MqttClientTlsOptions(){UseTls = false})
+                    .Build();
+                }
                 mqttClient.ApplicationMessageReceivedAsync += e =>
                 {
                     byte[] receivedBytes = e.ApplicationMessage.PayloadSegment.ToArray();
-                    ResponseMsgs.Enqueue(new ResponseMsg(StringEncoding.GetString(receivedBytes),receivedBytes,serverURL + "|" + e.ApplicationMessage.Topic,ProtocolType.MQTTClient));
-                    //GD.Print(e.ApplicationMessage.Topic+":"+e.ApplicationMessage.PayloadSegment.ToArray().ToStringByHex());
+                    // EG.Print(e.ApplicationMessage.Topic+":"+e.ApplicationMessage.PayloadSegment.ToArray().ToStringByHex());
+                    ResponseMsgs.Enqueue(new ResponseMsg(StringEncoding.GetString(receivedBytes), receivedBytes, serverURL + "|" + e.ApplicationMessage.Topic, ProtocolType.MQTTClient));
                     return Task.CompletedTask;
                 };
                 await mqttClient.ConnectAsync(mqttClientOptions,CancellationToken.None);
@@ -77,6 +107,7 @@ namespace EGFramework{
         }
 
         public async void SubScribeTheme(string serverURL,string Theme){
+            EG.Print("StartSubScribeTheme"+serverURL+"|"+Theme);
             MqttClientSubscribeOptions mqttSubscribeOptions = MqttFactory.CreateSubscribeOptionsBuilder()
                 .WithTopicFilter(
                     f =>
@@ -143,6 +174,12 @@ namespace EGFramework{
         public void SetEncoding(Encoding textEncoding)
         {
             StringEncoding = textEncoding;
+        }
+
+        public void SetCredentials(string username,string passwd)
+        {
+            this.UserName = username;
+            this.Password = passwd;
         }
         public ConcurrentQueue<ResponseMsg> GetReceivedMsg()
         {
