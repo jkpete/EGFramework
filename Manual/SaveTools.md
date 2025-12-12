@@ -37,10 +37,15 @@ mindmap
 
 Load为可读写存储对象的加载，通常是用Path，或者数据库地址来进行实例化。
 
-以SQLite数据库为例
+以SQLite数据库、Json文件为例
 
 ```csharp
- EGSqliteSave SqliteTest = this.EGSave().Load<EGSqliteSave>("SaveData/test.db");
+//SQLite
+EGSqliteSave SqliteTest = this.EGSave().Load<EGSqliteSave>("SaveData/test.db");
+
+//Json
+string SettingFilePath { set; get; } = "SaveData/Settings.json".GetGodotUserPath();
+this.EGSave().LoadObjectFile<EGJsonSave>(SettingFilePath);
 ```
 
 具体使用方法详见API - IEGSaveData部分。
@@ -69,6 +74,60 @@ string json = @"{
 EGJsonSave jsonManage = this.EGSave().Read<EGJsonSave>("Example", json);
 GD.Print(jsonManage.GetObject<string>("CPU"));
 ```
+
+
+
+## 本地文件读写
+
+针对Object型的存储类型，可以实现对Json文件的增删查改
+
+定义我们要使用的数据类，以一个服务端设置信息为例
+
+```csharp
+public struct DataTargetServer
+{
+    public string ServerIP { set; get; }
+    public int ServerPort { set; get; }
+
+    public DataTargetServer()
+    {
+        ServerIP = "127.0.0.1";
+        ServerPort = 8888;
+    }
+    public DataTargetServer(string ip, int port)
+    {
+        this.ServerIP = ip;
+        this.ServerPort = port;
+    }
+
+}
+```
+
+检查&创建&存储数据
+
+```csharp
+//Json文件加载
+string SettingFilePath { set; get; } = "SaveData/Settings.json".GetGodotUserPath();
+this.EGSave().LoadObjectFile<EGJsonSave>(SettingFilePath);
+
+//是否存在该Key值下的数据
+if (this.EGSave().ContainsObject(SettingFilePath, "DataServer"))
+{
+    //获取对应数据
+    DataServer = this.EGSave().GetObject<DataTargetServer>(SettingFilePath, "DataServer");
+}
+else
+{
+    //设置该数据
+    this.EGSave().SetObject(SettingFilePath, "DataServer", new DataTargetServer());
+}
+```
+
+
+
+
+
+
 
 ## 数据库增删改查
 

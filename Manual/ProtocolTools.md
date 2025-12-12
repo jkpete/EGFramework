@@ -54,6 +54,26 @@ mindmap
 
 ---
 
+# 写在使用前
+
+发送请求之前，需要进行连接并检查连接状态，此处按TCPClient为例
+
+```csharp
+public async void Init()
+{
+   await this.EGTCPClient().ConnectTCP("127.0.0.1",6000);
+}
+//在Ready中调用
+public override void _Ready()
+{
+    Init();
+}
+```
+
+
+
+
+
 # 发送请求部分
 
 ## 1. 定义您的请求
