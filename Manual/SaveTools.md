@@ -45,7 +45,7 @@ EGSqliteSave SqliteTest = this.EGSave().Load<EGSqliteSave>("SaveData/test.db");
 
 //Json
 string SettingFilePath { set; get; } = "SaveData/Settings.json".GetGodotUserPath();
-this.EGSave().LoadObjectFile<EGJsonSave>(SettingFilePath);
+this.EGSave().Load<EGJsonSave>(SettingFilePath);
 ```
 
 具体使用方法详见API - IEGSaveData部分。
@@ -107,25 +107,21 @@ public struct DataTargetServer
 
 ```csharp
 //Json文件加载
-string SettingFilePath { set; get; } = "SaveData/Settings.json".GetGodotUserPath();
-this.EGSave().LoadObjectFile<EGJsonSave>(SettingFilePath);
+string SettingFilePath = "SaveData/Settings.json".GetGodotUserPath();
+EGJsonSave saveData = this.EGSave().Load<EGJsonSave>(SettingFilePath);
 
 //是否存在该Key值下的数据
-if (this.EGSave().ContainsObject(SettingFilePath, "DataServer"))
+if (saveData.ContainsKey("DataServer"))
 {
     //获取对应数据
-    DataServer = this.EGSave().GetObject<DataTargetServer>(SettingFilePath, "DataServer");
+    DataTargetServer dataServer = saveData.GetObject<DataTargetServer>("DataServer");
 }
 else
 {
     //设置该数据
-    this.EGSave().SetObject(SettingFilePath, "DataServer", new DataTargetServer());
+    saveData.SetObject("DataServer", new DataTargetServer());
 }
 ```
-
-
-
-
 
 
 
