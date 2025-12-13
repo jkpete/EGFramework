@@ -32,7 +32,15 @@ namespace EGFramework.Examples.Test
             // TestDialog();
             // TestMySQL();
             // EG.Print(OS.GetLocaleLanguage());
-            TestEdit();
+            // TestEdit();
+            EGXmlSave saveData = this.EGSave().Load<EGXmlSave>("SaveData/XmlTest.xml");
+            saveData.AddObject<DataPerson>("N",new DataPerson(){id = "sde"});
+            // foreach(DataPerson dataPerson in saveData.GetObjects<DataPerson>("Person"))
+            // {
+            //      GD.Print(dataPerson.id);
+            // }
+           
+            // EGXmlSave saveData = this.EGSave().Load<EGXmlSave>("EGFramework.svg");
         }
 
         public override void _ExitTree()
@@ -203,7 +211,6 @@ namespace EGFramework.Examples.Test
         public string id { get; set; }
         public string namee { set; get; }
         public string workPlace { set; get; }
-        public string policeNum { set; get; }
     }
 
     public enum SchoolType
