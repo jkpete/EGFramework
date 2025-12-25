@@ -174,7 +174,7 @@ namespace EGFramework{
         {
             //await Task.Run(() => {}).ConfigureAwait(false);
             SerialPort serialPort = (SerialPort)sender;
-            if(serialPort.BytesToRead >= 0){
+            if(serialPort.BytesToRead > 0){
                 int bufferSize = serialPort.BytesToRead;
                 byte[] buffer = new byte[bufferSize];
                 serialPort.Read(buffer,0,serialPort.BytesToRead);

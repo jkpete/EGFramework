@@ -21,7 +21,7 @@ namespace EGFramework
         public EGSave() { }
         public override void Init()
         {
-            DefaultJsonSave = Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
+            // DefaultJsonSave = Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
         }
         #region Load Data or Object and Unload
         public TSaveData Load<TSaveData>(string path) where TSaveData : IEGSave, new()
@@ -57,9 +57,17 @@ namespace EGFramework
         #region Default Json Operation
         public void SetObjectToJson<TObject>(TObject obj)
         {
+            if(DefaultJsonSave == null)
+            {
+                DefaultJsonSave = Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
+            }
             DefaultJsonSave.SetObject(typeof(TObject).ToString(), obj);
         }
         public TObject GetObjectFromJson<TObject>() where TObject : new(){
+            if(DefaultJsonSave == null)
+            {
+                DefaultJsonSave = Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
+            }
             return DefaultJsonSave.GetObject<TObject>(typeof(TObject).ToString());
         }
         #endregion
