@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Godot;
-using Mysqlx.Crud;
 using static Godot.GD;
 
 namespace EGFramework{
