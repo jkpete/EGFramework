@@ -75,8 +75,10 @@ namespace EGFramework{
             UdpClient udpClient;
             if(UDPDevices.Count>0){
                 udpClient = UDPDevices.First().Value;
+                udpClient.Client.EnableBroadcast = true;
             }else{
                 udpClient = new UdpClient();
+                udpClient.Client.EnableBroadcast = true;
             }
             try{
                 EG.Print(udpClient.EnableBroadcast);
