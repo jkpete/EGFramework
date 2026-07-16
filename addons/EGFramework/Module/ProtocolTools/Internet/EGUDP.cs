@@ -81,7 +81,6 @@ namespace EGFramework{
                 udpClient.Client.EnableBroadcast = true;
             }
             try{
-                EG.Print(udpClient.EnableBroadcast);
                 udpClient.Send(data, data.Length, host, port);
             }
             catch ( Exception e ){

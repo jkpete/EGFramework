@@ -118,51 +118,7 @@ namespace EGFramework
         byte[] ToProtocolByteData();
     }
     #endregion
-    #region AbstractClass
     
-    public class BaseJsonResponse : IResponse
-    {
-        private string ExceptionMsg;
-        public virtual string ToProtocolData()
-        {
-            return "";
-        }
-        public virtual bool TrySetData(string json,byte[] bytes)
-        {
-            try
-            {
-                return true;
-            }
-            catch (Exception e)
-            {
-                ExceptionMsg = e.ToString();
-                //PrintErr(ExceptionMsg);
-                return false;
-            }
-        }
-    }
-    
-    public class StringRequest : IRequest
-    {
-        private string RequestStr;
-        public StringRequest() {
-            RequestStr = "No message";
-        }
-        public StringRequest(string str) {
-            RequestStr = str;
-        }
-
-        public byte[] ToProtocolByteData()
-        {
-            return null;
-        }
-
-        public string ToProtocolData()
-        {
-            return RequestStr;
-        }
-    }
-    #endregion
     #region Extension
     public static class CanRegisterMessageExtension {
         /// <summary>
