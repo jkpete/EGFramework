@@ -34,7 +34,7 @@ namespace EGFramework
         #region ReceiveFunctions
         private void ReceiveResponse<T>(ResponseMsg msg) where T :IResponse, new()
         {
-            this.ExecuteResponse(new T(),msg.stringData,msg.byteData,msg.sender,msg.protocolType);
+            this.ExecuteResponse(new T(),msg.stringData,msg.byteData,msg.sender,msg.protocolType,msg.receiver);
         }
         /// <summary>
         /// Start to receive type of T data
@@ -78,13 +78,13 @@ namespace EGFramework
             }
         }
         
-        private void ExecuteResponse<TResponse>(TResponse response,string protocolString,byte[] protocolBytes,string sender,ProtocolType protocolType) where TResponse:IResponse
+        private void ExecuteResponse<TResponse>(TResponse response,string protocolString,byte[] protocolBytes,string sender,ProtocolType protocolType,string receiver) where TResponse:IResponse
         {
             bool isSet = response.TrySetData(protocolString,protocolBytes);
             if (isSet)
             {
                 //this.SendEvent(new ResponseMsgEvent(response, sender));
-                OnResponse.Invoke(new ResponseMsgEvent(response,sender,protocolType));
+                OnResponse.Invoke(new ResponseMsgEvent(response,sender,protocolType,receiver));
             }
         }
         #endregion
@@ -216,6 +216,15 @@ namespace EGFramework
                 }
             });
         }
+
+        public static IUnRegister EGRegisterMessageEvent<TResponse>(this IEGFramework self, Action<TResponse,string,ProtocolType,string> onEvent)where TResponse : IResponse
+        {
+            return EGArchitectureImplement.Interface.GetModule<EGMessage>().OnResponse.Register(e=> {
+                if (e.res.GetType() == typeof(TResponse)) {
+                    onEvent.Invoke((TResponse)e.res,e.sender,e.protocolType,e.receiver);
+                }
+            });
+        }
         /// <summary>
         /// Start to receive type of TResponse data
         /// </summary>
@@ -267,15 +276,17 @@ namespace EGFramework
     public struct ResponseMsg
     {
         public string sender;
+        public string receiver;
         public string stringData;
         public byte[] byteData;
         
         public ProtocolType protocolType;
-        public ResponseMsg(string stringData_,byte[] byteData_,string sender_,ProtocolType protocolType_)
+        public ResponseMsg(string stringData_,byte[] byteData_,string sender_,ProtocolType protocolType_,string receiver_="")
         {
             stringData = stringData_;
             byteData = byteData_;
             sender = sender_;
+            receiver = receiver_;
             protocolType = protocolType_;
         }
     }
@@ -284,11 +295,13 @@ namespace EGFramework
     {
         public IResponse res;
         public string sender;
+        public string receiver;
         public ProtocolType protocolType;
-        public ResponseMsgEvent(IResponse res_,string sender_,ProtocolType protocolType_)
+        public ResponseMsgEvent(IResponse res_,string sender_,ProtocolType protocolType_,string receiver_="")
         {
             res = res_;
             sender = sender_;
+            receiver = receiver_;
             protocolType = protocolType_;
         }
     }

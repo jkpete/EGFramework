@@ -57,7 +57,7 @@ namespace EGFramework{
                     TcpClient client = await TcpServerDevices[port].AcceptTcpClientAsync();
                     LinkedClients.Add(client.Client.RemoteEndPoint.ToString(), client);
                     OnClientConnect.Invoke(client.Client.RemoteEndPoint.ToString());
-                    _ = HandleClientAsync(client);
+                    _ = HandleClientAsync(client,port);
                     EG.Print("[EGTCPServer]"+port+" Client connected: " + client.Client.RemoteEndPoint.ToString());
                 }
                 TcpServerDevices[port].Stop();
@@ -71,7 +71,7 @@ namespace EGFramework{
             IsListening[port] = false;
         }
 
-        public async Task HandleClientAsync(TcpClient client)
+        public async Task HandleClientAsync(TcpClient client,int port)
         {
             try
             {
@@ -79,14 +79,14 @@ namespace EGFramework{
                 string ClientName = client.Client.RemoteEndPoint.ToString();
                 while (client.Connected)
                 {
-                    byte[] buffer = new byte[1024];
+                    byte[] buffer = new byte[4096];
                     int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
                     if (bytesRead == 0)
                     {
                         break;
                     }
                     string data = StringEncoding.GetString(buffer, 0, bytesRead);
-                    ResponseMsg receivedMsgs = new ResponseMsg(data,buffer,ClientName, ProtocolType.TCPServer);
+                    ResponseMsg receivedMsgs = new ResponseMsg(data,buffer,ClientName, ProtocolType.TCPServer,port.ToString());
                     //await Task.Run(() => OnDataReceived(receivedMsgs)).ConfigureAwait(false);
                     //this.EGOnReceivedData(receivedMsgs);
                     ResponseMsgs.Enqueue(receivedMsgs);

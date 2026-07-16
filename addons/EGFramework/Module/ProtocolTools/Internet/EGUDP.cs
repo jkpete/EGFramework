@@ -60,7 +60,7 @@ namespace EGFramework{
                 {
                     UdpReceiveResult data = await client.ReceiveAsync();
                     string dataStr = StringEncoding.GetString(data.Buffer);
-                    ResponseMsg receivedMsgs = new ResponseMsg(dataStr,data.Buffer,data.RemoteEndPoint.ToString(), ProtocolType.UDP);
+                    ResponseMsg receivedMsgs = new ResponseMsg(dataStr,data.Buffer,data.RemoteEndPoint.ToString(), ProtocolType.UDP,client.Client.LocalEndPoint.ToString());
                     //this.EGOnReceivedData(receivedMsgs);
                     ResponseMsgs.Enqueue(receivedMsgs);
                 }
