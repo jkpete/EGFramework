@@ -64,6 +64,17 @@ namespace EGFramework.UI
         {
             // base.OnAddData(data);
             SaveData.AddData(CurrentDataKey, data);
+            InitPageData();
+        }
+
+        public override void OnAddGroupData(IEnumerable<Dictionary<string, object>> dataArray)
+        {
+            // base.OnAddGroupData(dataArray);
+            foreach(Dictionary<string,object> data in dataArray)
+            {
+                SaveData.AddData(CurrentDataKey, data);
+            }
+            InitPageData();
         }
 
         public void ModifyData(Dictionary<string, object> eData)

@@ -80,6 +80,23 @@ namespace EGFramework.UI
             OnPageChanged.Invoke();
         }
 
+        public virtual void OnAddGroupData(IEnumerable<Dictionary<string,object>> dataArray)
+        {
+            foreach(Dictionary<string,object> data in dataArray)
+            {
+                string primaryKey = data.EGetDefaultPrimaryKey();
+                if (primaryKey != "")
+                {
+                    data[primaryKey] = TableData.Count.ToString();
+                }
+                TableData.Add(new Dictionary<string, object>(data));
+            }
+            PageAdapter.DataLength++;
+            PageAdapter.Reload(PageAdapter.DataLength, PageLimit);
+            InitPageData();
+            OnPageChanged.Invoke();
+        }
+
         public virtual void OnOutputFile(string path)
         {
             GD.Print("File has been Saved at " + path);
@@ -91,7 +108,18 @@ namespace EGFramework.UI
 
         public virtual void OnInputFile(string path)
         {
-
+            EGCsvSave eGCsvSave = new EGCsvSave();
+            eGCsvSave.InitSave(path);
+            if (System.IO.Path.GetExtension(path) == ".csv")
+            {
+                GD.Print("Input File " + path);
+                IEnumerable<Dictionary<string,object>> tableData = eGCsvSave.GetAll();
+                OnAddGroupData(tableData);
+            }
+            else
+            {
+                this.EGAlert("请导入csv格式的数据文件，目前暂不支持其它格式的文件导入。");
+            }
         }
 
         protected OptionButton FieldSelect { set; get; }
@@ -123,6 +151,7 @@ namespace EGFramework.UI
 
                 Button input = FunctionContainer.CreateNode<Button>("input");
                 input.Text = "Input";
+                input.Connect("pressed",Callable.From(() => this.EGFileOpen(TableName + ".csv", OnInputFile)));
                 input.FocusMode = FocusModeEnum.None;
                 input.CustomMinimumSize = MinimumFunctionButtonSize;
 

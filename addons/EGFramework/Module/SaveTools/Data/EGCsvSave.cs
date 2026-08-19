@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Reflection;
 using System.Configuration;
+using Godot;
 
 namespace EGFramework
 {
@@ -117,7 +118,7 @@ namespace EGFramework
             }
             for (int lineID = 0; lineID < lineData.Length; lineID++)
             {
-                if (lineID!=0){
+                if (lineID!=0 && lineData[lineID]!=""){
                     csvBlock.Add(lineData[lineID].Split(','));
                 }
             }
@@ -209,6 +210,23 @@ namespace EGFramework
                             property.SetValue(data,Convert.ChangeType(valueStr,property.PropertyType));
                         }
                     }
+                }
+                DataList.Add(data);
+            }
+            TypeDataContainer.Register(DataList);
+            return DataList;
+        }
+
+        public IEnumerable<Dictionary<string,object>> GetAll()
+        {
+            // throw new NotImplementedException();
+            List<Dictionary<string,object>> DataList = new List<Dictionary<string,object>>();
+            GD.Print(CsvDataBlock);
+            for (int dataID = 0; dataID < CsvDataBlock.Count(); dataID++){
+                Dictionary<string,object> data = new Dictionary<string,object>();
+                foreach(KeyValuePair<string,int> header in CsvDataHeader){
+                    // CsvParamAttribute csvParam = property.GetCustomAttribute<CsvParamAttribute>();
+                    data.Add(header.Key,CsvDataBlock[dataID][header.Value]);
                 }
                 DataList.Add(data);
             }
