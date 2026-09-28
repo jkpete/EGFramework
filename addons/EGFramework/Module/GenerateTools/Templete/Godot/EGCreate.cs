@@ -31,7 +31,8 @@ namespace EGFramework{
                 WindowCache.Push(CurrentWindow);
             }
 
-            window.PopupCentered();
+            // window.PopupCentered();
+            window.CallDeferred("popup_centered");
             this.CurrentWindow = window;
             CurrentWindow.VisibilityChanged += OnPopUpUnitVisibleChanged;
             PopUpFlag = false;
@@ -69,7 +70,8 @@ namespace EGFramework{
         {
             TNode nodeData = new TNode();
             nodeData.Name = typeof(TNode).Name;
-            self.AddChild(nodeData);
+            self.CallDeferred("add_child",nodeData);
+            // self.AddChild(nodeData);
             return nodeData;
         }
 
@@ -77,7 +79,8 @@ namespace EGFramework{
         {
             TNode nodeData = new TNode();
             nodeData.Name = name;
-            self.AddChild(nodeData);
+            // self.AddChild(nodeData);
+            self.CallDeferred("add_child",nodeData);
             return nodeData;
         }
 

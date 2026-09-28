@@ -16,6 +16,9 @@ namespace EGFramework.Examples.ModbusDebugTool{
         
         private bool IsLoadUI { set; get; }
 
+        
+		public EGJsonSave JsonSave { set; get; }
+
         public override void _Ready()
         {
 
@@ -66,7 +69,8 @@ namespace EGFramework.Examples.ModbusDebugTool{
             if(this.EGGetObject<DataModbus>().Items.ContainsKey(DataModbusItem.GetKey())){
                 this.EGGetObject<DataModbus>().Items.Remove(DataModbusItem.GetKey());
             }
-            this.EGSave().SetObjectToJson(this.EGGetObject<DataModbus>());
+			JsonSave = this.EGSave().Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
+            JsonSave.SetObject("DataModbus",this.EGGetObject<DataModbus>());
             this.GetNode<ViewMenu>("/root/Menu").RefreshSaveData();
         }
 

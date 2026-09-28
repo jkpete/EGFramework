@@ -9,6 +9,8 @@ namespace EGFramework.Examples.Gateway{
 	public partial class ViewBacNetGateway : Control,IGateway,IEGFramework
 	{
 		public DataBacnetGatewaySetting DataBacnetGatewaySetting { set; get; }
+		
+		public EGJsonSave JsonSave { set; get; }
 
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
@@ -20,16 +22,17 @@ namespace EGFramework.Examples.Gateway{
 
 		public void InitGateway()
 		{
-			if(this.EGSave().GetObjectFromJson<DataBacnetGatewaySetting>() == null){
+			JsonSave = this.EGSave().Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
+			if(JsonSave.GetObject<DataBacnetGatewaySetting>("DataBacnetGatewaySetting") == null){
 				DataBacnetGatewaySetting = new DataBacnetGatewaySetting(){
 					MqttHost = "192.168.1.220",
 					HttpServerPrefix = "http://127.0.0.1:5000/",
 					ResponseTheme = "/LocalBacnetResponse",
 					RequestTheme = "/LocalBacnetRequest"
 				};
-				this.EGSave().SetObjectToJson(DataBacnetGatewaySetting);
+				JsonSave.SetObject("DataBacnetGatewaySetting",DataBacnetGatewaySetting);
 			}else{
-				DataBacnetGatewaySetting = this.EGSave().GetObjectFromJson<DataBacnetGatewaySetting>();
+				DataBacnetGatewaySetting = JsonSave.GetObject<DataBacnetGatewaySetting>("DataBacnetGatewaySetting");
 			}
 			this.EGEnabledProtocolTool<EGBacnet>();
 			this.EGEnabledProtocolTool<EGMqtt>();

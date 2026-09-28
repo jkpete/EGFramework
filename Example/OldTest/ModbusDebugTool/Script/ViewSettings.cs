@@ -6,6 +6,7 @@ namespace EGFramework.Examples.ModbusDebugTool{
     {
         public LineEdit EditBaudRate { set; get; }
 
+		public EGJsonSave JsonSave { set; get; }
         public override void _Ready()
         {
             EditBaudRate = this.GetNode<LineEdit>("List/Device");
@@ -14,7 +15,8 @@ namespace EGFramework.Examples.ModbusDebugTool{
         }
 
         public void LoadSettings(){
-            DataModbusSettings settings = this.EGSave().GetObjectFromJson<DataModbusSettings>();
+            JsonSave = this.EGSave().Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
+            DataModbusSettings settings = JsonSave.GetObject<DataModbusSettings>("DataModbusSettings");
             this.EGRegisterObject(settings);
             UpdateSettings(settings);
             EditBaudRate.Text = settings.BaudRate.ToString();
@@ -36,7 +38,9 @@ namespace EGFramework.Examples.ModbusDebugTool{
                 };
                 UpdateSettings(settings);
                 this.EGRegisterObject(settings);
-                this.EGSave().SetObjectToJson(this.EGGetObject<DataModbusSettings>());
+                
+                JsonSave = this.EGSave().Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
+                JsonSave.SetObject("DataModbusSettings",this.EGGetObject<DataModbusSettings>());
                 this.Visible = false;
             }
             catch (System.Exception ex)

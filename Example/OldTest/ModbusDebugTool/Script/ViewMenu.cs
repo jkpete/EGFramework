@@ -9,6 +9,8 @@ namespace EGFramework.Examples.ModbusDebugTool{
         public PopupMenu MenuSettings;
         public GridContainer ModbusItemContainer;
         public ViewEdit Edit;
+        
+		public EGJsonSave JsonSave { set; get; }
 
         public EasyEvent<ModbusRTU_Response> OnModbusRTUGet { set; get; } = new EasyEvent<ModbusRTU_Response>();
 
@@ -20,7 +22,9 @@ namespace EGFramework.Examples.ModbusDebugTool{
             Edit = this.GetNode<ViewEdit>("Edit");
             Edit.Visible = false;
             this.EGEnabledProtocolTools();
-            DataModbus dataModbus = this.EGSave().GetObjectFromJson<DataModbus>();
+            
+            JsonSave = this.EGSave().Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
+            DataModbus dataModbus = JsonSave.GetObject<DataModbus>("DataModbus");
             if (dataModbus == null)
             {
                 dataModbus = new DataModbus();

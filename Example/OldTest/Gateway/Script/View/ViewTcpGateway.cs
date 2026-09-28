@@ -6,6 +6,8 @@ namespace EGFramework.Examples.Gateway{
 	public partial class ViewTcpGateway : Control,IEGFramework,IGateway
 	{
 		public DataTcpGatewaySetting DataTcpGatewaySetting { set; get; }
+		
+		public EGJsonSave JsonSave { set; get; }
 		public override void _Ready()
 		{
 			if(this.Visible){
@@ -14,7 +16,8 @@ namespace EGFramework.Examples.Gateway{
 		}
 
 		public void InitGateway(){
-			if(this.EGSave().GetObjectFromJson<DataTcpGatewaySetting>() == null){
+			JsonSave = this.EGSave().Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
+			if(JsonSave.GetObject<DataTcpGatewaySetting>("DataTcpGatewaySetting") == null){
 				DataTcpGatewaySetting = new DataTcpGatewaySetting();
 				DataTcpGatewaySetting.DataTcpGatewayDevices.Add(new DataTcpGatewayDevice(){
 					Host = "127.0.0.1",
@@ -23,9 +26,9 @@ namespace EGFramework.Examples.Gateway{
 					ResponseTheme = "/LocalTCPResponse",
 					RequestTheme = "/LocalTCPRequest"
 				});
-				this.EGSave().SetObjectToJson(DataTcpGatewaySetting);
+				JsonSave.SetObject<DataTcpGatewaySetting>("DataTcpGatewaySetting",DataTcpGatewaySetting);
 			}else{
-				DataTcpGatewaySetting = this.EGSave().GetObjectFromJson<DataTcpGatewaySetting>();
+				DataTcpGatewaySetting = JsonSave.GetObject<DataTcpGatewaySetting>("DataTcpGatewaySetting");
 			}
 			this.EGEnabledProtocolTool<EGTCPClient>();
 			this.EGEnabledProtocolTool<EGMqtt>();

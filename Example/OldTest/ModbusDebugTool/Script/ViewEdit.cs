@@ -16,6 +16,7 @@ namespace EGFramework.Examples.ModbusDebugTool{
         public ViewMenu ViewMenu { set; get; }
 
         public Dictionary<string,int> SerialPortMapping { set; get; } = new Dictionary<string, int>();
+		public EGJsonSave JsonSave { set; get; }
 
         public override void _Ready()
         {
@@ -75,7 +76,9 @@ namespace EGFramework.Examples.ModbusDebugTool{
                     this.EGGetObject<DataModbus>().Items.Remove(DataModbusItem.GetKey());
                 }
                 this.EGGetObject<DataModbus>().Items.Add(modbusItem.GetKey(),modbusItem);
-                this.EGSave().SetObjectToJson(this.EGGetObject<DataModbus>());
+                
+                JsonSave = this.EGSave().Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
+                JsonSave.SetObject("DataModbus",this.EGGetObject<DataModbus>());
                 this.Visible = false;
                 this.ViewMenu.RefreshSaveData();
                 

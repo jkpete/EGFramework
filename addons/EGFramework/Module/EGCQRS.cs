@@ -13,19 +13,29 @@ namespace EGFramework
         TResult Do();
     }
 
-    public interface IEGCQRS
+    public interface IUndo
     {
-        void SendCommand(ICommand command);
-        TResult DoQuery<TResult>(IQuery<TResult> query);
+        void Undo();
+    }
+
+    public interface IUndoCommand: ICommand,IUndo
+    {
+        
     }
     #endregion
 
-    public class EGCQRS :EGModule, IEGCQRS
+    public class EGCQRS :EGModule
     {
         public void SendCommand(ICommand command)
         {
             command.Execute();
         }
+
+        public void UndoCommand(IUndo command)
+        {
+            command.Undo();
+        }
+
         public TResult DoQuery<TResult>(IQuery<TResult> query)
         {
             return query.Do();
@@ -42,6 +52,14 @@ namespace EGFramework
         public static void EGSendCommand(this IEGFramework self, ICommand command)
         {
             EGArchitectureImplement.Interface.GetModule<EGCQRS>().SendCommand(command);
+        }
+    }
+
+    public static class CanUndoCommandExtension
+    {
+        public static void EGUndoCommand(this IEGFramework self, IUndo command)
+        {
+            EGArchitectureImplement.Interface.GetModule<EGCQRS>().UndoCommand(command);
         }
     }
 

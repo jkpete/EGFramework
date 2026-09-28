@@ -12,6 +12,7 @@ namespace EGFramework.Examples.Gateway{
 	public partial class ViewModbusGateway : Control,IEGFramework,IGateway
 	{
 		public DataModbusGatewaySetting Setting { set; get; }
+		public EGJsonSave JsonSave { set; get; }
 
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
@@ -43,11 +44,12 @@ namespace EGFramework.Examples.Gateway{
 
 		public void InitGateway()
 		{
-			if(this.EGSave().GetObjectFromJson<DataModbusGatewaySetting>() == null){
+			JsonSave = this.EGSave().Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
+			if(JsonSave.GetObject<DataModbusGatewaySetting>("DataModbusGatewaySetting") == null){
 				InitSettings();
-				this.EGSave().SetObjectToJson(Setting);
+				JsonSave.SetObject("DataModbusGatewaySetting",Setting);
 			}else{
-				Setting = this.EGSave().GetObjectFromJson<DataModbusGatewaySetting>();
+				Setting = JsonSave.GetObject<DataModbusGatewaySetting>("DataModbusGatewaySetting");
 			}
 			this.EGEnabledProtocolTool<EGTCPClient>();
 			this.EGEnabledProtocolTool<EGSerialPort>();

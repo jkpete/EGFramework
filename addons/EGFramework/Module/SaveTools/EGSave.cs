@@ -1,8 +1,6 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using Dapper;
-using System.Linq;
 
 namespace EGFramework
 {
@@ -16,8 +14,6 @@ namespace EGFramework
 
         public HashSet<string> KeySet = new HashSet<string>();
         public Dictionary<string, object> SaveMapping = new Dictionary<string, object>();
-
-        public EGJsonSave DefaultJsonSave { set; get; }
         public EGSave() { }
         public override void Init()
         {
@@ -51,25 +47,6 @@ namespace EGFramework
             return readOnlyData;
         }
         
-        #endregion
-
-
-        #region Default Json Operation
-        public void SetObjectToJson<TObject>(TObject obj)
-        {
-            if(DefaultJsonSave == null)
-            {
-                DefaultJsonSave = Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
-            }
-            DefaultJsonSave.SetObject(typeof(TObject).ToString(), obj);
-        }
-        public TObject GetObjectFromJson<TObject>() where TObject : new(){
-            if(DefaultJsonSave == null)
-            {
-                DefaultJsonSave = Load<EGJsonSave>("SaveData/DefaultJsonSave.json");
-            }
-            return DefaultJsonSave.GetObject<TObject>(typeof(TObject).ToString());
-        }
         #endregion
 
     }

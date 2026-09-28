@@ -33,12 +33,13 @@ namespace EGFramework.Examples.Test
             // TestMySQL();
             // EG.Print(OS.GetLocaleLanguage());
             // TestEdit();
-            EGXmlSave saveData = this.EGSave().Load<EGXmlSave>("SaveData/XmlTest.xml");
-            saveData.AddObject<DataPerson>("N",new DataPerson(){id = "sde"});
+            // EGXmlSave saveData = this.EGSave().Load<EGXmlSave>("SaveData/XmlTest.xml");
+            // saveData.AddObject<DataPerson>("N",new DataPerson(){id = "sde"});
             // foreach(DataPerson dataPerson in saveData.GetObjects<DataPerson>("Person"))
             // {
             //      GD.Print(dataPerson.id);
             // }
+            // this.EGAlert("D","d");
            
             // EGXmlSave saveData = this.EGSave().Load<EGXmlSave>("EGFramework.svg");
         }
