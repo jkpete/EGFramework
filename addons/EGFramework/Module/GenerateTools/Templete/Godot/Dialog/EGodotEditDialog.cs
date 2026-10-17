@@ -32,6 +32,7 @@ namespace EGFramework.UI
                 this.Size = new Vector2I(width, height);
                 IsInit = true;
             }
+            this.EditList.HideClildUI();
             this.EditList.ClearChildren();
             ParamUIs.Clear();
             this.Title = title;
@@ -48,7 +49,6 @@ namespace EGFramework.UI
                 paramUI.Init(param);
                 ParamUIs.Add(paramUI);
             }
-            this.PopupCentered();
         }
 
         public void OnConfirm()
@@ -97,7 +97,6 @@ namespace EGFramework.UI
         {
             EGodotEditDialog editDialog = self.PopupNode<EGodotEditDialog>("Edit");
             editDialog.InitDialog(data, onDataEdit, title);
-            // editDialog.PopupCentered();
             return editDialog;
         }
     }

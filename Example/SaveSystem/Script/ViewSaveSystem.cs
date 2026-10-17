@@ -29,7 +29,8 @@ namespace EGFramework.Examples.Test
             // {
             //     GD.Print(selectOptions.Key+"---"+selectOptions.Value);
             // }
-            // TestDialog();
+            // this.CallDeferred("TestDialog");
+            TestDialog();
             // TestMySQL();
             // EG.Print(OS.GetLocaleLanguage());
             // TestEdit();
@@ -79,12 +80,16 @@ namespace EGFramework.Examples.Test
             // }
         }
 
-        public void TestDialog()
+        public async void TestDialog()
         {
             DataStudent dataStudent = new DataStudent("ZG",10);
-            this.EGEditDialog(dataStudent.EGenerateDictiontaryByObject(), e =>
+            this.EGEditDialog(dataStudent.EGenerateDictiontaryByObject(), async e =>
             {
                 GD.Print("Name:" + e["Name"] + "Age:" + e["Age"]+"School:" + e["School"] + "Path:" + e["Path"]);
+                EGodotEditDialog dialog = this.EGEditDialog(dataStudent.EGenerateDictiontaryByObject(), e =>
+                {
+                    GD.Print("Name:" + e["Name"] + "Age:" + e["Age"]+"School:" + e["School"] + "Path:" + e["Path"]);
+                }, "Edit");
             }, "Edit");
         }
 
@@ -182,6 +187,8 @@ namespace EGFramework.Examples.Test
         public int Age;
         public EGPathSelect Path { set; get; }
         public SchoolType School { set; get; }
+        
+        public DataPerson ps {set;get;}
         public DataStudent(string name, int age)
         {
             Name = name;
@@ -189,6 +196,8 @@ namespace EGFramework.Examples.Test
             ID = 0;
             School = SchoolType.MIT;
             Path = new EGPathSelect();
+            
+            ps =new DataPerson();
         }
     }
 

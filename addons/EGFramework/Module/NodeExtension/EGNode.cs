@@ -21,6 +21,14 @@ namespace EGFramework{
             }
         }
 
+        public static void HideClildUI(this CanvasItem itemContainer)
+        {
+            foreach (CanvasItem child in itemContainer.GetChildren())
+            {
+                child.Visible = false;
+            }
+        }
+
         public static void ClearChildren(this Node itemContainer)
         {
             foreach (Node child in itemContainer.GetChildren())

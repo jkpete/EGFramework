@@ -149,6 +149,11 @@ namespace EGFramework.UI
                 // ParamOperate.Pressed +=
                 this.AddChild(ParamOperate);
             }
+            else
+            {
+                //if not a standard values,hide this param items.
+                this.Visible = false;
+            }
         }
 
         public string GetKey()
